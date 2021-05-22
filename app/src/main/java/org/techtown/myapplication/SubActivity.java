@@ -32,6 +32,10 @@ public class SubActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub);
 
+        init();//메인에서 넘어온 정보로 화면 초기화
+        logoutButtonClicked();//로그아웃 버튼 클릭
+    }
+    private void init(){
         iv_profile = findViewById(R.id.iv_profile);
         tv_nickname = findViewById(R.id.tv_nickname);
         tv_email = findViewById(R.id.tv_email);
@@ -45,13 +49,10 @@ public class SubActivity extends AppCompatActivity {
         Glide.with(this).load(profile).circleCrop().into(iv_profile);
         tv_nickname.setText(nickname);
         tv_email.setText(email);
-
-        logoutButtonClicked();
-
     }
 
     // 로그아웃 버튼 클릭했을때 발생하는 이벤트 메소드
-    public void logoutButtonClicked(){
+    private void logoutButtonClicked(){
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
