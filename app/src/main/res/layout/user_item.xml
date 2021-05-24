@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background2"
+    android:background="@color/background"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/background"
+        app:cardBackgroundColor="@color/button"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
         app:cardUseCompatPadding="true">
@@ -33,7 +33,7 @@
                 android:gravity="center_vertical"
                 android:text="이름"
                 style="@style/Text.TitleStyle"
-                android:textColor="@color/text"
+                android:textColor="@color/background"
                 android:textSize="30sp" />
         </LinearLayout>
 

@@ -7,8 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="background">#f7f7e8</color>
-    <color name="button">#9dad7f</color>
-    <color name="text">#557174</color>
-    <color name="background2">#c7cfb7</color>
+<!--    <color name="background">#f7f7e8</color>-->
+<!--    <color name="button">#9dad7f</color>-->
+<!--    <color name="text">#557174</color>-->
+<!--    <color name="background2">#c7cfb7</color>-->
+    <color name="button">#ecb390</color>
+    <color name="text">#df7861</color>
+    <color name="background">#fcf8e8</color>
+    <color name="background2">#d4e2d4</color>
 </resources>
