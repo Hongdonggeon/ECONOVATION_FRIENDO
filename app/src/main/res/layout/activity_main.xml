@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
-        android:background="@color/button"
+        android:background="@drawable/main_button"
         android:text="+"
         style="@style/Text.TitleStyle"
         android:textColor="@color/text"
