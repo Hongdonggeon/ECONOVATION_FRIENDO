@@ -23,6 +23,9 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth"
+                    android:scheme="cde9db3e2d1250e758b5d5c82b2a0767" />
             </intent-filter>
         </activity>
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
@@ -33,7 +36,8 @@
 
                 <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" -->
                 <data android:host="oauth"
-                    android:scheme="kakao0a65dffdec0f112a218c31aad74cd74f" />
+                    android:scheme="kakaocde9db3e2d1250e758b5d5c82b2a0767" />
+
             </intent-filter>
         </activity>
 

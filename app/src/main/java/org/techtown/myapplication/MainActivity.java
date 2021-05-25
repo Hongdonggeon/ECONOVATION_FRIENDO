@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                     //토큰 유효성 체크 성공(필요 시 토큰 갱신 됨)
-                    Log.d(" success token check : ", "토큰 유효성 체크 성공");
+                    Log.d("success token check : ", "토큰 유효성 체크 성공");
                     updateKakaoLoginUI();
                 }
                 return null;
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("success login : ", "로그인에 성공했습니다");
                 }
                 if (throwable != null){         // 로그인 실패 했다면
-                    Log.d("success login : ", "로그인에 실패했습니다" + throwable.toString());
+                    Log.d("fail login : ", "로그인에 실패했습니다" + throwable.toString());
                 }
                 updateKakaoLoginUI();
                 return null;
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     UserApiClient.getInstance().loginWithKakaoTalk(MainActivity.this,login_callback);
                 }else{
                     UserApiClient.getInstance().loginWithKakaoAccount(MainActivity.this,login_callback);
+                    Log.d("login in KakaoAccount :", "카카오 계정으로 로그인");
                 }
             }
         });
@@ -91,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
             @Override
             public Unit invoke(User user, Throwable throwable) {
-
                 // 로그인이 되어 있을때 이벤트
                 if(user != null){
                     //카카오 API로부터 넘어오는 정보들 확인용 로그
