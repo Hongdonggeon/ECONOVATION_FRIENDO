@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "invoke: gender=" + user.getKakaoAccount().getGender());
                     Log.i(TAG, "invoke: age=" + user.getKakaoAccount().getAgeRange());
 
-                    Intent intent = new Intent(MainActivity.this,SubActivity.class);
+                    Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                     intent.putExtra("profile",user.getKakaoAccount().getProfile().getThumbnailImageUrl());
                     intent.putExtra("nickname",user.getKakaoAccount().getProfile().getNickname());
                     intent.putExtra("email",user.getKakaoAccount().getEmail());
