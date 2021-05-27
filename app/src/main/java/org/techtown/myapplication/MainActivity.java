@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.kakao.sdk.auth.AuthApiClient;
 import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.common.model.KakaoSdkError;
+import com.kakao.sdk.common.util.Utility;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.AccessTokenInfo;
 import com.kakao.sdk.user.model.User;
@@ -28,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btn_login = findViewById(R.id.btn_login);
+
+        String keyHash = Utility.INSTANCE.getKeyHash(MainActivity.this);
+        Log.d(TAG, "해쉬키 값 : " + keyHash);
 
         // 토큰 유효성 체크하는 콜백함수
         Function2<AccessTokenInfo, Throwable, Unit> token_callback = new Function2<AccessTokenInfo, Throwable, Unit>() {
