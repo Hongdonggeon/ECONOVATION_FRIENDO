@@ -24,6 +24,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" -->
+            </intent-filter>
+            <intent-filter>
                 <data
                     android:host="oauth"
                     android:scheme="cde9db3e2d1250e758b5d5c82b2a0767" />
