@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
-        <activity android:name=".MenuActivity"></activity>
+        <activity android:name=".GroupCalendar"></activity>
+        <activity android:name=".MenuActivity" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -25,6 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
+
                 <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" -->
                 <data
                     android:host="oauth"
