@@ -18,6 +18,8 @@ allprojects {
         mavenCentral()
         jcenter() // Warning: this repository is going to shut down soon
 
+        maven { url 'https://jitpack.io'}
+
         // 카카오 SDK 레포지토리 실행
         maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
     }

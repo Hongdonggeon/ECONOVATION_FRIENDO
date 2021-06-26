@@ -33,6 +33,9 @@ android {
 
 dependencies {
 
+    //Add LakuePopupActivity Library
+    implementation 'com.github.lakue119:LakuePopupActivity:1.0.1'
+
     implementation "com.kakao.sdk:v2-user:2.5.0" // 카카오 로그인
     implementation "com.kakao.sdk:v2-talk:2.5.0" // 친구, 메시지(카카오톡)
     implementation "com.kakao.sdk:v2-story:2.5.0" // 카카오스토리
