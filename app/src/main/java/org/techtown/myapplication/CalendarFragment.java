@@ -24,6 +24,8 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 Intent intent = new Intent(getContext(), TodoWriteActivity.class);
+                intent.putExtra("month", month);
+                intent.putExtra("dayOfMonth", dayOfMonth);
                 startActivity(intent);
             }
         });

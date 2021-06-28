@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Friendo</string>
     <string name="kakao_app_key">cde9db3e2d1250e758b5d5c82b2a0767</string>
     <string name="title_activity_main_menu">MainMenu</string>
     <!-- Strings used for fragments for navigation -->
