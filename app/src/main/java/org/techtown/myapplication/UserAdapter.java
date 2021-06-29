@@ -55,7 +55,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         public ViewHolder(View itemView){
             super(itemView);
 
-            textView = itemView.findViewById(R.id.textView);
+            textView = itemView.findViewById(R.id.tdl_name);
         }
 
         public void setItem(User item) {
