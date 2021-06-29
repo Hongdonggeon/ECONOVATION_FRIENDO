@@ -36,8 +36,8 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
+
     // 로그인 후에 다시 로그인 화면 돌아가는거 방지 & 두번 터치시 어플 종료
     @Override
     public void onBackPressed() {
