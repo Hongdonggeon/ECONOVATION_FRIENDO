@@ -22,6 +22,9 @@ public class MenuActivity extends AppCompatActivity {
 
         mainFragment =(GroupsFragment)getSupportFragmentManager().findFragmentById(R.id.mainFragment);
 
+        //로그인 화면에서 받아온 카카오 이메일 값
+        Intent intent = getIntent();
+        String email = intent.getStringExtra("email");
 
         // 그룹캘린더 테스트용 버튼
         Button btn_test = findViewById(R.id.button);
@@ -29,6 +32,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), GroupCalendar.class);
+                intent.putExtra("email",email);
                 startActivity(intent);
             }
         });

@@ -106,12 +106,13 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "invoke: gender=" + user.getKakaoAccount().getGender());
                     Log.i(TAG, "invoke: age=" + user.getKakaoAccount().getAgeRange());
 
+
+
                     Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                     intent.putExtra("profile",user.getKakaoAccount().getProfile().getThumbnailImageUrl());
                     intent.putExtra("nickname",user.getKakaoAccount().getProfile().getNickname());
                     intent.putExtra("email",user.getKakaoAccount().getEmail());
                     startActivity(intent);
-
                 } else { //로그인이 되어 있지 않을 때, (user = null 일때를 의미)
                     Toast.makeText(MainActivity.this,"로그인이 필요합니다.",Toast.LENGTH_SHORT).show();
                 }

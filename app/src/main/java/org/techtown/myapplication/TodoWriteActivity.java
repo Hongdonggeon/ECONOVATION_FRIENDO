@@ -2,6 +2,7 @@ package org.techtown.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,6 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class TodoWriteActivity extends AppCompatActivity {
@@ -46,6 +50,10 @@ public class TodoWriteActivity extends AppCompatActivity {
         int dayOfMonth = intent.getIntExtra("dayOfMonth",0);
         textView.setText((month+1) + "월" + " "+ dayOfMonth + "일");
 
+        // 카카오API로부터 이메일 값 받아 왔음, 데이터베이스 만들때 UID로 사용하면 됨
+        String email = intent.getStringExtra("email");
+        Log.d("TodoWriteActivityEmail:", email);
+
 
         Switch switch1 = findViewById(R.id.switch1);
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -69,6 +77,10 @@ public class TodoWriteActivity extends AppCompatActivity {
         editText = findViewById(R.id.editText);
         checkBox = findViewById(R.id.checkBox);
 
+        // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        myRef.setValue("Test1");
 
 
         button.setOnClickListener(new View.OnClickListener() {

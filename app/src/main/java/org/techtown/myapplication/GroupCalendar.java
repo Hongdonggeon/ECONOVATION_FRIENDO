@@ -1,5 +1,6 @@
 package org.techtown.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -12,6 +13,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.jetbrains.annotations.NotNull;
 
 public class GroupCalendar extends AppCompatActivity {
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +36,14 @@ public class GroupCalendar extends AppCompatActivity {
 
         pager.setAdapter(adapter);
 
+        // 로그인 화면에서 받아온 카카오 이메일 값
+        Intent intent = getIntent();
+        String email = intent.getStringExtra("email");
+
+        // Bundle 이용하여 CalendarFragment로 넘겨줌
+        Bundle bundle = new Bundle(1);
+        bundle.putString("email", email);
+        calendarFragment.setArguments(bundle);
 
         // BottomNavigationView를 직접 터치했을때 화면 전환 이벤트
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -70,4 +81,5 @@ public class GroupCalendar extends AppCompatActivity {
         });
 
     }
+
 }
