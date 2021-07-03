@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
                         // 로그인 필요하다
                         Log.d("need login : ","로그인이 필요합니다");
                     }
-
                     else {
                         //기타 에러
                         Log.d("error occured : ", "기타 에러 발생" + throwable.toString());

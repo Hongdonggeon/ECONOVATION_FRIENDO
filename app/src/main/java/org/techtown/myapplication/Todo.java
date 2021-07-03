@@ -4,7 +4,22 @@ import java.util.Objects;
 
 public class Todo {
     public int id;
+    public String todo;
+    public String alarm;
 
+    public Todo(int id, String todo, String alarm) {
+        this.id = id;
+        this.todo = todo;
+        this.alarm = alarm;
+    }
+
+    public String getAlarm() {
+        return alarm;
+    }
+
+    public void setAlarm(String alarm) {
+        this.alarm = alarm;
+    }
     public int getId() {
         return id;
     }
@@ -13,12 +28,6 @@ public class Todo {
         this.id = id;
     }
 
-    public String todo;
-
-    public Todo(int id, String todo) {
-        this.id = id;
-        this.todo = todo;
-    }
 
     public String getTodo() {
         return todo;

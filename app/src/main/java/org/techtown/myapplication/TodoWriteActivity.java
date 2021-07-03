@@ -6,9 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,23 +18,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 
 public class TodoWriteActivity extends AppCompatActivity {
+
+    ArrayList<Todo> items = new ArrayList<Todo>();
+
     TextView textView;
     TextView textViewTest;
     RecyclerView recyclerView;
     EditText editText;
     Button button;
     CheckBox checkBox;
+    CustomAdapter customAdapter;
 
+    String todoContent;
     int hour;
     int minute;
+    int position;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_write);
 
-        textViewTest = findViewById(R.id.textViewTest);
 
         recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
@@ -54,24 +59,8 @@ public class TodoWriteActivity extends AppCompatActivity {
         String email = intent.getStringExtra("email");
         Log.d("TodoWriteActivityEmail:", email);
 
-
-        Switch switch1 = findViewById(R.id.switch1);
-        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    Intent intent = new Intent(getApplicationContext(), PopupAlarmActivity.class);
-                    startActivityForResult(intent,101);
-                } else if(!isChecked){
-                    hour = 0;
-                    minute = 0;
-                    textViewTest.setText("지정 안됨");
-                }
-            }
-        });
-
-        CustomAdapter customAdapter = new CustomAdapter();
-        customAdapter.addItem(new Todo(1,"테스트"));
+        customAdapter = new CustomAdapter();
+        customAdapter.addItem(new Todo(1,"테스트","테스트"));
 
         button = findViewById(R.id.button);
         editText = findViewById(R.id.editText);
@@ -83,11 +72,12 @@ public class TodoWriteActivity extends AppCompatActivity {
         myRef.setValue("Test1");
 
 
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String todoContent = editText.getText().toString();
-                customAdapter.addItem(new Todo(2,todoContent));
+                todoContent = editText.getText().toString();
+                customAdapter.addItem(new Todo(2,todoContent,"알람 해제"));
                 editText.setText(null);
                 Toast.makeText(getApplicationContext(),editText.getText().toString(),Toast.LENGTH_SHORT).show();
             }
@@ -106,14 +96,23 @@ public class TodoWriteActivity extends AppCompatActivity {
         if(requestCode==101 && resultCode==102) {
             hour = data.getIntExtra("hour",0);
             minute = data.getIntExtra("minute",0);
+            position = data.getIntExtra("position",0);
+
+            Log.d("아이템 포지션",String.valueOf(position));
+
             if(hour < 10 && minute < 10) {
-                textViewTest.setText("0" + hour + ":" + "0" + minute);
+                customAdapter.getItems().get(position).setAlarm("0" + hour + ":" + "0" + minute);
+                customAdapter.notifyDataSetChanged();
+//                customAdapter.alarmSwitch.setText("0" + hour + ":" + "0" + minute);
             } else if (hour < 10 && minute > 10){
-                textViewTest.setText("0" + hour + ":" + minute);
+                customAdapter.getItems().get(position).setAlarm("0" + hour + ":" + "" + minute);
+                customAdapter.notifyDataSetChanged();
             } else if (hour > 10 && minute < 10){
-                textViewTest.setText(hour + ":" + "0" + minute);
+                customAdapter.getItems().get(position).setAlarm("" + hour + ":" + "0" + minute);
+                customAdapter.notifyDataSetChanged();
             } else {
-                textViewTest.setText(hour + ":" + minute);
+                customAdapter.getItems().get(position).setAlarm("" + hour + ":" + "" + minute);
+                customAdapter.notifyDataSetChanged();
             }
         }
     }

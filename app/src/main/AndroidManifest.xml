@@ -12,8 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
-        <activity android:name=".PopupAlarmActivity"
-            android:theme="@style/Theme.MyDialog"></activity>
+        <activity
+            android:name=".PopupAlarmActivity"
+            android:theme="@style/Theme.MyDialog" />
         <activity android:name=".TodoWriteActivity" />
         <activity android:name=".GroupCalendar" />
         <activity android:name=".MenuActivity" />

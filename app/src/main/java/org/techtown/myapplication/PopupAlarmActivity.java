@@ -21,11 +21,17 @@ public class PopupAlarmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_popup_alarm);
         TimePicker timePicker = findViewById(R.id.timePicker);
 
+        CustomAdapter customAdapter = new CustomAdapter();
+
+
         Button button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
+                Intent intent = getIntent();
+                int position = intent.getIntExtra("position", 0);
+                intent.putExtra("position", position);
+
                 intent.putExtra("hour",timePicker.getHour());
                 intent.putExtra("minute",timePicker.getMinute());
                 setResult(102,intent);
