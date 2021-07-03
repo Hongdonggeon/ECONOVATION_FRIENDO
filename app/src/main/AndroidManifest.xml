@@ -11,7 +11,7 @@
         android:theme="@style/Theme.MyApplication">
         <activity android:name=".Group_add_dialog"
             android:theme="@style/Theme.AppCompat.Dialog"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
