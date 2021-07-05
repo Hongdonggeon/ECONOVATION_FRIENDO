@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "649362980600",
+    "project_id": "friendo-cf119",
+    "storage_bucket": "friendo-cf119.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649362980600:android:afdc3c0573d94cffaf450d",
+        "android_client_info": {
+          "package_name": "org.techtown.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649362980600-5kmv7or1cf09t7qgr1rq9r2rj6l6e1qs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARgD5D0slsQ-6gUswHnnBt9cTj6fP7-lg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649362980600-5kmv7or1cf09t7qgr1rq9r2rj6l6e1qs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -13,6 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
 
+        <activity
+            android:name=".PopupAlarmActivity"
+            android:theme="@style/Theme.MyDialog" />
+        <activity android:name=".TodoWriteActivity" />
+        <activity android:name=".GroupCalendar" />
         <activity android:name=".GroupCalendar"></activity>
         <activity android:name=".MenuActivity" />
 
