@@ -18,7 +18,6 @@
             android:theme="@style/Theme.MyDialog" />
         <activity android:name=".TodoWriteActivity" />
         <activity android:name=".GroupCalendar" />
-        <activity android:name=".GroupCalendar"></activity>
         <activity android:name=".MenuActivity" />
 
         <meta-data
