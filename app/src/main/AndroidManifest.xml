@@ -20,7 +20,7 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"/>
 
         <activity android:name=".Group_add_dialog"
             android:theme="@style/Theme.AppCompat.Dialog"></activity>
