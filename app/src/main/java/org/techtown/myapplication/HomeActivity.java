@@ -30,17 +30,14 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Group_add_dialog.class);
                 startActivityForResult(intent,MAIN_ACTIVITY_REQUEST_CODE);
+            }
+        });
+        groupsFragment.userAdapter.setOnItemClickListener(new UserAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                Intent intent = new Intent(getApplicationContext(), GroupCalendar.class);
+                startActivity(intent);
 
-                if(groupsFragment.items.size()>0) {
-                    toDoList = findViewById(R.id.tdl_name);
-                    toDoList.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(getApplicationContext(), GroupCalendar.class);
-                            startActivity(intent);
-                        }
-                    });
-                }
             }
         });
     }

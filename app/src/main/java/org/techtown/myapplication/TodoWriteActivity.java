@@ -15,8 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+//import com.google.firebase.database.DatabaseReference;
+//import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -55,21 +55,21 @@ public class TodoWriteActivity extends AppCompatActivity {
         int dayOfMonth = intent.getIntExtra("dayOfMonth",0);
         textView.setText((month+1) + "월" + " "+ dayOfMonth + "일");
 
-        // 카카오API로부터 이메일 값 받아 왔음, 데이터베이스 만들때 UID로 사용하면 됨
-        String email = intent.getStringExtra("email");
-        Log.d("TodoWriteActivityEmail:", email);
+//        // 카카오API로부터 이메일 값 받아 왔음, 데이터베이스 만들때 UID로 사용하면 됨
+//        String email = intent.getStringExtra("email");
+//        Log.d("TodoWriteActivityEmail:", email);
 
         customAdapter = new CustomAdapter();
-        customAdapter.addItem(new Todo(1,"테스트","테스트"));
+        customAdapter.addItem(new Todo(1,"테스트","테스트",false));
 
         button = findViewById(R.id.button);
         editText = findViewById(R.id.editText);
         checkBox = findViewById(R.id.checkBox);
 
-        // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
-        myRef.setValue("Test1");
+//        // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference();
+//        myRef.setValue("Test1");
 
 
 
@@ -77,7 +77,7 @@ public class TodoWriteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 todoContent = editText.getText().toString();
-                customAdapter.addItem(new Todo(2,todoContent,"알람 해제"));
+                customAdapter.addItem(new Todo(2,todoContent,"알람 해제",false));
                 editText.setText(null);
                 Toast.makeText(getApplicationContext(),editText.getText().toString(),Toast.LENGTH_SHORT).show();
             }

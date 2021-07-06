@@ -2,7 +2,6 @@ package org.techtown.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +22,12 @@ public class CalendarFragment extends Fragment {
         TextView textView = (TextView)view.findViewById(R.id.textView);
 
 
-        // MainActivity에서 카카오API로부터 사용자의 이메일 값 가져옴
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            email = bundle.getString("email");
-            Log.d("카카오 이메일 정보 : ", email);
-        }
+//        // MainActivity에서 카카오API로부터 사용자의 이메일 값 가져옴
+//        Bundle bundle = getArguments();
+//        if(bundle != null) {
+//            email = bundle.getString("email");
+//            Log.d("카카오 이메일 정보 : ", email);
+//        }
 
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override

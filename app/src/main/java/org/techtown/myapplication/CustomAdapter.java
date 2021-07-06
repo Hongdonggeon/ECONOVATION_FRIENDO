@@ -13,8 +13,6 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 
 import static androidx.core.app.ActivityCompat.startActivityForResult;
@@ -42,15 +40,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
     @NonNull
-    @NotNull
     @Override
-    public CustomAdapter.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+    public CustomAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_todo_item,parent,false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull CustomAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CustomAdapter.ViewHolder holder, int position) {
         CheckBox checkBox = holder.itemView.findViewById(R.id.checkBox);
         alarmSwitch = holder.itemView.findViewById(R.id.alarmSwitch);
         Todo item = items.get(position);
