@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class GroupsFragment extends Fragment {
     static RecyclerView recyclerView;
-    static UserAdapter userAdapter;
+     UserAdapter userAdapter;
     ArrayList<User> items = new ArrayList<>();
 
     @Override

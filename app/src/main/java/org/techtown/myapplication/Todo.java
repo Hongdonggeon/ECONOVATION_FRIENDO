@@ -6,11 +6,13 @@ public class Todo {
     public int id;
     public String todo;
     public String alarm;
+    public boolean check;
 
-    public Todo(int id, String todo, String alarm) {
+    public Todo(int id, String todo, String alarm, boolean check) {
         this.id = id;
         this.todo = todo;
         this.alarm = alarm;
+        this.check = check;
     }
 
     public String getAlarm() {
