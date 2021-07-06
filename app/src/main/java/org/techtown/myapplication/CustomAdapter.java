@@ -13,6 +13,8 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import static androidx.core.app.ActivityCompat.startActivityForResult;
@@ -20,6 +22,7 @@ import static androidx.core.app.ActivityCompat.startActivityForResult;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>{
     ArrayList<Todo> items = new ArrayList<Todo>();
     Switch alarmSwitch;
+    CheckBox checkBox;
 
     public void setItems(ArrayList<Todo> items) {
         this.items = items;
@@ -28,9 +31,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     // 뷰홀더 클래스
     public static class ViewHolder extends RecyclerView.ViewHolder {
         Switch alarmSwitch;
+        CheckBox checkBox;
         public ViewHolder(View view) {
             super(view);
             alarmSwitch = view.findViewById(R.id.alarmSwitch);
+            checkBox = view.findViewById(R.id.checkBox);
         }
 
         // 설정된 알람 시간 텍스트로 표시
@@ -41,24 +46,32 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     @NonNull
     @Override
-    public CustomAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CustomAdapter.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_todo_item,parent,false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CustomAdapter.ViewHolder holder, int position) {
-        CheckBox checkBox = holder.itemView.findViewById(R.id.checkBox);
-        alarmSwitch = holder.itemView.findViewById(R.id.alarmSwitch);
-        Todo item = items.get(position);
+    public void onBindViewHolder(@NonNull @NotNull CustomAdapter.ViewHolder holder, int position) {
+        final Todo item = items.get(position);
+        holder.checkBox.setOnCheckedChangeListener(null);
+        holder.checkBox.setChecked(item.isCheckBoxChecked());
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    item.setCheckBoxChecked(true);
+                }
+            }
+        });
 
-        // setItem()메소드( 알람 시간 텍스트 설정 )를 사용하여 데이터 바인딩 시킴
-        ((ViewHolder)holder).setItem(item);
-
-        alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.alarmSwitch.setOnCheckedChangeListener(null);
+        holder.alarmSwitch.setChecked(item.isAlarmChecked());
+        holder.alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    item.setAlarmChecked(true);
                     Intent intent = new Intent(buttonView.getContext(), PopupAlarmActivity.class);
                     intent.putExtra("position",position);
                     startActivityForResult((Activity) buttonView.getContext(), intent, 101,null);
@@ -68,14 +81,16 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 }
             }
         });
-        checkBox.setText(items.get(position).todo);
+        // setItem()메소드( 알람 시간 텍스트 설정 )를 사용하여 데이터 바인딩 시킴
+        ((ViewHolder)holder).setItem(item);
+
+
+        holder.checkBox.setText(items.get(position).todo);
     }
 
     public ArrayList<Todo> getItems() {
         return items;
     }
-
-
 
     public void addItem(Todo item){
         items.add(item);

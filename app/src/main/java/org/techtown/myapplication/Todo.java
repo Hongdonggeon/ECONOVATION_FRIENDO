@@ -6,13 +6,32 @@ public class Todo {
     public int id;
     public String todo;
     public String alarm;
-    public boolean check;
+    public boolean checkBoxChecked;
 
-    public Todo(int id, String todo, String alarm, boolean check) {
+    public boolean isCheckBoxChecked() {
+        return checkBoxChecked;
+    }
+
+    public void setCheckBoxChecked(boolean checkBoxChecked) {
+        this.checkBoxChecked = checkBoxChecked;
+    }
+
+    public boolean isAlarmChecked() {
+        return alarmChecked;
+    }
+
+    public void setAlarmChecked(boolean alarmChecked) {
+        this.alarmChecked = alarmChecked;
+    }
+
+    public boolean alarmChecked;
+
+    public Todo(int id, String todo, String alarm, boolean checkBoxChecked, boolean alarmChecked) {
         this.id = id;
         this.todo = todo;
         this.alarm = alarm;
-        this.check = check;
+        this.checkBoxChecked = checkBoxChecked;
+        this.alarmChecked = alarmChecked;
     }
 
     public String getAlarm() {

@@ -15,8 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-//import com.google.firebase.database.DatabaseReference;
-//import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -60,24 +60,22 @@ public class TodoWriteActivity extends AppCompatActivity {
 //        Log.d("TodoWriteActivityEmail:", email);
 
         customAdapter = new CustomAdapter();
-        customAdapter.addItem(new Todo(1,"테스트","테스트",false));
+        customAdapter.addItem(new Todo(1,"테스트","테스트",false,false));
 
         button = findViewById(R.id.button);
         editText = findViewById(R.id.editText);
         checkBox = findViewById(R.id.checkBox);
 
-//        // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference();
-//        myRef.setValue("Test1");
-
-
+        // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        myRef.setValue("Test1");
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 todoContent = editText.getText().toString();
-                customAdapter.addItem(new Todo(2,todoContent,"알람 해제",false));
+                customAdapter.addItem(new Todo(2,todoContent,"알람 해제",false,false));
                 editText.setText(null);
                 Toast.makeText(getApplicationContext(),editText.getText().toString(),Toast.LENGTH_SHORT).show();
             }
@@ -103,7 +101,6 @@ public class TodoWriteActivity extends AppCompatActivity {
             if(hour < 10 && minute < 10) {
                 customAdapter.getItems().get(position).setAlarm("0" + hour + ":" + "0" + minute);
                 customAdapter.notifyDataSetChanged();
-//                customAdapter.alarmSwitch.setText("0" + hour + ":" + "0" + minute);
             } else if (hour < 10 && minute > 10){
                 customAdapter.getItems().get(position).setAlarm("0" + hour + ":" + "" + minute);
                 customAdapter.notifyDataSetChanged();
