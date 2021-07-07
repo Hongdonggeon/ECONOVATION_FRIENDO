@@ -38,7 +38,6 @@
             </intent-filter>
         </activity>
 
-
         <activity android:name=".Group_add_dialog"
             android:theme="@style/Theme.AppCompat.Dialog"></activity>
         <activity android:name=".HomeActivity">
