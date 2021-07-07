@@ -25,24 +25,24 @@
             android:value="@string/kakao_app_key" />
 
 
-        <activity android:name=".MainActivity"></activity>
-
-
-        <activity android:name=".Group_add_dialog"
-            android:theme="@style/Theme.AppCompat.Dialog"></activity>
-        <activity android:name=".HomeActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-
                 <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" -->
                 <data
                     android:host="oauth"
                     android:scheme="cde9db3e2d1250e758b5d5c82b2a0767" />
             </intent-filter>
+        </activity>
+
+
+        <activity android:name=".Group_add_dialog"
+            android:theme="@style/Theme.AppCompat.Dialog"></activity>
+        <activity android:name=".HomeActivity">
+
         </activity>
 
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">

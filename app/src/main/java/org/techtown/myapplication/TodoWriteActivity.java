@@ -60,7 +60,7 @@ public class TodoWriteActivity extends AppCompatActivity {
 //        Log.d("TodoWriteActivityEmail:", email);
 
         customAdapter = new CustomAdapter();
-        customAdapter.addItem(new Todo(1,"테스트","테스트",false));
+        customAdapter.addItem(new Todo(1,"테스트","테스트",false,false));
 
         button = findViewById(R.id.button);
         editText = findViewById(R.id.editText);
@@ -77,7 +77,7 @@ public class TodoWriteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 todoContent = editText.getText().toString();
-                customAdapter.addItem(new Todo(2,todoContent,"알람 해제",false));
+                customAdapter.addItem(new Todo(2,todoContent,"알람 해제",false,false));
                 editText.setText(null);
                 Toast.makeText(getApplicationContext(),editText.getText().toString(),Toast.LENGTH_SHORT).show();
             }

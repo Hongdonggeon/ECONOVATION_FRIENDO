@@ -65,7 +65,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 }
             }
         });
-
         holder.alarmSwitch.setOnCheckedChangeListener(null);
         holder.alarmSwitch.setChecked(item.isAlarmChecked());
         holder.alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
