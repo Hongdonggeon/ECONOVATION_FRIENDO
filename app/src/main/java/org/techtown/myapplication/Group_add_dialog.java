@@ -14,8 +14,7 @@ public class Group_add_dialog extends AppCompatActivity {
      Button cancelBtn;
      EditText tdl_input;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_group_add_dialog);
