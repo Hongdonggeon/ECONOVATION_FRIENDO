@@ -39,10 +39,12 @@ public class GroupCalendar extends AppCompatActivity {
         // 로그인 화면에서 받아온 카카오 이메일 값
         Intent intent = getIntent();
         String email = intent.getStringExtra("email");
+        String groupName = intent.getStringExtra("groupName");
 
         // Bundle 이용하여 CalendarFragment로 넘겨줌
-        Bundle bundle = new Bundle(1);
+        Bundle bundle = new Bundle();
         bundle.putString("email", email);
+        bundle.putString("groupName", groupName);
         calendarFragment.setArguments(bundle);
 
         // BottomNavigationView를 직접 터치했을때 화면 전환 이벤트

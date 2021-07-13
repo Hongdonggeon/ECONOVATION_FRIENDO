@@ -4,9 +4,19 @@ import java.util.Objects;
 
 public class Todo {
     public int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String todo;
     public String alarm;
     public boolean checkBoxChecked;
+    public boolean alarmChecked;
 
     public boolean isCheckBoxChecked() {
         return checkBoxChecked;
@@ -24,7 +34,7 @@ public class Todo {
         this.alarmChecked = alarmChecked;
     }
 
-    public boolean alarmChecked;
+    public Todo(){}
 
     public Todo(int id, String todo, String alarm, boolean checkBoxChecked, boolean alarmChecked) {
         this.id = id;
@@ -41,14 +51,6 @@ public class Todo {
     public void setAlarm(String alarm) {
         this.alarm = alarm;
     }
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
 
     public String getTodo() {
         return todo;

@@ -25,6 +25,10 @@ public class HomeActivity extends AppCompatActivity {
         groupsFragment =(GroupsFragment)getSupportFragmentManager().findFragmentById(R.id.mainFragment);
         accountAddButton = findViewById(R.id.groupAddButton);
 
+        Intent intent = getIntent();
+        String email = intent.getStringExtra("email");
+
+
         accountAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -36,6 +40,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int pos) {
                 Intent intent = new Intent(getApplicationContext(), GroupCalendar.class);
+                intent.putExtra("email",email);
+                intent.putExtra("groupName",tdl_name);
                 startActivity(intent);
 
             }
