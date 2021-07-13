@@ -29,6 +29,7 @@ public class HomeActivity extends AppCompatActivity {
         String email = intent.getStringExtra("email");
 
 
+        // 그룹 추가 버튼
         accountAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
