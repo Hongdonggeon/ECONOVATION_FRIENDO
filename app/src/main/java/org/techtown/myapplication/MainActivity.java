@@ -87,12 +87,15 @@ public class MainActivity extends AppCompatActivity {
                     UserApiClient.getInstance().loginWithKakaoAccount(MainActivity.this,login_callback);
                     Log.d("login in KakaoAccount :", "카카오 계정으로 로그인");
                 }
+
             }
         });
     }
 
     //로그인이 되어있는지를 확인하고 로그인 되어있는 경우, 아닌경우에 따라 다른 이벤트 설정
     private void updateKakaoLoginUI(){
+        CalendarFragment calendarFragment = new CalendarFragment();
+
         UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
             @Override
             public Unit invoke(User user, Throwable throwable) {
@@ -104,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "invoke: nickname=" + user.getKakaoAccount().getProfile().getNickname());
                     Log.i(TAG, "invoke: gender=" + user.getKakaoAccount().getGender());
                     Log.i(TAG, "invoke: age=" + user.getKakaoAccount().getAgeRange());
+
 
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                     intent.putExtra("profile",user.getKakaoAccount().getProfile().getThumbnailImageUrl());

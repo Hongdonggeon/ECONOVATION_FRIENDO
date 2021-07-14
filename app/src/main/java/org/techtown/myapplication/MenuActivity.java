@@ -2,6 +2,7 @@ package org.techtown.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ public class MenuActivity extends AppCompatActivity {
         //로그인 화면에서 받아온 카카오 이메일 값
         Intent intent = getIntent();
         String email = intent.getStringExtra("email");
+        Log.d("이메일값 오나? : ", email);
 
         // 그룹캘린더 테스트용 버튼
         Button btn_test = findViewById(R.id.button);

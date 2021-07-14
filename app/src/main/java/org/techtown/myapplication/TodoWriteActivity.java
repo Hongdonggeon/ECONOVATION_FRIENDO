@@ -15,8 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-//import com.google.firebase.database.DatabaseReference;
-//import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -37,11 +37,12 @@ public class TodoWriteActivity extends AppCompatActivity {
     int hour;
     int minute;
     int position;
+
+    int id=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_write);
-
 
         recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
@@ -55,29 +56,56 @@ public class TodoWriteActivity extends AppCompatActivity {
         int dayOfMonth = intent.getIntExtra("dayOfMonth",0);
         textView.setText((month+1) + "월" + " "+ dayOfMonth + "일");
 
-//        // 카카오API로부터 이메일 값 받아 왔음, 데이터베이스 만들때 UID로 사용하면 됨
-//        String email = intent.getStringExtra("email");
-//        Log.d("TodoWriteActivityEmail:", email);
+        // 카카오API로부터 이메일 값, 그룹이름 값 받아 왔음, 데이터베이스 만들때 UID로 사용하면 됨
+        String email = intent.getStringExtra("email");
+        String groupName = intent.getStringExtra("groupName");
+        Log.d("TodoWriteActivityEmail:", email);
 
         customAdapter = new CustomAdapter();
-        customAdapter.addItem(new Todo(1,"테스트","테스트",false,false));
 
         button = findViewById(R.id.button);
         editText = findViewById(R.id.editText);
         checkBox = findViewById(R.id.checkBox);
 
-//        // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference();
-//        myRef.setValue("Test1");
+        // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
 
 
-
+        // Todo아이템 추가 버튼
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
+                id += 1;
+                myRef.child("Todos")
+                        .child(groupName)
+                        .child(String.valueOf(month+1)+"월")
+                        .child(String.valueOf(dayOfMonth)+"일")
+                        .child(String.valueOf(id)+"번")
+                        .child("체크박스 여부").setValue(false);
+                myRef.child("Todos")
+                        .child(groupName)
+                        .child(String.valueOf(month+1)+"월")
+                        .child(String.valueOf(dayOfMonth)+"일")
+                        .child(String.valueOf(id)+"번")
+                        .child("내용").setValue(todoContent);
+                myRef.child("Todos")
+                        .child(groupName)
+                        .child(String.valueOf(month+1)+"월")
+                        .child(String.valueOf(dayOfMonth)+"일")
+                        .child(String.valueOf(id)+"번")
+                        .child("알림시간").setValue("알람없음");
+                myRef.child("Todos")
+                        .child(groupName)
+                        .child(String.valueOf(month+1)+"월")
+                        .child(String.valueOf(dayOfMonth)+"일")
+                        .child(String.valueOf(id)+"번")
+                        .child("알람스위치 체크 여부").setValue(false);
+
                 todoContent = editText.getText().toString();
-                customAdapter.addItem(new Todo(2,todoContent,"알람 해제",false,false));
+                customAdapter.addItem(new Todo(id,todoContent,"알람 해제",false,false));
                 editText.setText(null);
                 Toast.makeText(getApplicationContext(),editText.getText().toString(),Toast.LENGTH_SHORT).show();
             }
@@ -103,7 +131,6 @@ public class TodoWriteActivity extends AppCompatActivity {
             if(hour < 10 && minute < 10) {
                 customAdapter.getItems().get(position).setAlarm("0" + hour + ":" + "0" + minute);
                 customAdapter.notifyDataSetChanged();
-//                customAdapter.alarmSwitch.setText("0" + hour + ":" + "0" + minute);
             } else if (hour < 10 && minute > 10){
                 customAdapter.getItems().get(position).setAlarm("0" + hour + ":" + "" + minute);
                 customAdapter.notifyDataSetChanged();
