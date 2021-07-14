@@ -14,16 +14,13 @@ public class Group_add_dialog extends AppCompatActivity {
      Button cancelBtn;
      EditText tdl_input;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_group_add_dialog);
         submitBtn = findViewById(R.id.submit_btn);
         cancelBtn = findViewById(R.id.cancel_btn);
         tdl_input = findViewById(R.id.tdl_input);
-
-
 
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -33,7 +30,6 @@ public class Group_add_dialog extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.putExtra("name", tdl_name);
                 setResult(RESULT_OK, intent);
-
 
                 finish();
             }
