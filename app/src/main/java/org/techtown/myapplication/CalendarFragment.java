@@ -22,7 +22,7 @@ public class CalendarFragment extends Fragment {
         TextView textView = (TextView)view.findViewById(R.id.textView);
 
 
-//        // MainActivity에서 카카오API로부터 사용자의 이메일 값 가져옴
+        // MainActivity에서 카카오API로부터 사용자의 이메일 값 가져옴
 //        Bundle bundle = getArguments();
 //        if(bundle != null) {
 //            email = bundle.getString("email");
