@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kakao.sdk.auth.AuthApiClient;
 import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.common.model.KakaoSdkError;
@@ -96,18 +98,28 @@ public class MainActivity extends AppCompatActivity {
     private void updateKakaoLoginUI(){
         CalendarFragment calendarFragment = new CalendarFragment();
 
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+
         UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
             @Override
             public Unit invoke(User user, Throwable throwable) {
                 // 로그인이 되어 있을때 이벤트
                 if(user != null){
+                    long uuid = user.getId();
+                    String email = user.getKakaoAccount().getEmail();
+                    String nickname = user.getKakaoAccount().getProfile().getNickname();
+
+
                     //카카오 API로부터 넘어오는 정보들 확인용 로그
-                    Log.i(TAG, "invoke: id=" + user.getId());
-                    Log.i(TAG, "invoke: email=" + user.getKakaoAccount().getEmail());
-                    Log.i(TAG, "invoke: nickname=" + user.getKakaoAccount().getProfile().getNickname());
+                    Log.i(TAG, "invoke: id=" + uuid);
+                    Log.i(TAG, "invoke: email=" + email);
+                    Log.i(TAG, "invoke: nickname=" + nickname);
                     Log.i(TAG, "invoke: gender=" + user.getKakaoAccount().getGender());
                     Log.i(TAG, "invoke: age=" + user.getKakaoAccount().getAgeRange());
 
+                    myRef.child("Users").child(String.valueOf(uuid)).child("Nickname").setValue(nickname);
+                    myRef.child("Users").child(String.valueOf(uuid)).child("email").setValue(email);
 
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                     intent.putExtra("profile",user.getKakaoAccount().getProfile().getThumbnailImageUrl());
