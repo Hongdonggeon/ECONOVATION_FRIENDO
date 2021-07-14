@@ -16,7 +16,6 @@ public class HomeActivity extends AppCompatActivity {
     Button accountAddButton;
     public static String tdl_name;
     private static final int MAIN_ACTIVITY_REQUEST_CODE =100;
-    Button toDoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +32,8 @@ public class HomeActivity extends AppCompatActivity {
         accountAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 Intent intent = new Intent(getApplicationContext(), Group_add_dialog.class);
                 startActivityForResult(intent,MAIN_ACTIVITY_REQUEST_CODE);
             }
@@ -44,7 +45,6 @@ public class HomeActivity extends AppCompatActivity {
                 intent.putExtra("email",email);
                 intent.putExtra("groupName",tdl_name);
                 startActivity(intent);
-
             }
         });
     }

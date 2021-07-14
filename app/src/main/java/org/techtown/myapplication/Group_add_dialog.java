@@ -23,6 +23,9 @@ public class Group_add_dialog extends AppCompatActivity {
         cancelBtn = findViewById(R.id.cancel_btn);
         tdl_input = findViewById(R.id.tdl_input);
 
+
+
+
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -30,6 +33,8 @@ public class Group_add_dialog extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.putExtra("name", tdl_name);
                 setResult(RESULT_OK, intent);
+
+
                 finish();
             }
         });
