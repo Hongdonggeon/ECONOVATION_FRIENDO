@@ -25,16 +25,16 @@ public class HomeActivity extends AppCompatActivity {
         accountAddButton = findViewById(R.id.groupAddButton);
 
         Intent intent = getIntent();
+        long uuid = intent.getLongExtra("uuid",0);
         String email = intent.getStringExtra("email");
-
 
         // 그룹 추가 버튼
         accountAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-
                 Intent intent = new Intent(getApplicationContext(), Group_add_dialog.class);
+                intent.putExtra("uuid",uuid);
                 startActivityForResult(intent,MAIN_ACTIVITY_REQUEST_CODE);
             }
         });

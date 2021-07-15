@@ -10,15 +10,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class TodoWriteActivity extends AppCompatActivity {
@@ -26,7 +33,6 @@ public class TodoWriteActivity extends AppCompatActivity {
     ArrayList<Todo> items = new ArrayList<Todo>();
 
     TextView textView;
-    TextView textViewTest;
     RecyclerView recyclerView;
     EditText editText;
     Button button;
@@ -37,6 +43,8 @@ public class TodoWriteActivity extends AppCompatActivity {
     int hour;
     int minute;
     int position;
+
+    HashMap<String,Object> map = new HashMap<>();
 
     int id=1;
     @Override
@@ -51,6 +59,7 @@ public class TodoWriteActivity extends AppCompatActivity {
         editText = findViewById(R.id.editText);
 
         textView = findViewById(R.id.textView);
+
         Intent intent = getIntent();
         int month = intent.getIntExtra("month",0);
         int dayOfMonth = intent.getIntExtra("dayOfMonth",0);
@@ -62,7 +71,6 @@ public class TodoWriteActivity extends AppCompatActivity {
         Log.d("TodoWriteActivityEmail:", email);
 
         customAdapter = new CustomAdapter();
-        customAdapter.addItem(new Todo(1,"테스트","테스트",false,false));
 
         button = findViewById(R.id.button);
         editText = findViewById(R.id.editText);
@@ -70,29 +78,48 @@ public class TodoWriteActivity extends AppCompatActivity {
 
         // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
-
+        DatabaseReference myRef = database.getReference("TEST");
 
         // Todo아이템 추가 버튼
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                todoContent = editText.getText().toString();
 
-                // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
-                id += 1;
+                map.put("todo",todoContent);
+                map.put("alarm", "알람 없음");
+                map.put("checkBoxChecked", false);
+                map.put("alarmChecked", false);
+
                 myRef.child("Todos")
                         .child(groupName)
-                        .child(String.valueOf(month+1)+"월")
-                        .child(String.valueOf(dayOfMonth)+"일")
-                        .child(String.valueOf(id)+"번")
-                        .setValue("테스트 테스트");
+                        .child((month+1)+"월")
+                        .child((dayOfMonth)+"일")
+                        .push().setValue(map);
 
-                todoContent = editText.getText().toString();
-                customAdapter.addItem(new Todo(id,todoContent,"알람 해제",false,false));
                 editText.setText(null);
                 Toast.makeText(getApplicationContext(),editText.getText().toString(),Toast.LENGTH_SHORT).show();
             }
         });
+
+        myRef.child("Todos").child((month+1)+"월").child((dayOfMonth)+"일").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                items.clear();
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Todo todo = dataSnapshot.getValue(Todo.class);
+                    items.add(todo);
+                    customAdapter.setItems(items);
+                    Log.e("onDataChangeSuccess",todo.todo);
+                }
+                customAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                Log.e("TodoWriteActivity: ", String.valueOf(error.toException()));
+            }
+        });
+
         recyclerView.setAdapter(customAdapter);
     }
 

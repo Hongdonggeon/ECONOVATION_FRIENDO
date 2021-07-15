@@ -9,6 +9,9 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class Group_add_dialog extends AppCompatActivity {
      Button submitBtn;
      Button cancelBtn;
@@ -22,6 +25,11 @@ public class Group_add_dialog extends AppCompatActivity {
         cancelBtn = findViewById(R.id.cancel_btn);
         tdl_input = findViewById(R.id.tdl_input);
 
+        Intent intent = getIntent();
+        long uuid = intent.getLongExtra("uuid",0);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,6 +39,8 @@ public class Group_add_dialog extends AppCompatActivity {
                 intent.putExtra("name", tdl_name);
                 setResult(RESULT_OK, intent);
 
+//                //GroupUsers -> 그룹의 사용자들 관리하는 데이터베이스 테스트구현
+//                myRef.child("GroupUsers").child(tdl_name).push().setValue(uuid);
                 finish();
             }
         });

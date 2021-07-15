@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
 
     //로그인이 되어있는지를 확인하고 로그인 되어있는 경우, 아닌경우에 따라 다른 이벤트 설정
@@ -122,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                     myRef.child("Users").child(String.valueOf(uuid)).child("email").setValue(email);
 
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                    intent.putExtra("uuid",user.getId());
                     intent.putExtra("profile",user.getKakaoAccount().getProfile().getThumbnailImageUrl());
                     intent.putExtra("nickname",user.getKakaoAccount().getProfile().getNickname());
                     intent.putExtra("email",user.getKakaoAccount().getEmail());

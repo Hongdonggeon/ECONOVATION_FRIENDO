@@ -23,10 +23,9 @@ public class GroupsFragment extends Fragment {
         recyclerView = (RecyclerView)rootView.findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
+
         userAdapter = new UserAdapter();
         recyclerView.setAdapter(userAdapter);
         return rootView;
     }
-
-
 }

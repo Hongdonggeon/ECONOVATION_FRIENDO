@@ -3,20 +3,13 @@ package org.techtown.myapplication;
 import java.util.Objects;
 
 public class Todo {
-    public int id;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String todo;
     public String alarm;
     public boolean checkBoxChecked;
     public boolean alarmChecked;
+
+
 
     public boolean isCheckBoxChecked() {
         return checkBoxChecked;
@@ -36,8 +29,7 @@ public class Todo {
 
     public Todo(){}
 
-    public Todo(int id, String todo, String alarm, boolean checkBoxChecked, boolean alarmChecked) {
-        this.id = id;
+    public Todo(String todo, String alarm, boolean checkBoxChecked, boolean alarmChecked) {
         this.todo = todo;
         this.alarm = alarm;
         this.checkBoxChecked = checkBoxChecked;
