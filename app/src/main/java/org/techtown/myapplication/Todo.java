@@ -10,7 +10,6 @@ public class Todo {
     public boolean alarmChecked;
 
 
-
     public boolean isCheckBoxChecked() {
         return checkBoxChecked;
     }

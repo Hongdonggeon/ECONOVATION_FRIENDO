@@ -7,15 +7,21 @@
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="30"
-        android:text="Test" />
+        android:layout_height="match_parent"
+        android:text="Test"
+        android:layout_gravity="left" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <Switch
         android:id="@+id/alarmSwitch"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="알람 없음" />
+        android:text="알람 없음"
+        android:layout_gravity="right"/>
+
 
 </LinearLayout>

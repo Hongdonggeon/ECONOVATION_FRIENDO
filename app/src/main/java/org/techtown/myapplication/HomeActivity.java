@@ -15,6 +15,7 @@ public class HomeActivity extends AppCompatActivity {
     GroupsFragment groupsFragment;
     Button accountAddButton;
     public static String tdl_name;
+    public static String memberAccount;
     private static final int MAIN_ACTIVITY_REQUEST_CODE =100;
 
     @Override
@@ -55,6 +56,8 @@ public class HomeActivity extends AppCompatActivity {
         if(requestCode == MAIN_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 tdl_name = data.getStringExtra("name");
+                memberAccount = data.getStringExtra("user");
+
                 groupsFragment.items.add(new User(tdl_name));
                 groupsFragment.userAdapter.addItem(new User(tdl_name));
                 groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);

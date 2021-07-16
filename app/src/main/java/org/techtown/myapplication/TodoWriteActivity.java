@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,6 +47,8 @@ public class TodoWriteActivity extends AppCompatActivity {
 
     HashMap<String,Object> map = new HashMap<>();
 
+    ItemTouchHelper itemTouchHelper;
+
     int id=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +56,7 @@ public class TodoWriteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_todo_write);
 
         recyclerView = findViewById(R.id.recyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
         editText = findViewById(R.id.editText);
@@ -61,9 +64,9 @@ public class TodoWriteActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
 
         Intent intent = getIntent();
-        int month = intent.getIntExtra("month",0);
-        int dayOfMonth = intent.getIntExtra("dayOfMonth",0);
-        textView.setText((month+1) + "월" + " "+ dayOfMonth + "일");
+        int month = intent.getIntExtra("month", 0);
+        int dayOfMonth = intent.getIntExtra("dayOfMonth", 0);
+        textView.setText((month + 1) + "월" + " " + dayOfMonth + "일");
 
         // 카카오API로부터 이메일 값, 그룹이름 값 받아 왔음, 데이터베이스 만들때 UID로 사용하면 됨
         String email = intent.getStringExtra("email");
@@ -86,34 +89,34 @@ public class TodoWriteActivity extends AppCompatActivity {
             public void onClick(View v) {
                 todoContent = editText.getText().toString();
 
-                map.put("todo",todoContent);
+                map.put("todo", todoContent);
                 map.put("alarm", "알람 없음");
                 map.put("checkBoxChecked", false);
                 map.put("alarmChecked", false);
 
                 myRef.child("Todos")
                         .child(groupName)
-                        .child((month+1)+"월")
-                        .child((dayOfMonth)+"일")
+                        .child((month + 1) + "월")
+                        .child((dayOfMonth) + "일")
                         .push().setValue(map);
 
                 editText.setText(null);
-                Toast.makeText(getApplicationContext(),editText.getText().toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        myRef.child("Todos").child((month+1)+"월").child((dayOfMonth)+"일").addValueEventListener(new ValueEventListener() {
+        myRef.child("Todos").child((month + 1) + "월").child((dayOfMonth) + "일").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 items.clear();
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Todo todo = dataSnapshot.getValue(Todo.class);
                     items.add(todo);
                     customAdapter.setItems(items);
-                    Log.e("onDataChangeSuccess",todo.todo);
                 }
                 customAdapter.notifyDataSetChanged();
             }
+
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
                 Log.e("TodoWriteActivity: ", String.valueOf(error.toException()));
@@ -121,8 +124,10 @@ public class TodoWriteActivity extends AppCompatActivity {
         });
 
         recyclerView.setAdapter(customAdapter);
-    }
 
+        itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(customAdapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
     @Override
     protected void onResume() {
         super.onResume();
