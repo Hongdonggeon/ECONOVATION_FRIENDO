@@ -38,7 +38,7 @@ public class TodoWriteActivity extends AppCompatActivity {
     int minute;
     int position;
 
-    int id=0;
+    int id=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +62,7 @@ public class TodoWriteActivity extends AppCompatActivity {
         Log.d("TodoWriteActivityEmail:", email);
 
         customAdapter = new CustomAdapter();
+        customAdapter.addItem(new Todo(1,"테스트","테스트",false,false));
 
         button = findViewById(R.id.button);
         editText = findViewById(R.id.editText);
@@ -84,25 +85,7 @@ public class TodoWriteActivity extends AppCompatActivity {
                         .child(String.valueOf(month+1)+"월")
                         .child(String.valueOf(dayOfMonth)+"일")
                         .child(String.valueOf(id)+"번")
-                        .child("체크박스 여부").setValue(false);
-                myRef.child("Todos")
-                        .child(groupName)
-                        .child(String.valueOf(month+1)+"월")
-                        .child(String.valueOf(dayOfMonth)+"일")
-                        .child(String.valueOf(id)+"번")
-                        .child("내용").setValue(todoContent);
-                myRef.child("Todos")
-                        .child(groupName)
-                        .child(String.valueOf(month+1)+"월")
-                        .child(String.valueOf(dayOfMonth)+"일")
-                        .child(String.valueOf(id)+"번")
-                        .child("알림시간").setValue("알람없음");
-                myRef.child("Todos")
-                        .child(groupName)
-                        .child(String.valueOf(month+1)+"월")
-                        .child(String.valueOf(dayOfMonth)+"일")
-                        .child(String.valueOf(id)+"번")
-                        .child("알람스위치 체크 여부").setValue(false);
+                        .setValue("테스트 테스트");
 
                 todoContent = editText.getText().toString();
                 customAdapter.addItem(new Todo(id,todoContent,"알람 해제",false,false));
