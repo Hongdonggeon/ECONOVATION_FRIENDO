@@ -39,7 +39,7 @@
         </activity>
 
         <activity android:name=".Group_add_dialog"
-            android:theme="@style/Theme.AppCompat.Dialog"></activity>
+            android:theme="@style/Theme.MyDialog"></activity>
         <activity android:name=".HomeActivity">
 
         </activity>

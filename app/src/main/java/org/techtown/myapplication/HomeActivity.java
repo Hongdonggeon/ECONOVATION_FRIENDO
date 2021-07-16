@@ -9,6 +9,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class HomeActivity extends AppCompatActivity {
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
@@ -16,6 +19,8 @@ public class HomeActivity extends AppCompatActivity {
     Button accountAddButton;
     public static String tdl_name;
     private static final int MAIN_ACTIVITY_REQUEST_CODE =100;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +31,7 @@ public class HomeActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String email = intent.getStringExtra("email");
-
+        String name = intent.getStringExtra("nickname");
 
         // 그룹 추가 버튼
         accountAddButton.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +63,7 @@ public class HomeActivity extends AppCompatActivity {
                 groupsFragment.items.add(new User(tdl_name));
                 groupsFragment.userAdapter.addItem(new User(tdl_name));
                 groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
+                myRef.child("groups").push().child("GroupName").setValue(tdl_name);
             }
         }
     }

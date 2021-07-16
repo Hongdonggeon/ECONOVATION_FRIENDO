@@ -97,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
     //로그인이 되어있는지를 확인하고 로그인 되어있는 경우, 아닌경우에 따라 다른 이벤트 설정
     private void updateKakaoLoginUI(){
         CalendarFragment calendarFragment = new CalendarFragment();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
@@ -106,10 +108,11 @@ public class MainActivity extends AppCompatActivity {
             public Unit invoke(User user, Throwable throwable) {
                 // 로그인이 되어 있을때 이벤트
                 if(user != null){
+
+
                     long uuid = user.getId();
                     String email = user.getKakaoAccount().getEmail();
                     String nickname = user.getKakaoAccount().getProfile().getNickname();
-
 
                     //카카오 API로부터 넘어오는 정보들 확인용 로그
                     Log.i(TAG, "invoke: id=" + uuid);
@@ -118,8 +121,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "invoke: gender=" + user.getKakaoAccount().getGender());
                     Log.i(TAG, "invoke: age=" + user.getKakaoAccount().getAgeRange());
 
+
                     myRef.child("Users").child(String.valueOf(uuid)).child("Nickname").setValue(nickname);
                     myRef.child("Users").child(String.valueOf(uuid)).child("email").setValue(email);
+
 
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                     intent.putExtra("profile",user.getKakaoAccount().getProfile().getThumbnailImageUrl());
