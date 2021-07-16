@@ -49,7 +49,6 @@ public class TodoWriteActivity extends AppCompatActivity {
 
     ItemTouchHelper itemTouchHelper;
 
-    int id=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
