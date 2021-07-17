@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
                     myRef.child("Users").child(String.valueOf(uuid)).child("email").setValue(email);
 
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                    intent.putExtra("uuid",uuid);
                     intent.putExtra("profile",user.getKakaoAccount().getProfile().getThumbnailImageUrl());
                     intent.putExtra("nickname",user.getKakaoAccount().getProfile().getNickname());
                     intent.putExtra("email",user.getKakaoAccount().getEmail());
