@@ -64,10 +64,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     @Override
     public void onItemSwipe(int position) {
-        items.remove(position);
-        notifyItemRemoved(position);
+        Log.d("아이템포지션 체크", String.valueOf(position));
 
-        myRef.child("Todos").child(groupName).child((month+1)+"월").child(dayOfMonth+"일").addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child("Todos")
+                .child(groupName)
+                .child((month+1)+"월")
+                .child(dayOfMonth+"일")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
@@ -77,10 +80,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                                 .child(groupName)
                                 .child((month+1)+"월")
                                 .child(dayOfMonth+"일")
-                                .child(dataSnapshot.getKey()).removeValue();
+                                .child(items.get(position).getPushKey()).removeValue();
                     }
                 }
-
             }
 
             @Override
