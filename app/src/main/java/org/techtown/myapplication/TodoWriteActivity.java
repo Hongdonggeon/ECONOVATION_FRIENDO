@@ -87,6 +87,7 @@ public class TodoWriteActivity extends AppCompatActivity {
         button = findViewById(R.id.button);
         editText = findViewById(R.id.editText);
         checkBox = findViewById(R.id.checkBox);
+//1
 
         // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
         FirebaseDatabase database = FirebaseDatabase.getInstance();
