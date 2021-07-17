@@ -2,12 +2,23 @@ package org.techtown.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.jetbrains.annotations.NotNull;
 
 public class HomeActivity extends AppCompatActivity {
     private final long FINISH_INTERVAL_TIME = 2000;
@@ -16,6 +27,10 @@ public class HomeActivity extends AppCompatActivity {
     Button accountAddButton;
     public static String tdl_name;
     private static final int MAIN_ACTIVITY_REQUEST_CODE =100;
+    private FirebaseDatabase database;
+    private DatabaseReference myReference;
+    Long uuid;
+    String gid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String email = intent.getStringExtra("email");
+        uuid = intent.getLongExtra("uuid",0);
 
 
         // 그룹 추가 버튼
@@ -47,6 +63,65 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        database =FirebaseDatabase.getInstance();
+        myReference = database.getReference("UserGroups").child(uuid.toString());
+
+
+        myReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+                Log.d("HomeActivity","onchiladded"+snapshot.getKey());
+                groupsFragment.items.add(new User(snapshot.getValue().toString()));
+                groupsFragment.userAdapter.setItems(groupsFragment.items);
+                groupsFragment.userAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+                Log.d("HomeActivity","onchildchanged"+snapshot.getValue());
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
+                Log.d("HomeActivity","onchildremoved"+snapshot.getValue());
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+                Log.d("HomeActivity","onchildmoved"+snapshot.getValue());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                Log.d("HomeActivity","onchildcancelled"+error.getMessage());
+
+            }
+        });
+
+//        myReference.child(gid).child("그룹명").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                groupsFragment.items.clear();
+//                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+//                    User user = dataSnapshot.getValue(User.class);
+//                    groupsFragment.items.add(user);
+//                    groupsFragment.userAdapter.setItems(groupsFragment.items);
+//                }
+
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//                Log.e("HomeActivity",String.valueOf(error.toException()));
+//            }
+//        });
+//        groupsFragment.userAdapter = new UserAdapter(groupsFragment.items,this);
+//        groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
+
     }
 
     @Override
@@ -55,11 +130,13 @@ public class HomeActivity extends AppCompatActivity {
         if(requestCode == MAIN_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 tdl_name = data.getStringExtra("name");
-                groupsFragment.items.add(new User(tdl_name));
-                groupsFragment.userAdapter.addItem(new User(tdl_name));
-                groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
+//                groupsFragment.items.add(new User(tdl_name));
+//                groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
+                myReference.push().setValue(tdl_name);
+
             }
         }
+
     }
 
     @Override

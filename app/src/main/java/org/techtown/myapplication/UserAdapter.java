@@ -1,5 +1,6 @@
 package org.techtown.myapplication;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,14 @@ import java.util.ArrayList;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     ArrayList<User> items = new ArrayList<User>();
+    Context context;
+    public UserAdapter(){};
+
+
+    public UserAdapter(ArrayList<User> items, Context context) {
+        this.items = items;
+        this.context = context;
+    }
 
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
@@ -33,8 +42,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-
         User item = items.get(position);
+//        viewHolder.textView.setText(items.get(position).getName());
         viewHolder.setItem(item);
     }
 

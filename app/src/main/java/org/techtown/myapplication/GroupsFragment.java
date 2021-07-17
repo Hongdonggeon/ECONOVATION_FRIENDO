@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class GroupsFragment extends Fragment {
-    static RecyclerView recyclerView;
-     UserAdapter userAdapter;
+    RecyclerView recyclerView;
+    UserAdapter userAdapter;
     ArrayList<User> items = new ArrayList<>();
 
     @Override
