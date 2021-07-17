@@ -97,17 +97,18 @@ public class TodoWriteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 todoContent = editText.getText().toString();
+//                String pushKey = myRef.getKey();
 
+//                map.put("pushKey",pushKey);
                 map.put("todo", todoContent);
                 map.put("alarm", "알람 없음");
                 map.put("checkBoxChecked", false);
                 map.put("alarmChecked", false);
 
-                myRef.child("Todos")
-                        .child(groupName)
-                        .child((month + 1) + "월")
-                        .child((dayOfMonth) + "일")
-                        .push().setValue(map);
+
+//                Log.d("pushKey Test", pushKey);
+
+                myRef.child("Todos").child(groupName).child((month+1)+"월").child(dayOfMonth+"일").push().setValue(map);
 
                 editText.setText(null);
                 Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT).show();

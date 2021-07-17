@@ -3,12 +3,55 @@ package org.techtown.myapplication;
 import java.util.Objects;
 
 public class Todo {
-
+    public String pushKey;
     public String todo;
     public String alarm;
     public boolean checkBoxChecked;
     public boolean alarmChecked;
 
+    public Todo(){}
+
+    public Todo(String pushKey, String todo, String alarm, boolean checkBoxChecked, boolean alarmChecked) {
+        this.pushKey = pushKey;
+        this.todo = todo;
+        this.alarm = alarm;
+        this.checkBoxChecked = checkBoxChecked;
+        this.alarmChecked = alarmChecked;
+    }
+
+    public Todo(String todo, String alarm, boolean checkBoxChecked, boolean alarmChecked) {
+        this.todo = todo;
+        this.alarm = alarm;
+        this.checkBoxChecked = checkBoxChecked;
+        this.alarmChecked = alarmChecked;
+    }
+
+    public Todo(String pushKey) {
+        this.pushKey = pushKey;
+    }
+
+    public String getPushKey() {
+        return pushKey;
+    }
+
+    public void setPushKey(String pushKey) {
+        this.pushKey = pushKey;
+    }
+    public String getAlarm() {
+        return alarm;
+    }
+
+    public void setAlarm(String alarm) {
+        this.alarm = alarm;
+    }
+
+    public String getTodo() {
+        return todo;
+    }
+
+    public void setTodo(String todo) {
+        this.todo = todo;
+    }
 
     public boolean isCheckBoxChecked() {
         return checkBoxChecked;
@@ -26,30 +69,6 @@ public class Todo {
         this.alarmChecked = alarmChecked;
     }
 
-    public Todo(){}
-
-    public Todo(String todo, String alarm, boolean checkBoxChecked, boolean alarmChecked) {
-        this.todo = todo;
-        this.alarm = alarm;
-        this.checkBoxChecked = checkBoxChecked;
-        this.alarmChecked = alarmChecked;
-    }
-
-    public String getAlarm() {
-        return alarm;
-    }
-
-    public void setAlarm(String alarm) {
-        this.alarm = alarm;
-    }
-
-    public String getTodo() {
-        return todo;
-    }
-
-    public void setTodo(String todo) {
-        this.todo = todo;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -62,5 +81,15 @@ public class Todo {
     @Override
     public int hashCode() {
         return Objects.hash(todo);
+    }
+
+    @Override
+    public String toString() {
+        return "Todo{" +
+                "todo='" + todo + '\'' +
+                ", alarm='" + alarm + '\'' +
+                ", checkBoxChecked=" + checkBoxChecked +
+                ", alarmChecked=" + alarmChecked +
+                '}';
     }
 }

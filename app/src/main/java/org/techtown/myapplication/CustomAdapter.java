@@ -12,14 +12,13 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -50,10 +49,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         this.dayOfMonth=dayOfMonth;
     }
 
+
     public void setItems(ArrayList<Todo> items) {
         this.items = items;
     }
-
+    
 
     @Override
     public boolean onItemMove(int from_position, int to_position) {
@@ -67,30 +67,20 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         items.remove(position);
         notifyItemRemoved(position);
 
-        Log.d("month data test", month+1+"월");
-        Log.d("dayOfMonth data test", dayOfMonth+"일");
-
-        myRef.child("Todos").child(groupName).child((month+1)+"월").child(dayOfMonth+"일").addChildEventListener(new ChildEventListener() {
+        myRef.child("Todos").child(groupName).child((month+1)+"월").child(dayOfMonth+"일").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-                Log.d("getKey() 테스트Added",snapshot.getKey());
-                if(snapshot.getKey() == "-Mejtv_XSWdfj7uMEXuZ")
-                    myRef.child("Todos").child(groupName).child((month+1)+"월").child(dayOfMonth+"일").child("-Mejtv_XSWdfj7uMEXuZ").removeValue();
-            }
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Log.d("getKey() 테스트Added",dataSnapshot.getKey());
+                    if(dataSnapshot.getKey().equals(items.get(position).getPushKey())) {
+                        myRef.child("Todos")
+                                .child(groupName)
+                                .child((month+1)+"월")
+                                .child(dayOfMonth+"일")
+                                .child(dataSnapshot.getKey()).removeValue();
+                    }
+                }
 
-            @Override
-            public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-                Log.d("getKey() 테스트Changed",snapshot.getKey());
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
-                Log.d("getKey() 테스트Removed",snapshot.getKey());
-            }
-
-            @Override
-            public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-                Log.d("getKey() 테스트Moved",snapshot.getKey());
             }
 
             @Override
