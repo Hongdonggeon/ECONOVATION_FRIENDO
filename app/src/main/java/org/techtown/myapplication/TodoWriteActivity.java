@@ -45,6 +45,10 @@ public class TodoWriteActivity extends AppCompatActivity {
     int minute;
     int position;
 
+    int month;
+    int dayOfMonth;
+    String groupName;
+
     HashMap<String,Object> map = new HashMap<>();
 
     ItemTouchHelper itemTouchHelper;
@@ -63,16 +67,22 @@ public class TodoWriteActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
 
         Intent intent = getIntent();
-        int month = intent.getIntExtra("month", 0);
-        int dayOfMonth = intent.getIntExtra("dayOfMonth", 0);
-        textView.setText((month + 1) + "월" + " " + dayOfMonth + "일");
+//        month = intent.getIntExtra("month", 0);
+//        dayOfMonth = intent.getIntExtra("dayOfMonth", 0);
+//        textView.setText((month + 1) + "월" + " " + dayOfMonth + "일");
+        month = intent.getIntExtra("month", 0);
+        dayOfMonth = intent.getIntExtra("dayOfMonth", 0);
+        groupName = intent.getStringExtra("groupName");
+
+        textView.setText(month+1 + "월" + " " + dayOfMonth + "일");
+        customAdapter = new CustomAdapter(groupName,month,dayOfMonth);
+
 
         // 카카오API로부터 이메일 값, 그룹이름 값 받아 왔음, 데이터베이스 만들때 UID로 사용하면 됨
         String email = intent.getStringExtra("email");
         String groupName = intent.getStringExtra("groupName");
         Log.d("TodoWriteActivityEmail:", email);
 
-        customAdapter = new CustomAdapter();
 
         button = findViewById(R.id.button);
         editText = findViewById(R.id.editText);
@@ -80,7 +90,7 @@ public class TodoWriteActivity extends AppCompatActivity {
 
         // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("TEST");
+        DatabaseReference myRef = database.getReference();
 
         // Todo아이템 추가 버튼
         button.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +114,7 @@ public class TodoWriteActivity extends AppCompatActivity {
             }
         });
 
-        myRef.child("Todos").child((month + 1) + "월").child((dayOfMonth) + "일").addValueEventListener(new ValueEventListener() {
+        myRef.child("Todos").child(groupName).child((month + 1) + "월").child((dayOfMonth) + "일").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 items.clear();

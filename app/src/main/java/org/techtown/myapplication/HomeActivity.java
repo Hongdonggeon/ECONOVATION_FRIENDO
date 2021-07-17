@@ -2,6 +2,7 @@ package org.techtown.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), GroupCalendar.class);
                 intent.putExtra("email",email);
                 intent.putExtra("groupName",tdl_name);
+                Log.d("그룹이름 테스트",tdl_name);
                 startActivity(intent);
             }
         });
