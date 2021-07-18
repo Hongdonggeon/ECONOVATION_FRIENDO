@@ -9,6 +9,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "org.techtown.myapplication"
         minSdkVersion 19
         targetSdkVersion 30
@@ -34,6 +35,9 @@ android {
 }
 
 dependencies {
+
+    implementation 'androidx.multidex:multidex:2.0.1'
+
     // 파이어 베이스 라이브러리
     // Import the Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:28.2.0')

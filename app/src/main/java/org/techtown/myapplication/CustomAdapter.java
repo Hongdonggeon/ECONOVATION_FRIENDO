@@ -12,14 +12,13 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,51 +28,61 @@ import static androidx.core.app.ActivityCompat.startActivityForResult;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> implements ItemTouchHelperListener{
     ArrayList<Todo> items = new ArrayList<Todo>();
-    Switch alarmSwitch;
-    CheckBox checkBox;
+    String groupName;
+    int month;
+    int dayOfMonth;
+
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("TEST");
+    DatabaseReference myRef = database.getReference();
 
+    public CustomAdapter(){}
+
+    public CustomAdapter(String groupName, int month, int dayOfMonth) {
+        this.groupName = groupName;
+        this.month = month;
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    public CustomAdapter(int month, int dayOfMonth) {
+        this.month = month;
+        this.dayOfMonth=dayOfMonth;
+    }
 
 
     public void setItems(ArrayList<Todo> items) {
         this.items = items;
     }
-
+    
 
     @Override
     public boolean onItemMove(int from_position, int to_position) {
         return false;
     }
 
+
+
     @Override
     public void onItemSwipe(int position) {
-        items.remove(position);
-        notifyItemRemoved(position);
-        Log.d("swipe success","스와이프 성공");
+        Log.d("아이템포지션 체크", String.valueOf(position));
 
-        myRef.child("Todos").child("7월").child("14일").addChildEventListener(new ChildEventListener() {
+        myRef.child("Todos")
+                .child(groupName)
+                .child((month+1)+"월")
+                .child(dayOfMonth+"일")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-                Log.d("getKey() 테스트Added",snapshot.getKey());
-                if(snapshot.getKey() == "-Meiw_gcR1ZZepOTjQXT")
-                    myRef.child("Todos").child("7월").child("14일").removeValue();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-                Log.d("getKey() 테스트Changed",snapshot.getKey());
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
-                Log.d("getKey() 테스트Removed",snapshot.getKey());
-            }
-
-            @Override
-            public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-                Log.d("getKey() 테스트Moved",snapshot.getKey());
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Log.d("getKey() 테스트Added",dataSnapshot.getKey());
+                    if(dataSnapshot.getKey().equals(items.get(position).getPushKey())) {
+                        myRef.child("Todos")
+                                .child(groupName)
+                                .child((month+1)+"월")
+                                .child(dayOfMonth+"일")
+                                .child(items.get(position).getPushKey()).removeValue();
+                    }
+                }
             }
 
             @Override

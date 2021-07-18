@@ -62,8 +62,12 @@ public class HomeActivity extends AppCompatActivity {
             public void onItemClick(View v, int pos) {
                 Intent intent = new Intent(getApplicationContext(), GroupCalendar.class);
                 intent.putExtra("email",email);
+
                 intent.putExtra("groupKey",groupsFragment.items.get(pos).getKey());
-//                Toast.makeText(HomeActivity.this, "groupKey : "+groupsFragment.items.get(pos).getKey(), Toast.LENGTH_LONG).show();
+
+                intent.putExtra("groupName",tdl_name);
+                Log.d("그룹이름 테스트",tdl_name);
+
                 startActivity(intent);
             }
         });

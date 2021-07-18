@@ -45,6 +45,10 @@ public class TodoWriteActivity extends AppCompatActivity {
     int minute;
     int position;
 
+    int month;
+    int dayOfMonth;
+    String groupName;
+
     HashMap<String,Object> map = new HashMap<>();
 
     ItemTouchHelper itemTouchHelper;
@@ -63,48 +67,59 @@ public class TodoWriteActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
 
         Intent intent = getIntent();
-        int month = intent.getIntExtra("month", 0);
-        int dayOfMonth = intent.getIntExtra("dayOfMonth", 0);
-        textView.setText((month + 1) + "월" + " " + dayOfMonth + "일");
+//        month = intent.getIntExtra("month", 0);
+//        dayOfMonth = intent.getIntExtra("dayOfMonth", 0);
+//        textView.setText((month + 1) + "월" + " " + dayOfMonth + "일");
+        month = intent.getIntExtra("month", 0);
+        dayOfMonth = intent.getIntExtra("dayOfMonth", 0);
+        groupName = intent.getStringExtra("groupName");
+
+        textView.setText(month+1 + "월" + " " + dayOfMonth + "일");
+        customAdapter = new CustomAdapter(groupName,month,dayOfMonth);
+
 
         // 카카오API로부터 이메일 값, 그룹이름 값 받아 왔음, 데이터베이스 만들때 UID로 사용하면 됨
         String email = intent.getStringExtra("email");
         String groupName = intent.getStringExtra("groupName");
         Log.d("TodoWriteActivityEmail:", email);
 
-        customAdapter = new CustomAdapter();
 
         button = findViewById(R.id.button);
         editText = findViewById(R.id.editText);
         checkBox = findViewById(R.id.checkBox);
 
+
         // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("TEST");
+        DatabaseReference myRef = database.getReference().child("Todos").child(groupName).child((month+1)+"월").child(dayOfMonth+"일");
+
+
 
         // Todo아이템 추가 버튼
         button.setOnClickListener(new View.OnClickListener() {
+            String pushKey;
             @Override
             public void onClick(View v) {
+                DatabaseReference myRef2 = database.getReference().child("Todos").child(groupName).child((month+1)+"월").child(dayOfMonth+"일").push();
                 todoContent = editText.getText().toString();
+                pushKey = myRef2.getKey();
 
+                map.put("pushKey",pushKey);
                 map.put("todo", todoContent);
                 map.put("alarm", "알람 없음");
                 map.put("checkBoxChecked", false);
                 map.put("alarmChecked", false);
 
-                myRef.child("Todos")
-                        .child(groupName)
-                        .child((month + 1) + "월")
-                        .child((dayOfMonth) + "일")
-                        .push().setValue(map);
+                Log.d("pushKey Test", pushKey);
+
+                myRef2.setValue(map);
 
                 editText.setText(null);
                 Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        myRef.child("Todos").child((month + 1) + "월").child((dayOfMonth) + "일").addValueEventListener(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 items.clear();
