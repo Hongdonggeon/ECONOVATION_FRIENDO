@@ -2,11 +2,13 @@ package org.techtown.myapplication;
 
 public class User {
     private String name;
+    private String key;
 
     public User(){}
 
-    public User(String name) {
+    public User(String name,String key) {
         this.name = name;
+        this.key = key;
     }
 
     public String getName() {
@@ -15,5 +17,13 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }
