@@ -78,7 +78,7 @@ public class TodoWriteActivity extends AppCompatActivity {
 
 
         textView.setText(month+1 + "월" + " " + dayOfMonth + "일");
-        customAdapter = new CustomAdapter(groupName,month,dayOfMonth);
+        customAdapter = new CustomAdapter(groupKey,month,dayOfMonth);
 
 
         // 카카오API로부터 이메일 값, 그룹이름 값 받아 왔음, 데이터베이스 만들때 UID로 사용하면 됨

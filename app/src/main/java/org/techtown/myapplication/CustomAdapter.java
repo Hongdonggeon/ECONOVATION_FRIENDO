@@ -28,7 +28,7 @@ import static androidx.core.app.ActivityCompat.startActivityForResult;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> implements ItemTouchHelperListener{
     ArrayList<Todo> items = new ArrayList<Todo>();
-    String groupName;
+    String groupKey;
     int month;
     int dayOfMonth;
 
@@ -38,8 +38,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     public CustomAdapter(){}
 
-    public CustomAdapter(String groupName, int month, int dayOfMonth) {
-        this.groupName = groupName;
+    public CustomAdapter(String groupKey, int month, int dayOfMonth) {
+        this.groupKey = groupKey;
         this.month = month;
         this.dayOfMonth = dayOfMonth;
     }
@@ -67,7 +67,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         Log.d("아이템포지션 체크", String.valueOf(position));
 
         myRef.child("Todos")
-                .child(groupName)
+                .child(groupKey)
                 .child((month+1)+"월")
                 .child(dayOfMonth+"일")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -77,7 +77,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     Log.d("getKey() 테스트Added",dataSnapshot.getKey());
                     if(dataSnapshot.getKey().equals(items.get(position).getPushKey())) {
                         myRef.child("Todos")
-                                .child(groupName)
+                                .child(groupKey)
                                 .child((month+1)+"월")
                                 .child(dayOfMonth+"일")
                                 .child(items.get(position).getPushKey()).removeValue();
