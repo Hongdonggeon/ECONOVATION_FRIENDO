@@ -49,6 +49,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database'
 
 
+
     //Add LakuePopupActivity Library
     implementation 'com.github.lakue119:LakuePopupActivity:1.0.1'
 
