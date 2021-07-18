@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 public class CalendarFragment extends Fragment {
     String email;
     String groupName;
+    String groupKey;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,6 +29,7 @@ public class CalendarFragment extends Fragment {
         if(bundle != null) {
             email = bundle.getString("email","이메일 값 안넘어옴");
             groupName = bundle.getString("groupName", "그룹이름 값 안넘어옴");
+            groupKey = bundle.getString("groupKey","그룹 키 값 안넘어옴");
             Log.d("카카오 이메일 정보 : ", email);
             Log.d("그룹이름 정보 : ", groupName);
         }
@@ -41,6 +43,7 @@ public class CalendarFragment extends Fragment {
                 intent.putExtra("dayOfMonth", dayOfMonth);
                 intent.putExtra("email", email);
                 intent.putExtra("groupName",groupName);
+                intent.putExtra("groupKey",groupKey);
                 startActivity(intent);
             }
         });
