@@ -48,6 +48,7 @@ public class TodoWriteActivity extends AppCompatActivity {
     int month;
     int dayOfMonth;
     String groupName;
+    String groupKey;
 
     HashMap<String,Object> map = new HashMap<>();
 
@@ -73,6 +74,8 @@ public class TodoWriteActivity extends AppCompatActivity {
         month = intent.getIntExtra("month", 0);
         dayOfMonth = intent.getIntExtra("dayOfMonth", 0);
         groupName = intent.getStringExtra("groupName");
+        groupKey = intent.getStringExtra("groupKey");
+
 
         textView.setText(month+1 + "월" + " " + dayOfMonth + "일");
         customAdapter = new CustomAdapter(groupName,month,dayOfMonth);
@@ -91,7 +94,7 @@ public class TodoWriteActivity extends AppCompatActivity {
 
         // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference().child("Todos").child(groupName).child((month+1)+"월").child(dayOfMonth+"일");
+        DatabaseReference myRef = database.getReference().child("Todos").child(groupKey).child((month+1)+"월").child(dayOfMonth+"일");
 
 
 
@@ -100,7 +103,7 @@ public class TodoWriteActivity extends AppCompatActivity {
             String pushKey;
             @Override
             public void onClick(View v) {
-                DatabaseReference myRef2 = database.getReference().child("Todos").child(groupName).child((month+1)+"월").child(dayOfMonth+"일").push();
+                DatabaseReference myRef2 = database.getReference().child("Todos").child(groupKey).child((month+1)+"월").child(dayOfMonth+"일").push();
                 todoContent = editText.getText().toString();
                 pushKey = myRef2.getKey();
 

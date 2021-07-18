@@ -39,11 +39,13 @@ public class GroupCalendar extends AppCompatActivity {
         Intent intent = getIntent();
         String email = intent.getStringExtra("email");
         String groupName = intent.getStringExtra("groupName");
+        String groupKey = intent.getStringExtra("groupKey");
 
         // Bundle 이용하여 CalendarFragment로 넘겨줌
         Bundle bundle = new Bundle();
         bundle.putString("email", email);
         bundle.putString("groupName", groupName);
+        bundle.putString("groupKey",groupKey);
         calendarFragment.setArguments(bundle);
 
         // BottomNavigationView를 직접 터치했을때 화면 전환 이벤트

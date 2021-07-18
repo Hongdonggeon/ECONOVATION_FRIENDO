@@ -66,7 +66,6 @@ public class HomeActivity extends AppCompatActivity {
                 intent.putExtra("groupKey",groupsFragment.items.get(pos).getKey());
 
                 intent.putExtra("groupName",tdl_name);
-                Log.d("그룹이름 테스트",tdl_name);
 
                 startActivity(intent);
             }
