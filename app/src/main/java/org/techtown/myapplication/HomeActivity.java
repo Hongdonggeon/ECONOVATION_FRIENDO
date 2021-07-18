@@ -20,6 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class HomeActivity extends AppCompatActivity {
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
@@ -30,6 +32,7 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference myReference;
     Long uuid;
+    ArrayList<User> groupsNames;
     String gid;
 
     @Override
@@ -59,8 +62,12 @@ public class HomeActivity extends AppCompatActivity {
             public void onItemClick(View v, int pos) {
                 Intent intent = new Intent(getApplicationContext(), GroupCalendar.class);
                 intent.putExtra("email",email);
+
+                intent.putExtra("groupKey",groupsFragment.items.get(pos).getKey());
+
                 intent.putExtra("groupName",tdl_name);
                 Log.d("그룹이름 테스트",tdl_name);
+
                 startActivity(intent);
             }
         });
@@ -73,7 +80,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
                 Log.d("HomeActivity","onchiladded"+snapshot.getKey());
-                groupsFragment.items.add(new User(snapshot.getValue().toString()));
+                groupsFragment.items.add(new User(snapshot.getValue().toString(),snapshot.getKey()));
                 groupsFragment.userAdapter.setItems(groupsFragment.items);
                 groupsFragment.userAdapter.notifyDataSetChanged();
             }
