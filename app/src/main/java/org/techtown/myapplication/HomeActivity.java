@@ -34,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference myReference;
     private DatabaseReference myReference2;
+    private DatabaseReference myReference3;
     Long uuid;
     ArrayList<User> groupsNames;
     String gid;
@@ -75,6 +76,7 @@ public class HomeActivity extends AppCompatActivity {
         database =FirebaseDatabase.getInstance();
         myReference = database.getReference("UserGroups").child(uuid.toString());
         myReference2 = database.getReference("UserGroups");
+        myReference3 = database.getReference("Todos");
 
         groupsFragment.userAdapter.setOnItemLongClickListener(new UserAdapter.OnItemLongClickListener() {
             @Override
@@ -92,6 +94,8 @@ public class HomeActivity extends AppCompatActivity {
                                 position = pos;
 
                                 myReference.child(groupKey).removeValue();
+                                myReference3.child(groupKey).removeValue();
+
                                 Log.d("그룹 키값 확인",groupKey);
                             }
                         })
