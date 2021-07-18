@@ -26,11 +26,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         void onItemClick(View v, int pos);
     }
 
+    public interface OnItemLongClickListener{
+        void onItemLongClick(View v, int pos);
+    }
+
     private OnItemClickListener mListener = null;
+    private OnItemLongClickListener mLongListener = null;
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mListener = listener;
     }
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) { this.mLongListener = listener; }
 
     @NonNull
     @Override
@@ -83,6 +89,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                             mListener.onItemClick(view, pos);
                         }
                     }
+                }
+
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int pos = getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION){
+                        if (mLongListener != null){
+                            mLongListener.onItemLongClick(v, pos);
+                        }
+                    }
+                    return true;
                 }
             });
         }

@@ -1,5 +1,7 @@
 package org.techtown.myapplication;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,9 +33,12 @@ public class HomeActivity extends AppCompatActivity {
     private static final int MAIN_ACTIVITY_REQUEST_CODE =100;
     private FirebaseDatabase database;
     private DatabaseReference myReference;
+    private DatabaseReference myReference2;
     Long uuid;
     ArrayList<User> groupsNames;
     String gid;
+
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,6 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String email = intent.getStringExtra("email");
         uuid = intent.getLongExtra("uuid",0);
-
 
         // 그룹 추가 버튼
         accountAddButton.setOnClickListener(new View.OnClickListener() {
@@ -62,17 +66,45 @@ public class HomeActivity extends AppCompatActivity {
             public void onItemClick(View v, int pos) {
                 Intent intent = new Intent(getApplicationContext(), GroupCalendar.class);
                 intent.putExtra("email",email);
-
                 intent.putExtra("groupKey",groupsFragment.items.get(pos).getKey());
-
                 intent.putExtra("groupName",tdl_name);
-
                 startActivity(intent);
             }
         });
 
         database =FirebaseDatabase.getInstance();
         myReference = database.getReference("UserGroups").child(uuid.toString());
+        myReference2 = database.getReference("UserGroups");
+
+        groupsFragment.userAdapter.setOnItemLongClickListener(new UserAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(View v, int pos) {
+                Toast.makeText(getApplicationContext(),"롱클릭 확인",Toast.LENGTH_SHORT);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(HomeActivity.this)
+                        .setTitle("삭제")
+                        .setMessage("해당 그룹을 삭제하시겠습니까?")
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(getApplicationContext(),"그룹이 삭제되었습니다.",Toast.LENGTH_SHORT).show();
+                                String groupKey = groupsFragment.items.get(pos).getKey();
+
+                                position = pos;
+
+                                myReference.child(groupKey).removeValue();
+                                Log.d("그룹 키값 확인",groupKey);
+                            }
+                        })
+                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        });
+                dialog.create().show();
+            }
+        });
+
 
 
         myReference.addChildEventListener(new ChildEventListener() {
