@@ -92,6 +92,7 @@ public class HomeActivity extends AppCompatActivity {
                                 String groupKey = groupsFragment.items.get(pos).getKey();
 
                                 position = pos;
+                                groupsFragment.items.remove(pos);
 
                                 myReference.child(groupKey).removeValue();
                                 myReference3.child(groupKey).removeValue();
@@ -108,8 +109,6 @@ public class HomeActivity extends AppCompatActivity {
                 dialog.create().show();
             }
         });
-
-
 
         myReference.addChildEventListener(new ChildEventListener() {
             @Override
@@ -129,7 +128,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
                 Log.d("HomeActivity","onchildremoved"+snapshot.getValue());
-
+                groupsFragment.userAdapter.setItems(groupsFragment.items);
+                groupsFragment.userAdapter.notifyDataSetChanged();
             }
 
             @Override
