@@ -19,10 +19,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.kakao.sdk.user.UserApiClient;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 public class HomeActivity extends AppCompatActivity {
     private final long FINISH_INTERVAL_TIME = 2000;
@@ -39,6 +43,8 @@ public class HomeActivity extends AppCompatActivity {
     ArrayList<User> groupsNames;
     String gid;
 
+    Button kakaoLogoutButton;
+
     int position;
 
     @Override
@@ -47,10 +53,29 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         groupsFragment =(GroupsFragment)getSupportFragmentManager().findFragmentById(R.id.mainFragment);
         accountAddButton = findViewById(R.id.groupAddButton);
+        kakaoLogoutButton = findViewById(R.id.kakaoLogoutButton);
 
         Intent intent = getIntent();
         String email = intent.getStringExtra("email");
         uuid = intent.getLongExtra("uuid",0);
+
+        kakaoLogoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
+                    @Override
+                    public Unit invoke(Throwable throwable) {
+                        if(throwable != null){
+                            Log.e("로그아웃 실패", "로그아웃 실패, SDK에서 토큰 삭제됨",throwable);
+                        }else {
+                            Log.i("로그아웃 성공","로그아웃 성공, SDK에서 토큰 삭제됨");
+                            finish();
+                        }
+                        return null;
+                    }
+                });
+            }
+        });
 
         // 그룹 추가 버튼
         accountAddButton.setOnClickListener(new View.OnClickListener() {
