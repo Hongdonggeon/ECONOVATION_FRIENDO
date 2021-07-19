@@ -83,8 +83,6 @@ public class HomeActivity extends AppCompatActivity {
         accountAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 Intent intent = new Intent(getApplicationContext(), Group_add_dialog.class);
                 startActivityForResult(intent,MAIN_ACTIVITY_REQUEST_CODE);
             }
