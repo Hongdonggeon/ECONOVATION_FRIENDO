@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "649362980600",
+    "firebase_url": "https://friendo-cf119-default-rtdb.firebaseio.com",
     "project_id": "friendo-cf119",
     "storage_bucket": "friendo-cf119.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "649362980600-bn6hjvdtoo2imsvlur0mukgltbe23jl3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.techtown.myapplication",
+            "certificate_hash": "dc377276eef62742be84a4dd9eb8e005eced934d"
+          }
+        },
         {
           "client_id": "649362980600-5kmv7or1cf09t7qgr1rq9r2rj6l6e1qs.apps.googleusercontent.com",
           "client_type": 3
