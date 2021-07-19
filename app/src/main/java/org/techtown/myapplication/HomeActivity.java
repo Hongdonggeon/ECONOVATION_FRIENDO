@@ -59,6 +59,8 @@ public class HomeActivity extends AppCompatActivity {
         String email = intent.getStringExtra("email");
         uuid = intent.getLongExtra("uuid",0);
 
+
+        // 임시 카카오 로그아웃 버튼
         kakaoLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
