@@ -56,8 +56,17 @@ public class MainActivity extends AppCompatActivity {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(this);
+
+        if(gsa != null){
+            // 재로그인 방지 메소드
+            mGoogleSignInClient.signOut();
+            Log.d(TAG,"로그인 정보 확인");
+            Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+            startActivity(homeMove_intent);
+        }
+
         mAuth = FirebaseAuth.getInstance();
 
         SignInButton g_login_btn = findViewById(R.id.google_login_btn);
@@ -66,10 +75,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 System.out.println("클릭테스트");
+
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
-                startActivity(homeMove_intent);
+
             }
         });
 
@@ -133,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+
     }
 
     //로그인이 되어있는지를 확인하고 로그인 되어있는 경우, 아닌경우에 따라 다른 이벤트 설정
@@ -195,6 +207,21 @@ public class MainActivity extends AppCompatActivity {
                 Log.w(TAG, "Google sign in failed", e);
             }
         }
+
+        if(requestCode == RC_SIGN_IN){
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+                firebaseAuthWithGoogle(account.getIdToken());
+                Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(homeMove_intent);
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(TAG, "Google sign in failed", e);
+            }
+        }
     }
 
     @Override
@@ -226,6 +253,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-
     }
 }
