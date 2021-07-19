@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
         if(gsa != null){
             // 재로그인 방지 메소드
-            mGoogleSignInClient.signOut();
             Log.d(TAG,"로그인 정보 확인");
+            mGoogleSignInClient.signOut();
             Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(homeMove_intent);
         }
@@ -76,11 +76,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 System.out.println("클릭테스트");
                 signIn();
-
             }
         });
-
-
 
         String keyHash = Utility.INSTANCE.getKeyHash(MainActivity.this);
         Log.d(TAG, "해쉬키 값 : " + keyHash);
@@ -167,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
                     String email = user.getKakaoAccount().getEmail();
                     String nickname = user.getKakaoAccount().getProfile().getNickname();
 
-
                     //카카오 API로부터 넘어오는 정보들 확인용 로그
                     Log.i(TAG, "invoke: id=" + uuid);
                     Log.i(TAG, "invoke: email=" + email);
@@ -192,26 +188,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     // google
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-                firebaseAuthWithGoogle(account.getIdToken());
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
-            }
-        }
-
         if(requestCode == RC_SIGN_IN){
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -224,6 +206,11 @@ public class MainActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
+            }
+
+            if(task != null){
+                Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(homeMove_intent);
             }
         }
     }
@@ -258,6 +245,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-
     }
 }
