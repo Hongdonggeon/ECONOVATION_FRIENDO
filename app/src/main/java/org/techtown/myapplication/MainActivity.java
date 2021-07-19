@@ -66,12 +66,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 System.out.println("클릭테스트");
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
-                startActivityForResult(signInIntent, RC_SIGN_IN);
-                startActivity(homeMove_intent);
+                signIn();
             }
         });
+
+
 
         String keyHash = Utility.INSTANCE.getKeyHash(MainActivity.this);
         Log.d(TAG, "해쉬키 값 : " + keyHash);
@@ -133,6 +132,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     //로그인이 되어있는지를 확인하고 로그인 되어있는 경우, 아닌경우에 따라 다른 이벤트 설정
@@ -226,6 +229,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-
+        if(user !=null){
+            Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+            startActivity(homeMove_intent);
+            finish();
+        }
     }
 }
