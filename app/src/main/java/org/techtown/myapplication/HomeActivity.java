@@ -96,7 +96,6 @@ public class HomeActivity extends AppCompatActivity {
                                 myReference.child(groupKey).removeValue();
                                 myReference3.child(groupKey).removeValue();
 
-                                Log.d("그룹 키값 확인",groupKey);
                             }
                         })
                         .setNegativeButton("취소", new DialogInterface.OnClickListener() {
