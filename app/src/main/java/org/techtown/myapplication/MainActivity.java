@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(this);
 
+
         if(gsa != null){
             // 재로그인 방지 메소드
             Log.d(TAG,"로그인 정보 확인");
@@ -67,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(homeMove_intent);
         }
 
+
         mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
 
         SignInButton g_login_btn = findViewById(R.id.google_login_btn);
 
@@ -174,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     myRef.child("Users").child(String.valueOf(uuid)).child("Nickname").setValue(nickname);
                     myRef.child("Users").child(String.valueOf(uuid)).child("email").setValue(email);
 
+                    Log.d(TAG,"onActivityForResult Kakao Intent호출");
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                     intent.putExtra("uuid",uuid);
                     intent.putExtra("profile",user.getKakaoAccount().getProfile().getThumbnailImageUrl());
@@ -208,11 +212,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.w(TAG, "Google sign in failed", e);
             }
 
-            if(task != null){
-                Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
-                startActivity(homeMove_intent);
-            }
         }
+
     }
 
 
@@ -221,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        Log.d(TAG,"getCurrentUser() = "+currentUser.toString());
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
@@ -245,5 +246,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
+
     }
 }
