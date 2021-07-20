@@ -29,4 +29,14 @@
         app:font="@font/nanum_pen_script_regular"
         app:fontStyle="normal"
         app:fontWeight="1000" />
+
+    <font
+        android:font="@font/pwchalk"
+        android:fontStyle="normal"
+        android:fontWeight="1000"
+        app:font="@font/pwchalk"
+        app:fontStyle="normal"
+        app:fontWeight="1000"
+
+        />
 </font-family>

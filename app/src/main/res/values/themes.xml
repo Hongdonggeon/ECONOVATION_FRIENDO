@@ -18,6 +18,12 @@
 
     <style name="Text.TitleStyle" parent="android:TextAppearance">
         <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/pwchalk</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Text.NormalStyle" parent="android:TextAppearance">
+        <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/app_font</item>
         <item name="android:includeFontPadding">false</item>
     </style>

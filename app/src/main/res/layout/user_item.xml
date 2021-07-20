@@ -32,9 +32,9 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="이름"
-                style="@style/Text.TitleStyle"
+                style="@style/Text.NormalStyle"
                 android:textColor="@color/background"
-                android:textSize="30sp" />
+                android:textSize="40sp" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
