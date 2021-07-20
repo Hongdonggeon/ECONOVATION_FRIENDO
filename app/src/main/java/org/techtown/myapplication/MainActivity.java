@@ -71,18 +71,19 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        user.getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-            @Override
-            public void onComplete(@NonNull @NotNull Task<GetTokenResult> task) {
-                if(task.isSuccessful()) {
-                    String idToken = task.getResult().getToken();
-                    Log.d(TAG,"아이디 토큰 = " + idToken);
-                    Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
-                    startActivity(homeMove_intent);
+        if(user !=null) {
+            user.getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                @Override
+                public void onComplete(@NonNull @NotNull Task<GetTokenResult> task) {
+                    if (task.isSuccessful()) {
+                        String idToken = task.getResult().getToken();
+                        Log.d(TAG, "아이디 토큰 = " + idToken);
+                        Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(homeMove_intent);
+                    }
                 }
-            }
-        });
-
+            });
+        }
         SignInButton g_login_btn = findViewById(R.id.google_login_btn);
 
         g_login_btn.setOnClickListener(new View.OnClickListener() {
