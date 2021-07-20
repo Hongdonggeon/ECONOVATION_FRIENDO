@@ -26,6 +26,7 @@ import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.annotations.NotNull;
 import com.kakao.sdk.auth.AuthApiClient;
 import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.common.model.KakaoSdkError;
@@ -33,8 +34,6 @@ import com.kakao.sdk.common.util.Utility;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.AccessTokenInfo;
 import com.kakao.sdk.user.model.User;
-
-import org.jetbrains.annotations.NotNull;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
@@ -46,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG2 = "GoogleActivity";
     private static final int RC_SIGN_IN = 100;
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
     private GoogleSignInClient mGoogleSignInClient;
 
     @Override
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btn_login = findViewById(R.id.btn_login);
+
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -70,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
+        user = mAuth.getCurrentUser();
+
         if(user !=null) {
             user.getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                 @Override
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
                         String idToken = task.getResult().getToken();
                         Log.d(TAG, "아이디 토큰 = " + idToken);
                         Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        homeMove_intent.putExtra("nameGoogle",user.getDisplayName());
+                        Log.d(TAG,"구글이름1" + user.getDisplayName());
                         startActivity(homeMove_intent);
                     }
                 }
@@ -155,8 +159,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -218,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
                 Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+                homeMove_intent.putExtra("nameGoogle",account.getDisplayName());
                 startActivity(homeMove_intent);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
@@ -234,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
@@ -246,6 +250,12 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            if(user != null){
+                                Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                homeMove_intent.putExtra("nameGoogle", user.getDisplayName());
+                                Log.d(TAG, "구글이름2" + user.getDisplayName());
+                                startActivity(homeMove_intent);
+                            }
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -257,6 +267,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-
+        if(user !=null) {
+        }
     }
 }

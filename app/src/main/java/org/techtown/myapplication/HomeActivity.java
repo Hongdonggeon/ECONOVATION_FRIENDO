@@ -60,7 +60,8 @@ public class HomeActivity extends AppCompatActivity {
 
         //구글 사용자 정보
 //        String emailGoogle = intent.getStringExtra("emailGoogle");
-//        String nameGoogle = intent.getStringExtra("nameGoogle");
+        String nameGoogle = intent.getStringExtra("nameGoogle");
+        Toast.makeText(getApplicationContext(),"이름:" + nameGoogle,Toast.LENGTH_SHORT).show();
 //        String uidGoogle = intent.getStringExtra("uidGoogle");
 
         uuid = intent.getLongExtra("uuid",0);
