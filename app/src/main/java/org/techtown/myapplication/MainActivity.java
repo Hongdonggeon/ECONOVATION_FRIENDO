@@ -81,7 +81,9 @@ public class MainActivity extends AppCompatActivity {
                         String idToken = task.getResult().getToken();
                         Log.d(TAG, "아이디 토큰 = " + idToken);
                         Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        homeMove_intent.putExtra("emailGoogle",user.getEmail());
                         homeMove_intent.putExtra("nameGoogle",user.getDisplayName());
+                        homeMove_intent.putExtra("uidGoogle",user.getUid());
                         Log.d(TAG,"구글이름1" + user.getDisplayName());
                         startActivity(homeMove_intent);
                     }
@@ -220,7 +222,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
                 Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+                homeMove_intent.putExtra("emailGoogle",account.getEmail());
                 homeMove_intent.putExtra("nameGoogle",account.getDisplayName());
+                Log.d(TAG,"account.getId():"+account.getIdToken());
                 startActivity(homeMove_intent);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately

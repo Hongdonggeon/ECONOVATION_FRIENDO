@@ -92,8 +92,6 @@ public class TodoWriteActivity extends AppCompatActivity {
         // 카카오API로부터 이메일 값, 그룹이름 값 받아 왔음, 데이터베이스 만들때 UID로 사용하면 됨
         String emailKakao = intent.getStringExtra("email");
         String groupName = intent.getStringExtra("groupName");
-        Log.d("TodoWriteActivityEmail:", emailKakao);
-
 
         button = findViewById(R.id.button);
         editText = findViewById(R.id.editText);
