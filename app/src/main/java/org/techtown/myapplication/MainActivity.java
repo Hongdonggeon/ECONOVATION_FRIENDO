@@ -21,7 +21,10 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -46,16 +49,28 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(this);
 
-        if(gsa != null){
-            // 재로그인 방지 메소드
-            mGoogleSignInClient.signOut();
-            Log.d(TAG,"로그인 정보 확인");
-            Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
-            startActivity(homeMove_intent);
-        }
+//        if(gsa != null){
+//            // 재로그인 방지 메소드
+//            Log.d(TAG,"로그인 정보 확인");
+//            Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+//            startActivity(homeMove_intent);
+//        }
 
         mAuth = FirebaseAuth.getInstance();
-
+        FirebaseUser user = mAuth.getCurrentUser();
+        if(user !=null) {
+            user.getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                @Override
+                public void onComplete(@NonNull @NotNull Task<GetTokenResult> task) {
+                    if (task.isSuccessful()) {
+                        String idToken = task.getResult().getToken();
+                        Log.d(TAG, "아이디 토큰 = " + idToken);
+                        Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(homeMove_intent);
+                    }
+                }
+            });
+        }
         SignInButton g_login_btn = findViewById(R.id.google_login_btn);
 
         g_login_btn.setOnClickListener(new View.OnClickListener() {
@@ -65,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
                 signIn();
             }
         });
-
-
 
 //        String keyHash = Utility.INSTANCE.getKeyHash(MainActivity.this);
 //        Log.d(TAG, "해쉬키 값 : " + keyHash);
@@ -139,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //로그인이 되어있는지를 확인하고 로그인 되어있는 경우, 아닌경우에 따라 다른 이벤트 설정
+
 //    private void updateKakaoLoginUI(){
 //        CalendarFragment calendarFragment = new CalendarFragment();
 //
@@ -179,37 +193,36 @@ public class MainActivity extends AppCompatActivity {
 //        });
 //    }
 
-
     // google
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
+        if(requestCode == RC_SIGN_IN){
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account.getIdToken());
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
+                Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(homeMove_intent);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
             }
+
         }
+
     }
+
 
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-//        updateUI(currentUser);
-        Log.d(TAG, "ONSTART");
-
-
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
@@ -222,29 +235,20 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            successLogin();
+                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-
+                            updateUI(null);
                         }
                     }
                 });
     }
 
-//    private void updateUI(FirebaseUser user){
-//        if(user!=null){
-//            Intent intent = new Intent(getApplication(), HomeActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
-//    }
+    private void updateUI(FirebaseUser user){
 
-
-    private void successLogin(){
-        Intent intent = new Intent(getApplication(), HomeActivity.class);
-        startActivity(intent);
-        finish();
-        Log.d(TAG, "SUCCESS_LOGIN");
     }
+
+
+
 }

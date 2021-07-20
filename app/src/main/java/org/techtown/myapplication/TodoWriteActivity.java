@@ -49,6 +49,9 @@ public class TodoWriteActivity extends AppCompatActivity {
     int dayOfMonth;
     String groupName;
     String groupKey;
+    String emailGoogle;
+    String nameGoogle;
+    String uidGoogle;
 
     HashMap<String,Object> map = new HashMap<>();
 
@@ -71,20 +74,25 @@ public class TodoWriteActivity extends AppCompatActivity {
 //        month = intent.getIntExtra("month", 0);
 //        dayOfMonth = intent.getIntExtra("dayOfMonth", 0);
 //        textView.setText((month + 1) + "월" + " " + dayOfMonth + "일");
+        // 캘린더 월/일 값 받아오기
         month = intent.getIntExtra("month", 0);
         dayOfMonth = intent.getIntExtra("dayOfMonth", 0);
+        // 그룹 이름/키값 받아오기
         groupName = intent.getStringExtra("groupName");
         groupKey = intent.getStringExtra("groupKey");
-
+        // 구글 사용자 정보 받아오기
+//        emailGoogle = intent.getStringExtra("emailGoogle");
+//        nameGoogle = intent.getStringExtra("nameGoogle");
+//        uidGoogle = intent.getStringExtra("uidGoogle");
 
         textView.setText(month+1 + "월" + " " + dayOfMonth + "일");
         customAdapter = new CustomAdapter(groupKey,month,dayOfMonth);
 
 
         // 카카오API로부터 이메일 값, 그룹이름 값 받아 왔음, 데이터베이스 만들때 UID로 사용하면 됨
-        String email = intent.getStringExtra("email");
+        String emailKakao = intent.getStringExtra("email");
         String groupName = intent.getStringExtra("groupName");
-        Log.d("TodoWriteActivityEmail:", email);
+        Log.d("TodoWriteActivityEmail:", emailKakao);
 
 
         button = findViewById(R.id.button);

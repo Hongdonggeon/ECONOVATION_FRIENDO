@@ -56,7 +56,13 @@ public class HomeActivity extends AppCompatActivity {
         kakaoLogoutButton = findViewById(R.id.kakaoLogoutButton);
 
         Intent intent = getIntent();
-        String email = intent.getStringExtra("email");
+        String emailKakao = intent.getStringExtra("emailKakao");
+
+        //구글 사용자 정보
+//        String emailGoogle = intent.getStringExtra("emailGoogle");
+//        String nameGoogle = intent.getStringExtra("nameGoogle");
+//        String uidGoogle = intent.getStringExtra("uidGoogle");
+
         uuid = intent.getLongExtra("uuid",0);
 
 
@@ -83,8 +89,6 @@ public class HomeActivity extends AppCompatActivity {
         accountAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 Intent intent = new Intent(getApplicationContext(), Group_add_dialog.class);
                 startActivityForResult(intent,MAIN_ACTIVITY_REQUEST_CODE);
             }
@@ -93,9 +97,15 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int pos) {
                 Intent intent = new Intent(getApplicationContext(), GroupCalendar.class);
-                intent.putExtra("email",email);
-                intent.putExtra("groupKey",groupsFragment.items.get(pos).getKey());
+                //카카오 사용자 정보 내보내기
+                intent.putExtra("emailKakao",emailKakao);
+                // 그룹 이름/난수 내보내기
                 intent.putExtra("groupName",tdl_name);
+                intent.putExtra("groupKey",groupsFragment.items.get(pos).getKey());
+                //구글 사용자 정보 내보내기
+//                intent.putExtra("emailGoolge",emailGoogle);
+//                intent.putExtra("nameGoogle",nameGoogle);
+//                intent.putExtra("uidGoogle",uidGoogle);
                 startActivity(intent);
             }
         });
@@ -119,7 +129,7 @@ public class HomeActivity extends AppCompatActivity {
                                 String groupKey = groupsFragment.items.get(pos).getKey();
 
                                 position = pos;
-
+                                groupsFragment.items.remove(pos);
                                 myReference.child(groupKey).removeValue();
                                 myReference3.child(groupKey).removeValue();
 
@@ -136,12 +146,10 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
-
         myReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-                Log.d("HomeActivity","onchiladded"+snapshot.getKey());
+                Log.d("HomeActivity","onchildadded"+snapshot.getKey());
                 groupsFragment.items.add(new User(snapshot.getValue().toString(),snapshot.getKey()));
                 groupsFragment.userAdapter.setItems(groupsFragment.items);
                 groupsFragment.userAdapter.notifyDataSetChanged();
@@ -156,7 +164,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
                 Log.d("HomeActivity","onchildremoved"+snapshot.getValue());
-
+                groupsFragment.userAdapter.setItems(groupsFragment.items);
+                groupsFragment.userAdapter.notifyDataSetChanged();
             }
 
             @Override
