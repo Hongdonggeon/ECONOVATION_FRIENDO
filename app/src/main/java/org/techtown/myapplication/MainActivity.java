@@ -148,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
                             if(user != null){
                                 Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
                                 homeMove_intent.putExtra("nameGoogle", user.getDisplayName());
+                                homeMove_intent.putExtra("emailGoogle", user.getEmail());
+                                homeMove_intent.putExtra("uidGoogle",user.getUid());
                                 Log.d(TAG, "구글이름2" + user.getDisplayName());
                                 startActivity(homeMove_intent);
                             }

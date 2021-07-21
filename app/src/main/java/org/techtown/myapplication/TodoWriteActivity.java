@@ -160,24 +160,31 @@ public class TodoWriteActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Todos").child(groupKey).child((month+1)+"월").child(dayOfMonth+"일");
+
         if(requestCode==101 && resultCode==102) {
             hour = data.getIntExtra("hour",0);
             minute = data.getIntExtra("minute",0);
             position = data.getIntExtra("position",0);
 
             Log.d("아이템 포지션",String.valueOf(position));
-
             if(hour < 10 && minute < 10) {
-                customAdapter.getItems().get(position).setAlarm("0" + hour + ":" + "0" + minute);
+//                customAdapter.getItems().get(position).setAlarm("0" + hour + ":" + "0" + minute);
+                myRef.child(items.get(position).getPushKey()).child("alarm").setValue("0" + hour + ":" + "0" + minute);
                 customAdapter.notifyDataSetChanged();
             } else if (hour < 10 && minute > 10){
-                customAdapter.getItems().get(position).setAlarm("0" + hour + ":" + "" + minute);
+//                customAdapter.getItems().get(position).setAlarm("0" + hour + ":" + "" + minute);
+                myRef.child(items.get(position).getPushKey()).child("alarm").setValue("0" + hour + ":" + "" + minute);
                 customAdapter.notifyDataSetChanged();
             } else if (hour > 10 && minute < 10){
-                customAdapter.getItems().get(position).setAlarm("" + hour + ":" + "0" + minute);
+//                customAdapter.getItems().get(position).setAlarm("" + hour + ":" + "0" + minute);
+                myRef.child(items.get(position).getPushKey()).child("alarm").setValue("" + hour + ":" + "0" + minute);
                 customAdapter.notifyDataSetChanged();
             } else {
-                customAdapter.getItems().get(position).setAlarm("" + hour + ":" + "" + minute);
+//                customAdapter.getItems().get(position).setAlarm("" + hour + ":" + "" + minute);
+                myRef.child(items.get(position).getPushKey()).child("alarm").setValue("" + hour + ":" + "" + minute);
                 customAdapter.notifyDataSetChanged();
             }
         }
