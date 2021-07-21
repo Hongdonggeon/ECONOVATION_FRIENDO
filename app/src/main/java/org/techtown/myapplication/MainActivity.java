@@ -24,19 +24,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.annotations.NotNull;
-import com.kakao.sdk.auth.AuthApiClient;
-import com.kakao.sdk.auth.model.OAuthToken;
-import com.kakao.sdk.common.model.KakaoSdkError;
-import com.kakao.sdk.common.util.Utility;
-import com.kakao.sdk.user.UserApiClient;
-import com.kakao.sdk.user.model.AccessTokenInfo;
-import com.kakao.sdk.user.model.User;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function2;
+
+import com.google.firebase.database.annotations.NotNull;
+import com.kakao.sdk.common.util.Utility;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -53,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btn_login = findViewById(R.id.btn_login);
 
 
         // Configure Google Sign In
@@ -100,14 +93,12 @@ public class MainActivity extends AppCompatActivity {
                 signIn();
             }
         });
-
     }
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
         Log.d(TAG,"SIGNIN");
     }
-
 
     // google
     @Override
