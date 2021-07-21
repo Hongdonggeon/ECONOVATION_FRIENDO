@@ -32,27 +32,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imv_icon" />
 
-    <ImageView
-        android:id="@+id/btn_login"
-        android:layout_width="380dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.516"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_appname"
-        app:layout_constraintVertical_bias="0.703"
-        app:srcCompat="@drawable/kakao_login_large_wide" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_login_btn"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="84dp"
         android:layout_marginBottom="16dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/btn_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.483"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_appname" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
