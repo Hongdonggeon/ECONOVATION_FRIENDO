@@ -131,17 +131,24 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             }
         });
 
+
+
+
         holder.alarmSwitch.setOnCheckedChangeListener(null);
         holder.alarmSwitch.setChecked(item.isAlarmChecked());
         holder.alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    item.setAlarmChecked(true);
+//                    item.setAlarmChecked(true);
+
+                    //알람 스위치 상태 DB저장 완료, 알람 시간 텍스트뷰에 적용시켜야함
+                    myRef.child("Todos").child(groupKey).child((month+1)+"월").child(dayOfMonth+"일").child(item.getPushKey()).child("alarmChecked").setValue(isChecked);
                     Intent intent = new Intent(buttonView.getContext(), PopupAlarmActivity.class);
                     intent.putExtra("position",position);
                     startActivityForResult((Activity) buttonView.getContext(), intent, 101,null);
                 } else {
+                    myRef.child(groupKey).child(String.valueOf(month)).child(String.valueOf(dayOfMonth)).child(item.getPushKey()).setValue(isChecked);
                     items.get(position).setAlarm("알람 해제");
                     notifyDataSetChanged();
                 }
