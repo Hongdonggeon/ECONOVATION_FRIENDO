@@ -23,8 +23,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+
 import com.google.firebase.database.annotations.NotNull;
 import com.kakao.sdk.common.util.Utility;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -86,18 +93,12 @@ public class MainActivity extends AppCompatActivity {
                 signIn();
             }
         });
-
-        String keyHash = Utility.INSTANCE.getKeyHash(MainActivity.this);
-        Log.d(TAG, "해쉬키 값 : " + keyHash);
-
-
     }
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+        Log.d(TAG,"SIGNIN");
     }
-
-
 
     // google
     @Override
@@ -161,8 +162,13 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
-        if(user !=null) {
+
+    private void updateUI(FirebaseUser user){
         }
-    }
+
+
+
+
+
+
 }

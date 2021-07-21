@@ -4,33 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@drawable/blackboard5">
+    android:background="@drawable/blackboard5"
+    tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/imv_icon"
-        android:layout_width="245dp"
-        android:layout_height="257dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/friends_v1" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imv_icon"-->
+    <!--        android:layout_width="245dp"-->
+    <!--        android:layout_height="257dp"-->
+    <!--        android:layout_marginStart="48dp"-->
+    <!--        android:layout_marginTop="48dp"-->
+    <!--        android:layout_marginEnd="48dp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:srcCompat="@drawable/friendo" />-->
 
     <TextView
         android:id="@+id/tv_appname"
+        style="@style/Text.TitleStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="Friendo"
         android:textSize="50dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imv_icon" />
+        app:layout_constraintTop_toTopOf="@+id/guideline11" />
 
 
     <com.google.android.gms.common.SignInButton
@@ -44,5 +43,12 @@
         app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_appname" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.09711684" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
