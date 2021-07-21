@@ -24,7 +24,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.annotations.NotNull;
+import com.kakao.sdk.auth.AuthApiClient;
+import com.kakao.sdk.auth.model.OAuthToken;
+import com.kakao.sdk.common.model.KakaoSdkError;
+import com.kakao.sdk.common.util.Utility;
+import com.kakao.sdk.user.UserApiClient;
+import com.kakao.sdk.user.model.AccessTokenInfo;
+import com.kakao.sdk.user.model.User;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function2;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -33,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG2 = "GoogleActivity";
     private static final int RC_SIGN_IN = 100;
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
     private GoogleSignInClient mGoogleSignInClient;
 
     @Override
@@ -40,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btn_login = findViewById(R.id.btn_login);
+
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -57,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
+        user = mAuth.getCurrentUser();
+
         if(user !=null) {
             user.getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                 @Override
@@ -66,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
                         String idToken = task.getResult().getToken();
                         Log.d(TAG, "아이디 토큰 = " + idToken);
                         Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        homeMove_intent.putExtra("emailGoogle",user.getEmail());
+                        homeMove_intent.putExtra("nameGoogle",user.getDisplayName());
+                        homeMove_intent.putExtra("uidGoogle",user.getUid());
+                        Log.d(TAG,"구글이름1" + user.getDisplayName());
                         startActivity(homeMove_intent);
                     }
                 }
@@ -81,69 +101,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        String keyHash = Utility.INSTANCE.getKeyHash(MainActivity.this);
-//        Log.d(TAG, "해쉬키 값 : " + keyHash);
-//
-//        // 토큰 유효성 체크하는 콜백함수
-//        Function2<AccessTokenInfo, Throwable, Unit> token_callback = new Function2<AccessTokenInfo, Throwable, Unit>() {
-//            @Override
-//            public Unit invoke(AccessTokenInfo accessTokenInfo, Throwable throwable) {
-//                if(throwable != null) {
-//                    if (throwable instanceof KakaoSdkError && ((KakaoSdkError) throwable).isInvalidTokenError() == true) {
-//                        // 로그인 필요하다
-//                        Log.d("need login : ","로그인이 필요합니다");
-//                    }
-//                    else {
-//                        //기타 에러
-//                        Log.d("error occured : ", "기타 에러 발생" + throwable.toString());
-//                    }
-//                }
-//                else {
-//                    //토큰 유효성 체크 성공(필요 시 토큰 갱신 됨)
-//                    Log.d("success token check : ", "토큰 유효성 체크 성공");
-//                    updateKakaoLoginUI();
-//                }
-//                return null;
-//            }
-//        };
-//
-//        if (AuthApiClient.getInstance().hasToken()){
-//            UserApiClient.getInstance().accessTokenInfo(token_callback);
-//        } else {
-//            // 로그인 필요하다
-//            Log.d("need login : ","로그인이 필요합니다");
-//        }
-//
-//        // 로그인 공통 callback 구성
-//        Function2<OAuthToken, Throwable, Unit> login_callback = new Function2<OAuthToken, Throwable, Unit>() {
-//            @Override
-//            public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
-//                if(oAuthToken != null){         // 로그인 성공 했다면
-//                    Log.d("success login : ", "로그인에 성공했습니다");
-//                }
-//                if (throwable != null){         // 로그인 실패 했다면
-//                    Log.d("fail login : ", "로그인에 실패했습니다" + throwable.toString());
-//                }
-//                updateKakaoLoginUI();
-//                return null;
-//            }
-//        };
-//
-//        btn_login.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(UserApiClient.getInstance().isKakaoTalkLoginAvailable(MainActivity.this)){
-//                    UserApiClient.getInstance().loginWithKakaoTalk(MainActivity.this,login_callback);
-//                }else{
-//                    UserApiClient.getInstance().loginWithKakaoAccount(MainActivity.this,login_callback);
-//                    Log.d("login in KakaoAccount :", "카카오 계정으로 로그인");
-//                }
-//
-//            }
-//        });
-//
-//
-//
     }
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -151,47 +108,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG,"SIGNIN");
     }
 
-    //로그인이 되어있는지를 확인하고 로그인 되어있는 경우, 아닌경우에 따라 다른 이벤트 설정
-
-//    private void updateKakaoLoginUI(){
-//        CalendarFragment calendarFragment = new CalendarFragment();
-//
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference();
-//
-//        UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
-//            @Override
-//            public Unit invoke(User user, Throwable throwable) {
-//                // 로그인이 되어 있을때 이벤트
-//                if(user != null){
-//                    long uuid = user.getId();
-//                    String email = user.getKakaoAccount().getEmail();
-//                    String nickname = user.getKakaoAccount().getProfile().getNickname();
-//
-//
-//                    //카카오 API로부터 넘어오는 정보들 확인용 로그
-//                    Log.i(TAG, "invoke: id=" + uuid);
-//                    Log.i(TAG, "invoke: email=" + email);
-//                    Log.i(TAG, "invoke: nickname=" + nickname);
-//                    Log.i(TAG, "invoke: gender=" + user.getKakaoAccount().getGender());
-//                    Log.i(TAG, "invoke: age=" + user.getKakaoAccount().getAgeRange());
-//
-//                    myRef.child("Users").child(String.valueOf(uuid)).child("Nickname").setValue(nickname);
-//                    myRef.child("Users").child(String.valueOf(uuid)).child("email").setValue(email);
-//
-//                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-//                    intent.putExtra("uuid",uuid);
-//                    intent.putExtra("profile",user.getKakaoAccount().getProfile().getThumbnailImageUrl());
-//                    intent.putExtra("nickname",user.getKakaoAccount().getProfile().getNickname());
-//                    intent.putExtra("email",user.getKakaoAccount().getEmail());
-//                    startActivity(intent);
-//                } else { //로그인이 되어 있지 않을 때, (user = null 일때를 의미)
-//                    Toast.makeText(MainActivity.this,"로그인이 필요합니다.",Toast.LENGTH_SHORT).show();
-//                }
-//                return null;
-//            }
-//        });
-//    }
 
     // google
     @Override
@@ -207,6 +123,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
                 Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+                homeMove_intent.putExtra("emailGoogle",account.getEmail());
+                homeMove_intent.putExtra("nameGoogle",account.getDisplayName());
+                Log.d(TAG,"account.getId():"+account.getIdToken());
                 startActivity(homeMove_intent);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
@@ -223,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
@@ -235,6 +155,12 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            if(user != null){
+                                Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                homeMove_intent.putExtra("nameGoogle", user.getDisplayName());
+                                Log.d(TAG, "구글이름2" + user.getDisplayName());
+                                startActivity(homeMove_intent);
+                            }
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -245,9 +171,12 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUI(FirebaseUser user){
 
-    }
+    private void updateUI(FirebaseUser user){
+        }
+
+
+
 
 
 

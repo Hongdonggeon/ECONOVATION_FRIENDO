@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference myReference;
     private DatabaseReference myReference2;
     private DatabaseReference myReference3;
+    private DatabaseReference myReference4;
     Long uuid;
     ArrayList<User> groupsNames;
     String gid;
@@ -51,17 +54,31 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+
+
         groupsFragment =(GroupsFragment)getSupportFragmentManager().findFragmentById(R.id.mainFragment);
         accountAddButton = findViewById(R.id.groupAddButton);
         kakaoLogoutButton = findViewById(R.id.kakaoLogoutButton);
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
 
         Intent intent = getIntent();
         String emailKakao = intent.getStringExtra("emailKakao");
 
         //구글 사용자 정보
-//        String emailGoogle = intent.getStringExtra("emailGoogle");
-//        String nameGoogle = intent.getStringExtra("nameGoogle");
-//        String uidGoogle = intent.getStringExtra("uidGoogle");
+        String emailGoogle = intent.getStringExtra("emailGoogle");
+        String nameGoogle = intent.getStringExtra("nameGoogle");
+        String uidGoogle = user.getUid();
+
+
+        // Users 데이터베이스 생성
+        database =FirebaseDatabase.getInstance();
+        myReference4 = database.getReference();
+        myReference4.child("Users").child(uidGoogle).child("Name").setValue(nameGoogle);
+        myReference4.child("Users").child(uidGoogle).child("Email").setValue(emailGoogle);
 
         uuid = intent.getLongExtra("uuid",0);
 
@@ -110,8 +127,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        database =FirebaseDatabase.getInstance();
-        myReference = database.getReference("UserGroups").child(uuid.toString());
+
+        myReference = database.getReference("UserGroups").child(uidGoogle);
         myReference2 = database.getReference("UserGroups");
         myReference3 = database.getReference("Todos");
 
