@@ -3,9 +3,9 @@
     package="org.techtown.myapplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".KakaoApplication"
@@ -15,12 +15,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
+      
+        <activity android:name=".AlarmActivity"></activity>
 
-        <receiver android:name=".AlarmReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.sec"/>
-            </intent-filter>
-        </receiver>
+        <service
+            android:name=".AlarmService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver android:name=".AlarmReceiver" />
+
 
 
         <activity
@@ -29,30 +33,30 @@
         <activity android:name=".TodoWriteActivity" />
         <activity android:name=".GroupCalendar" />
         <activity android:name=".MenuActivity" />
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+                //?
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
+
                 <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" -->
                 <data
                     android:host="oauth"
                     android:scheme="cde9db3e2d1250e758b5d5c82b2a0767" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Group_add_dialog"
-            android:theme="@style/Theme.MyDialog"></activity>
-        <activity android:name=".HomeActivity">
-
-        </activity>
-
+        <activity
+            android:name=".Group_add_dialog"
+            android:theme="@style/Theme.MyDialog" />
+        <activity android:name=".HomeActivity"></activity>
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
