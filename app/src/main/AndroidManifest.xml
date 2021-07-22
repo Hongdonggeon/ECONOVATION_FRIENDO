@@ -15,11 +15,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
+
         <receiver android:name=".AlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.sec"/>
             </intent-filter>
         </receiver>
+
 
         <activity
             android:name=".PopupAlarmActivity"
@@ -64,6 +66,14 @@
                     android:scheme="kakaocde9db3e2d1250e758b5d5c82b2a0767" />
             </intent-filter>
         </activity>
+
+        <service android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

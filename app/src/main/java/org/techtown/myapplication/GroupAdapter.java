@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
-    ArrayList<User> items = new ArrayList<User>();
+public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
+    ArrayList<Group> items = new ArrayList<Group>();
     Context context;
-    public UserAdapter(){};
+    public GroupAdapter(){};
 
 
-    public UserAdapter(ArrayList<User> items, Context context) {
+    public GroupAdapter(ArrayList<Group> items, Context context) {
         this.items = items;
         this.context = context;
     }
@@ -42,13 +42,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View itemView = inflater.inflate(R.layout.user_item, viewGroup, false);
+        View itemView = inflater.inflate(R.layout.group_item, viewGroup, false);
         return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        User item = items.get(position);
+        Group item = items.get(position);
 //        viewHolder.textView.setText(items.get(position).getName());
         viewHolder.setItem(item);
     }
@@ -58,19 +58,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         return items.size();
     }
 
-    public void addItem(User item) {
+    public void addItem(Group item) {
         items.add(item);
     }
 
-    public void setItems(ArrayList<User> items) {
+    public void setItems(ArrayList<Group> items) {
         this.items = items;
     }
 
-    public User getItem(int position) {
+    public Group getItem(int position) {
         return items.get(position);
     }
 
-    public void setItem(int position, User item) {
+    public void setItem(int position, Group item) {
         items.set(position, item);
     }
 
@@ -106,7 +106,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             });
         }
 
-        public void setItem(User item) {
+        public void setItem(Group item) {
             textView.setText(item.getName());
         }
     }

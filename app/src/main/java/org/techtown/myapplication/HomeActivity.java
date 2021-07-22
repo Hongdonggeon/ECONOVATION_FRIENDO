@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -21,14 +23,23 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.kakao.sdk.user.UserApiClient;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity {
     private final long FINISH_INTERVAL_TIME = 2000;
@@ -43,12 +54,19 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference myReference3;
     private DatabaseReference myReference4;
     Long uuid;
-    ArrayList<User> groupsNames;
+    ArrayList<Group> groupsNames;
     String gid;
+
+    private UserModel destinationUserModel;
 
     Button kakaoLogoutButton;
 
     int position;
+    String token;
+    String uidGoogle;
+    String emailGoogle;
+
+    HashMap<String, String> userTokens = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,38 +87,20 @@ public class HomeActivity extends AppCompatActivity {
         String emailKakao = intent.getStringExtra("emailKakao");
 
         //구글 사용자 정보
-        String emailGoogle = intent.getStringExtra("emailGoogle");
+         emailGoogle = intent.getStringExtra("emailGoogle");
         String nameGoogle = intent.getStringExtra("nameGoogle");
-        String uidGoogle = user.getUid();
+         uidGoogle = user.getUid();
 
+        // fcm 토큰 얻기
+        saveTokenToDB();
 
         // Users 데이터베이스 생성
         database =FirebaseDatabase.getInstance();
         myReference4 = database.getReference();
         myReference4.child("Users").child(uidGoogle).child("Name").setValue(nameGoogle);
         myReference4.child("Users").child(uidGoogle).child("Email").setValue(emailGoogle);
-
         uuid = intent.getLongExtra("uuid",0);
 
-
-        // 임시 카카오 로그아웃 버튼
-        kakaoLogoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
-                    @Override
-                    public Unit invoke(Throwable throwable) {
-                        if(throwable != null){
-                            Log.e("로그아웃 실패", "로그아웃 실패, SDK에서 토큰 삭제됨",throwable);
-                        }else {
-                            Log.i("로그아웃 성공","로그아웃 성공, SDK에서 토큰 삭제됨");
-                            finish();
-                        }
-                        return null;
-                    }
-                });
-            }
-        });
 
         // 그룹 추가 버튼
         accountAddButton.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +110,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivityForResult(intent,MAIN_ACTIVITY_REQUEST_CODE);
             }
         });
-        groupsFragment.userAdapter.setOnItemClickListener(new UserAdapter.OnItemClickListener() {
+        groupsFragment.groupAdapter.setOnItemClickListener(new GroupAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int pos) {
                 Intent intent = new Intent(getApplicationContext(), GroupCalendar.class);
@@ -132,7 +132,8 @@ public class HomeActivity extends AppCompatActivity {
         myReference2 = database.getReference("UserGroups");
         myReference3 = database.getReference("Todos");
 
-        groupsFragment.userAdapter.setOnItemLongClickListener(new UserAdapter.OnItemLongClickListener() {
+
+        groupsFragment.groupAdapter.setOnItemLongClickListener(new GroupAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View v, int pos) {
                 Toast.makeText(getApplicationContext(),"롱클릭 확인",Toast.LENGTH_SHORT);
@@ -167,9 +168,9 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
                 Log.d("HomeActivity","onchildadded"+snapshot.getKey());
-                groupsFragment.items.add(new User(snapshot.getValue().toString(),snapshot.getKey()));
-                groupsFragment.userAdapter.setItems(groupsFragment.items);
-                groupsFragment.userAdapter.notifyDataSetChanged();
+                groupsFragment.items.add(new Group(snapshot.getValue().toString(),snapshot.getKey()));
+                groupsFragment.groupAdapter.setItems(groupsFragment.items);
+                groupsFragment.groupAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -181,8 +182,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
                 Log.d("HomeActivity","onchildremoved"+snapshot.getValue());
-                groupsFragment.userAdapter.setItems(groupsFragment.items);
-                groupsFragment.userAdapter.notifyDataSetChanged();
+                groupsFragment.groupAdapter.setItems(groupsFragment.items);
+                groupsFragment.groupAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -197,26 +198,49 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+    }
 
-//        myReference.child(gid).child("그룹명").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-//                groupsFragment.items.clear();
-//                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-//                    User user = dataSnapshot.getValue(User.class);
-//                    groupsFragment.items.add(user);
-//                    groupsFragment.userAdapter.setItems(groupsFragment.items);
-//                }
+    private void saveTokenToDB() {
+        // 현재 토큰
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        sendGcm();
+                        if (!task.isSuccessful()) {
+                            Log.w("HomeActivity", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
 
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-//                Log.e("HomeActivity",String.valueOf(error.toException()));
-//            }
-//        });
-//        groupsFragment.userAdapter = new UserAdapter(groupsFragment.items,this);
-//        groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
+                        // Get new FCM registration token
+                        token = task.getResult();
+
+                        // Log and toast
+//                        String msg = getString(R.string.msg_token_fmt, token);
+//                        Log.d("HomeActivity", msg);
+                        Log.d("HomeActivity", token);
+//                        Toast.makeText(HomeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        myReference4 = database.getReference();
+                        myReference4.child("FcmID").child(uidGoogle).child(token).setValue(emailGoogle);
+
+                        myReference4.child("FcmID").child(uidGoogle).child(token).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                String token = snapshot.getKey();
+                                String email = snapshot.getValue().toString();
+                                userTokens.put(email,token);
+                                Log.d("homeactivity","here ! "+email);
+                                Log.d("homeactivity","here ! "+userTokens.get(email));
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                });
 
     }
 
@@ -233,6 +257,33 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    void sendGcm(){
+        Gson gson = new Gson();
+        NotificationModel notificationModel = new NotificationModel();
+        notificationModel.to = token;
+        notificationModel.notification.title ="asdf";
+        notificationModel.notification.text="초대 수락하시겠습니까";
+
+        RequestBody requestBody = RequestBody.create(gson.toJson(notificationModel),MediaType.parse("application/json; charset=utf8"));
+        Request request = new Request.Builder().header("Content-Type", "application/json")
+                .addHeader("Authorization","key=AAAAlzEMvvg:APA91bGHGn5W1uGfO3PKxvn_IGMK41j5b2ArIglH6PG_Py2kRNupE0v0St6YX28St_7ZkOKVs31cjz8psFiHvdMqGgSMnbiUyIvhf0XtbJIhaJ2XsD0X-DHjZAd4LX6BYGjumXUE3Lqh")
+                .url("https://gcm-http.googleapis.com/gcm/send")
+                .post(requestBody)
+                .build();
+        OkHttpClient okHttpClient =new OkHttpClient();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+            }
+        });
     }
 
     @Override
