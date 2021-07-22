@@ -23,24 +23,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -91,6 +79,9 @@ public class HomeActivity extends AppCompatActivity {
 
         // fcm 토큰 얻기
         saveTokenToDB();
+
+        Intent hashIntent = new Intent(getApplicationContext(),Group_add_dialog.class);
+        hashIntent.putExtra("userTokens",userTokens);
 
         // Users 데이터베이스 생성
         database =FirebaseDatabase.getInstance();
@@ -204,7 +195,6 @@ public class HomeActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
-                        sendGcm();
                         if (!task.isSuccessful()) {
                             Log.w("HomeActivity", "Fetching FCM registration token failed", task.getException());
                             return;
@@ -220,7 +210,6 @@ public class HomeActivity extends AppCompatActivity {
 //                        Toast.makeText(HomeActivity.this, msg, Toast.LENGTH_SHORT).show();
                         myReference4 = database.getReference();
                         myReference4.child("FcmID").child(uidGoogle).child(token).setValue(emailGoogle);
-
                         myReference4.child("FcmID").child(uidGoogle).child(token).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -248,40 +237,41 @@ public class HomeActivity extends AppCompatActivity {
         if(requestCode == MAIN_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 tdl_name = data.getStringExtra("name");
+
+
 //                groupsFragment.items.add(new User(tdl_name));
 //                groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
                 myReference.push().setValue(tdl_name);
-
             }
         }
 
     }
 
     void sendGcm(){
-        Gson gson = new Gson();
-        NotificationModel notificationModel = new NotificationModel();
-        notificationModel.to = token;
-        notificationModel.notification.title ="asdf";
-        notificationModel.notification.text="초대 수락하시겠습니까";
-
-        RequestBody requestBody = RequestBody.create(gson.toJson(notificationModel),MediaType.parse("application/json; charset=utf8"));
-        Request request = new Request.Builder().header("Content-Type", "application/json")
-                .addHeader("Authorization","key=AAAAlzEMvvg:APA91bGHGn5W1uGfO3PKxvn_IGMK41j5b2ArIglH6PG_Py2kRNupE0v0St6YX28St_7ZkOKVs31cjz8psFiHvdMqGgSMnbiUyIvhf0XtbJIhaJ2XsD0X-DHjZAd4LX6BYGjumXUE3Lqh")
-                .url("https://gcm-http.googleapis.com/gcm/send")
-                .post(requestBody)
-                .build();
-        OkHttpClient okHttpClient =new OkHttpClient();
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
-            }
-        });
+//        Gson gson = new Gson();
+//        NotificationModel notificationModel = new NotificationModel();
+//        notificationModel.to =  ;
+//        notificationModel.notification.title =emailGoogle;
+//        notificationModel.notification.text="초대 수락하시겠습니까";
+//
+//        RequestBody requestBody = RequestBody.create(gson.toJson(notificationModel),MediaType.parse("application/json; charset=utf8"));
+//        Request request = new Request.Builder().header("Content-Type", "application/json")
+//                .addHeader("Authorization","key=AAAAlzEMvvg:APA91bGHGn5W1uGfO3PKxvn_IGMK41j5b2ArIglH6PG_Py2kRNupE0v0St6YX28St_7ZkOKVs31cjz8psFiHvdMqGgSMnbiUyIvhf0XtbJIhaJ2XsD0X-DHjZAd4LX6BYGjumXUE3Lqh")
+//                .url("https://gcm-http.googleapis.com/gcm/send")
+//                .post(requestBody)
+//                .build();
+//        OkHttpClient okHttpClient =new OkHttpClient();
+//        okHttpClient.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//
+//            }
+//        });
     }
 
     @Override
