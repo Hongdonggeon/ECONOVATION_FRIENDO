@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,7 +34,6 @@ import com.kakao.sdk.common.util.Utility;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private ImageView btn_login;
     private SignInButton g_login_btn;
     private static final String TAG2 = "GoogleActivity";
     private static final int RC_SIGN_IN = 100;
@@ -57,12 +55,6 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(this);
 
-//        if(gsa != null){
-//            // 재로그인 방지 메소드
-//            Log.d(TAG,"로그인 정보 확인");
-//            Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
-//            startActivity(homeMove_intent);
-//        }
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -84,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        SignInButton g_login_btn = findViewById(R.id.google_login_btn);
+        g_login_btn = findViewById(R.id.google_login_btn);
+
+
 
         g_login_btn.setOnClickListener(new View.OnClickListener() {
             @Override

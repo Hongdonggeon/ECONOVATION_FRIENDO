@@ -7,42 +7,33 @@
     android:background="@drawable/blackboard5"
     tools:context=".MainActivity">
 
-    <!--    <ImageView-->
-    <!--        android:id="@+id/imv_icon"-->
-    <!--        android:layout_width="245dp"-->
-    <!--        android:layout_height="257dp"-->
-    <!--        android:layout_marginStart="48dp"-->
-    <!--        android:layout_marginTop="48dp"-->
-    <!--        android:layout_marginEnd="48dp"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        app:srcCompat="@drawable/friendo" />-->
 
     <TextView
         android:id="@+id/tv_appname"
         style="@style/Text.TitleStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@font/nanum_pen_script_regular"
+
         android:text="Friendo"
-        android:textSize="50dp"
+        android:textColor="@color/white"
+        android:textSize="100dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline11" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_login_btn"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
-        android:layout_marginBottom="16dp"
-        android:text="TextView"
+        android:layout_marginBottom="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.483"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_appname" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline11"
