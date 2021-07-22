@@ -9,7 +9,7 @@ public class Todo {
     public boolean checkBoxChecked;
     public boolean alarmChecked;
 
-    public Todo(){}
+
 
     public Todo(String pushKey, String todo, String alarm, boolean checkBoxChecked, boolean alarmChecked) {
         this.pushKey = pushKey;
@@ -18,6 +18,9 @@ public class Todo {
         this.checkBoxChecked = checkBoxChecked;
         this.alarmChecked = alarmChecked;
     }
+
+    public Todo(){}
+
 
     public Todo(String todo, String alarm, boolean checkBoxChecked, boolean alarmChecked) {
         this.todo = todo;
@@ -37,6 +40,7 @@ public class Todo {
     public void setPushKey(String pushKey) {
         this.pushKey = pushKey;
     }
+
     public String getAlarm() {
         return alarm;
     }
