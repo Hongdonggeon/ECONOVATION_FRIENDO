@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@drawable/blackboard5">
+    android:background="@drawable/blackboard5"
+    tools:context=".MainActivity">
 
 
     <TextView
         android:id="@+id/tv_appname"
+        style="@style/Text.TitleStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:fontFamily="@font/nanum_pen_script_regular"
+
         android:text="Friendo"
         android:textColor="@color/white"
         android:textSize="100dp"
@@ -21,6 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_login_btn"
@@ -31,5 +34,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.09711684" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@drawable/blackboard5"
     android:orientation="vertical"
     tools:context=".HomeActivity">
 
@@ -13,11 +13,11 @@
         android:id="@+id/main_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="36dp"
         android:gravity="center"
         android:text="FRIENDO"
         android:textColor="@color/text"
-        android:textSize="60sp"
+        android:textSize="45sp"
         style="@style/Text.TitleStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

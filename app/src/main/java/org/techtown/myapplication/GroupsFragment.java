@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class GroupsFragment extends Fragment {
     RecyclerView recyclerView;
-    UserAdapter userAdapter;
-    ArrayList<User> items = new ArrayList<>();
+    GroupAdapter groupAdapter;
+    ArrayList<Group> items = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -24,8 +24,8 @@ public class GroupsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        userAdapter = new UserAdapter();
-        recyclerView.setAdapter(userAdapter);
+        groupAdapter = new GroupAdapter();
+        recyclerView.setAdapter(groupAdapter);
         return rootView;
     }
 }
