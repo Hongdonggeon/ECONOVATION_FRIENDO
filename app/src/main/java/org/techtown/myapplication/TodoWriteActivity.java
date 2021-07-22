@@ -33,6 +33,7 @@ public class TodoWriteActivity extends AppCompatActivity {
 
     ArrayList<Todo> items = new ArrayList<Todo>();
 
+
     TextView textView;
     RecyclerView recyclerView;
     EditText editText;
@@ -61,6 +62,7 @@ public class TodoWriteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_write);
+
 
         recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
@@ -101,8 +103,6 @@ public class TodoWriteActivity extends AppCompatActivity {
         // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference().child("Todos").child(groupKey).child((month+1)+"월").child(dayOfMonth+"일");
-
-
 
 
         // Todo아이템 추가 버튼
@@ -151,6 +151,10 @@ public class TodoWriteActivity extends AppCompatActivity {
 
         itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(customAdapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+
+
+
     }
     @Override
     protected void onResume() {

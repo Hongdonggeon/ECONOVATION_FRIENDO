@@ -10,7 +10,6 @@ public class Todo {
     public boolean alarmChecked;
 
 
-
     public Todo(String pushKey, String todo, String alarm, boolean checkBoxChecked, boolean alarmChecked) {
         this.pushKey = pushKey;
         this.todo = todo;
@@ -20,7 +19,6 @@ public class Todo {
     }
 
     public Todo(){}
-
 
     public Todo(String todo, String alarm, boolean checkBoxChecked, boolean alarmChecked) {
         this.todo = todo;
