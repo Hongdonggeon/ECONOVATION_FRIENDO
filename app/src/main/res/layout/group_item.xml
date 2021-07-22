@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background"
+    android:background="@drawable/blackboard7"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -23,18 +23,29 @@
                 android:id="@+id/imageView"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:padding="5dp"
-                app:srcCompat="@drawable/ic_launcher_foreground" />
+                android:src="@drawable/ic_launcher_foreground"
+                android:padding="5dp" />
 
             <TextView
                 android:id="@+id/tdl_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+
                 android:text="이름"
                 style="@style/Text.NormalStyle"
                 android:textColor="@color/background"
-                android:textSize="40sp" />
+                android:textSize="40dp"/>
+
+<!--            <TextView-->
+<!--                android:id="@+id/tdl_name"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_gravity="center_vertical"-->
+<!--                android:text="이름"-->
+<!--                style="@style/Text.NormalStyle"-->
+<!--                android:textColor="@color/background"-->
+<!--                android:textSize="30dp" />-->
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
