@@ -32,7 +32,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     int month;
     int dayOfMonth;
 
-
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference();
 
@@ -130,8 +129,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         });
 
 
-
-
         holder.alarmSwitch.setOnCheckedChangeListener(null);
         holder.alarmSwitch.setChecked(item.isAlarmChecked());
         holder.alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -142,6 +139,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     //알람 스위치 상태 DB저장 완료, 알람 시간 텍스트뷰에 적용시켜야함
                     myRef.child("Todos").child(groupKey).child((month+1)+"월").child(dayOfMonth+"일").child(item.getPushKey()).child("alarmChecked").setValue(isChecked);
                     Intent intent = new Intent(buttonView.getContext(), PopupAlarmActivity.class);
+                    intent.putExtra("todo",item.getTodo());
                     intent.putExtra("groupKey",groupKey);
                     intent.putExtra("month",month);
                     intent.putExtra("dayOfMonth",dayOfMonth);

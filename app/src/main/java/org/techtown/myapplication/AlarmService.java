@@ -18,7 +18,9 @@ public class AlarmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG,"AlarmService 호출");
+        String todo = intent.getStringExtra("todo");
         Intent alarmIntent = new Intent(getApplicationContext(), AlarmActivity.class);
+        alarmIntent.putExtra("todo",todo);
         startActivity(alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         return super.onStartCommand(intent, flags, startId);
     }

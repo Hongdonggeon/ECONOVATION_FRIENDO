@@ -1,6 +1,7 @@
 package org.techtown.myapplication;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -47,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private UserModel destinationUserModel;
 
-   
+    ArrayList<PendingIntent> pendingIntentArrayList;
 
     int position;
     String token;
@@ -61,6 +63,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        pendingIntentArrayList = new ArrayList<>();
 
         groupsFragment =(GroupsFragment)getSupportFragmentManager().findFragmentById(R.id.mainFragment);
         accountAddButton = findViewById(R.id.groupAddButton);
