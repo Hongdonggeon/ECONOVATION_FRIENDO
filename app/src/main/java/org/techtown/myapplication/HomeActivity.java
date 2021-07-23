@@ -73,9 +73,9 @@ public class HomeActivity extends AppCompatActivity {
         String emailKakao = intent.getStringExtra("emailKakao");
 
         //구글 사용자 정보
-         emailGoogle = intent.getStringExtra("emailGoogle");
+        emailGoogle = intent.getStringExtra("emailGoogle");
         String nameGoogle = intent.getStringExtra("nameGoogle");
-         uidGoogle = user.getUid();
+        uidGoogle = user.getUid();
 
         // fcm 토큰 얻기
         saveTokenToDB();

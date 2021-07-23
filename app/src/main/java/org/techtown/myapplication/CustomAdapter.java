@@ -146,6 +146,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     intent.putExtra("month",month);
                     intent.putExtra("dayOfMonth",dayOfMonth);
                     intent.putExtra("position",position);
+                    intent.putExtra("pushKey",item.getPushKey());
                     startActivityForResult((Activity) buttonView.getContext(), intent, 101,null);
                 } else {
 //                    item.setAlarmChecked(isChecked);

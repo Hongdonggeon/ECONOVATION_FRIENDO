@@ -151,10 +151,6 @@ public class TodoWriteActivity extends AppCompatActivity {
 
         itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(customAdapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
-
-
-
-
     }
     @Override
     protected void onResume() {
