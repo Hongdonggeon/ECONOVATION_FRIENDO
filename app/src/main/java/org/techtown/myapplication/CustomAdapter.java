@@ -124,7 +124,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                myRef.child("Todos").child(groupKey).child((month+1)+"월").child(dayOfMonth+"일").child(item.getPushKey()).child("checkBoxChecked").setValue(isChecked);
+                myRef.child("Todos")
+                        .child(groupKey)
+                        .child((month+1)+"월")
+                        .child(dayOfMonth+"일")
+                        .child(item.getPushKey())
+                        .child("checkBoxChecked")
+                        .setValue(isChecked);
             }
         });
 
@@ -145,6 +151,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     intent.putExtra("dayOfMonth",dayOfMonth);
                     intent.putExtra("position",position);
                     intent.putExtra("pushKey",item.getPushKey());
+
                     startActivityForResult((Activity) buttonView.getContext(), intent, 101,null);
                 } else {
 //                    item.setAlarmChecked(isChecked);

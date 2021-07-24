@@ -28,6 +28,9 @@ public class PopupAlarmActivity extends AppCompatActivity {
     int position;
     String pushKey;
     String todo;
+    String groupKey;
+    int month;
+    int dayOfMonth;
 
     ArrayList<PendingIntent> pendingIntentArrayList;
 
@@ -49,6 +52,10 @@ public class PopupAlarmActivity extends AppCompatActivity {
         position = intent.getIntExtra("position", 0);
         pushKey = intent.getStringExtra("pushKey");
         todo = intent.getStringExtra("todo");
+        groupKey = intent.getStringExtra("groupKey");
+        month = intent.getIntExtra("month",0);
+        dayOfMonth = intent.getIntExtra("dayOfMonth",0);
+
         Log.d("PopupAlarmActivitiy", "Todo내용: " + todo);
 
 
@@ -89,9 +96,13 @@ public class PopupAlarmActivity extends AppCompatActivity {
 
         Intent alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
         alarmIntent.putExtra("todo",todo);
+        alarmIntent.putExtra("groupKey",groupKey);
+        alarmIntent.putExtra("month",month);
+        alarmIntent.putExtra("dayOfMonth",dayOfMonth);
+        alarmIntent.putExtra("pushKey",pushKey);
+
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmIntent.setAction(AlarmReceiver.ACTION_RESTART_SERVICE);
-
 
         //reqeustCode를 별도로 관리하여야 할 듯? pendingIntent를 ArrayList로 만들어보자
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), position, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
