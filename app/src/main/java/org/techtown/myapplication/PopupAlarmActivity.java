@@ -29,6 +29,8 @@ public class PopupAlarmActivity extends AppCompatActivity {
     String pushKey;
     String todo;
     String groupKey;
+
+    int year;
     int month;
     int dayOfMonth;
 
@@ -53,6 +55,7 @@ public class PopupAlarmActivity extends AppCompatActivity {
         pushKey = intent.getStringExtra("pushKey");
         todo = intent.getStringExtra("todo");
         groupKey = intent.getStringExtra("groupKey");
+        year = intent.getIntExtra("year",0);
         month = intent.getIntExtra("month",0);
         dayOfMonth = intent.getIntExtra("dayOfMonth",0);
 
@@ -97,6 +100,7 @@ public class PopupAlarmActivity extends AppCompatActivity {
         Intent alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
         alarmIntent.putExtra("todo",todo);
         alarmIntent.putExtra("groupKey",groupKey);
+        alarmIntent.putExtra("year",year);
         alarmIntent.putExtra("month",month);
         alarmIntent.putExtra("dayOfMonth",dayOfMonth);
         alarmIntent.putExtra("pushKey",pushKey);

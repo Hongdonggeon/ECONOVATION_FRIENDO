@@ -21,6 +21,8 @@ public class AlarmService extends Service {
     String todo;
     String groupKey;
     String pushKey;
+
+    int year;
     int month;
     int dayOfMonth;
 
@@ -36,12 +38,14 @@ public class AlarmService extends Service {
         todo = intent.getStringExtra("todo");
         groupKey = intent.getStringExtra("groupKey");
         pushKey = intent.getStringExtra("pushKey");
+        year = intent.getIntExtra("year",0);
         month = intent.getIntExtra("month",0);
         dayOfMonth = intent.getIntExtra("dayOfMonth",0);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Todos")
                                             .child(groupKey)
+                                            .child(year+"년")
                                             .child((month+1)+"월")
                                             .child(dayOfMonth+"일")
                                             .child(pushKey)
@@ -54,6 +58,7 @@ public class AlarmService extends Service {
                 alarmIntent.putExtra("todo",todo);
                 alarmIntent.putExtra("groupKey",groupKey);
                 alarmIntent.putExtra("pushKey",pushKey);
+                alarmIntent.putExtra("year",year);
                 alarmIntent.putExtra("month",month);
                 alarmIntent.putExtra("dayOfMonth",dayOfMonth);
 

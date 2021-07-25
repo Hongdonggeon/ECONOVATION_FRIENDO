@@ -59,18 +59,33 @@ public class HomeActivity extends AppCompatActivity {
     HashMap<String, String> userTokens = new HashMap<>();
 
     @Override
+    protected void onStart() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        uidGoogle = user.getUid();
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        uidGoogle = user.getUid();
+        super.onResume();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
 
         pendingIntentArrayList = new ArrayList<>();
 
         groupsFragment =(GroupsFragment)getSupportFragmentManager().findFragmentById(R.id.mainFragment);
         accountAddButton = findViewById(R.id.groupAddButton);
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-
 
         Intent intent = getIntent();
         String emailKakao = intent.getStringExtra("emailKakao");
@@ -78,7 +93,14 @@ public class HomeActivity extends AppCompatActivity {
         //구글 사용자 정보
         emailGoogle = intent.getStringExtra("emailGoogle");
         String nameGoogle = intent.getStringExtra("nameGoogle");
+
         uidGoogle = user.getUid();
+
+
+
+//        Log.d("HomeActivity","emailGoogle : " + user.getEmail());
+//        Log.d("HomeActivity","nameGoogle : " + user.getDisplayName());
+//        Log.d("HomeActivity","uidGoogle : " + user.getUid());
 
         // fcm 토큰 얻기
         saveTokenToDB();

@@ -14,6 +14,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         String todo = intent.getStringExtra("todo");
         String groupKey = intent.getStringExtra("groupKey");
         String pushKey = intent.getStringExtra("pushKey");
+        int year = intent.getIntExtra("year",0);
         int month = intent.getIntExtra("month",0);
         int dayOfMonth = intent.getIntExtra("dayOfMonth",0);
 
@@ -23,6 +24,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             in.putExtra("todo",todo);
             in.putExtra("groupKey",groupKey);
             in.putExtra("pushKey",pushKey);
+            in.putExtra("year",year);
             in.putExtra("month",month);
             in.putExtra("dayOfMonth",dayOfMonth);
 

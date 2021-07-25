@@ -29,6 +29,7 @@ import static androidx.core.app.ActivityCompat.startActivityForResult;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> implements ItemTouchHelperListener{
     ArrayList<Todo> items = new ArrayList<Todo>();
     String groupKey;
+    int year;
     int month;
     int dayOfMonth;
 
@@ -37,17 +38,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     public CustomAdapter(){}
 
-    public CustomAdapter(String groupKey, int month, int dayOfMonth) {
+    public CustomAdapter(String groupKey,int year, int month, int dayOfMonth) {
+        this.year= year;
         this.groupKey = groupKey;
         this.month = month;
         this.dayOfMonth = dayOfMonth;
     }
-
-    public CustomAdapter(int month, int dayOfMonth) {
-        this.month = month;
-        this.dayOfMonth=dayOfMonth;
-    }
-
 
     public void setItems(ArrayList<Todo> items) {
         this.items = items;
@@ -67,6 +63,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         myRef.child("Todos")
                 .child(groupKey)
+                .child(year+"년")
                 .child((month+1)+"월")
                 .child(dayOfMonth+"일")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -77,6 +74,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     if(dataSnapshot.getKey().equals(items.get(position).getPushKey())) {
                         myRef.child("Todos")
                                 .child(groupKey)
+                                .child(year+"년")
                                 .child((month+1)+"월")
                                 .child(dayOfMonth+"일")
                                 .child(items.get(position).getPushKey()).removeValue();
@@ -126,6 +124,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 myRef.child("Todos")
                         .child(groupKey)
+                        .child(year+"년")
                         .child((month+1)+"월")
                         .child(dayOfMonth+"일")
                         .child(item.getPushKey())
@@ -141,12 +140,19 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-//                    item.setAlarmChecked(isChecked);
                     //알람 스위치 상태 DB저장 완료, 알람 시간 텍스트뷰에 적용시켜야함
-                    myRef.child("Todos").child(groupKey).child((month+1)+"월").child(dayOfMonth+"일").child(item.getPushKey()).child("alarmChecked").setValue(isChecked);
+                    myRef.child("Todos")
+                            .child(groupKey)
+                            .child(year+"년")
+                            .child((month+1)+"월")
+                            .child(dayOfMonth+"일")
+                            .child(item.getPushKey())
+                            .child("alarmChecked").setValue(isChecked);
+
                     Intent intent = new Intent(buttonView.getContext(), PopupAlarmActivity.class);
                     intent.putExtra("todo",item.getTodo());
                     intent.putExtra("groupKey",groupKey);
+                    intent.putExtra("year",year);
                     intent.putExtra("month",month);
                     intent.putExtra("dayOfMonth",dayOfMonth);
                     intent.putExtra("position",position);
@@ -155,8 +161,22 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     startActivityForResult((Activity) buttonView.getContext(), intent, 101,null);
                 } else {
 //                    item.setAlarmChecked(isChecked);
-                    myRef.child("Todos").child(groupKey).child((month+1)+"월").child((dayOfMonth+"일")).child(item.getPushKey()).child("alarmChecked").setValue(isChecked);
-                    myRef.child("Todos").child(groupKey).child((month+1)+"월").child((dayOfMonth+"일")).child(item.getPushKey()).child("alarm").setValue("알람해제");
+                    myRef.child("Todos")
+                            .child(groupKey)
+                            .child(year+"년")
+                            .child((month+1)+"월")
+                            .child((dayOfMonth+"일"))
+                            .child(item.getPushKey())
+                            .child("alarmChecked")
+                            .setValue(isChecked);
+                    myRef.child("Todos")
+                            .child(groupKey)
+                            .child(year+"년")
+                            .child((month+1)+"월")
+                            .child((dayOfMonth+"일"))
+                            .child(item.getPushKey())
+                            .child("alarm")
+                            .setValue("알람해제");
                     notifyDataSetChanged();
                 }
             }
