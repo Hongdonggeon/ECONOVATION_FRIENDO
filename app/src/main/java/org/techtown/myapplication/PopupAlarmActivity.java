@@ -23,7 +23,6 @@ public class PopupAlarmActivity extends AppCompatActivity {
     TimePicker timePicker;
 
     Calendar calendar;
-    PendingIntent pendingIntent;
 
     int position;
     String pushKey;
@@ -46,9 +45,7 @@ public class PopupAlarmActivity extends AppCompatActivity {
         timePicker = findViewById(R.id.timePicker);
 
         CustomAdapter customAdapter = new CustomAdapter();
-
         pendingIntentArrayList = new ArrayList<>();
-
 
         Intent intent = getIntent();
         position = intent.getIntExtra("position", 0);
@@ -71,11 +68,13 @@ public class PopupAlarmActivity extends AppCompatActivity {
                 intent.putExtra("minute",timePicker.getMinute());
                 intent.putExtra("todo",todo);
                 setAlarm();
+
                 setResult(102,intent);
                 finish();
             }
         });
     }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void setAlarm(){
         Log.d("PopupAlarmActivity", "setAlarm()메소드 호출");
@@ -85,13 +84,6 @@ public class PopupAlarmActivity extends AppCompatActivity {
         calendar.set(Calendar.MINUTE, timePicker.getMinute());
         Log.d("PopupAlarmActivity", timePicker.getHour()+"시"+timePicker.getMinute()+"분 설정");
         calendar.set(Calendar.SECOND,0);
-
-        // 다중 알람 테스트
-//        Calendar calendar2 = Calendar.getInstance();
-//        calendar2.setTimeInMillis(System.currentTimeMillis());
-//        calendar2.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
-//        calendar2.set(Calendar.MINUTE, timePicker.getMinute()+1);
-//        calendar2.set(Calendar.SECOND,0);
 
         if(calendar.before(Calendar.getInstance())) {
             calendar.add(Calendar.DATE, 1);
@@ -108,26 +100,16 @@ public class PopupAlarmActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmIntent.setAction(AlarmReceiver.ACTION_RESTART_SERVICE);
 
-        //reqeustCode를 별도로 관리하여야 할 듯? pendingIntent를 ArrayList로 만들어보자
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), position, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
         Log.d("PopupAlarmActivity", "i값 : " + position);
-        // 다중 알람 테스트
-//        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(), 2, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
-
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
-            // 다중 알람 테스트
-//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar2.getTimeInMillis(), pendingIntent2);
             Log.d("PopupAlarmActivity", "Build.VERSION_CODES.M 호출");
         }
         else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pendingIntent);
-
-            // 다중 알람 테스트
-//            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar2.getTimeInMillis(), pendingIntent2);
-            Log.d("PopupAlarmActivity", "Build.VERSION_CODES.KITKAT");
+            Log.d("PopupAlarmActivity", "Build.VERSION_CODES.KITKAT 호출");
         }
     }
 

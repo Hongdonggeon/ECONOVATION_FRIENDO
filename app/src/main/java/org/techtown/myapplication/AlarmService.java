@@ -26,6 +26,7 @@ public class AlarmService extends Service {
     int month;
     int dayOfMonth;
 
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -44,16 +45,19 @@ public class AlarmService extends Service {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Todos")
-                                            .child(groupKey)
-                                            .child(year+"년")
-                                            .child((month+1)+"월")
-                                            .child(dayOfMonth+"일")
-                                            .child(pushKey)
-                                            .child("alarm");
+                .child(groupKey)
+                .child(year+"년")
+                .child((month+1)+"월")
+                .child(dayOfMonth+"일")
+                .child(pushKey)
+                .child("alarm");
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+                }
                 Intent alarmIntent = new Intent(getApplicationContext(), AlarmActivity.class);
                 alarmIntent.putExtra("todo",todo);
                 alarmIntent.putExtra("groupKey",groupKey);

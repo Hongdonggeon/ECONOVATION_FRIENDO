@@ -36,7 +36,8 @@ public class SettingFragment extends Fragment {
         btn_developer_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getContext(),DevInfoActivitiy.class);
+                startActivity(intent);
             }
         });
 

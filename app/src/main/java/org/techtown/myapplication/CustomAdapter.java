@@ -56,7 +56,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
 
-
     @Override
     public void onItemSwipe(int position) {
         Log.d("아이템포지션 체크", String.valueOf(position));
@@ -88,7 +87,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             }
         });
     }
-
 
     // 뷰홀더 클래스
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -183,9 +181,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         });
         // setItem()메소드( 알람 시간 텍스트 설정 )를 사용하여 데이터 바인딩 시킴
         ((ViewHolder)holder).setItem(item);
-
         holder.checkBox.setText(items.get(position).todo);
     }
+
     public ArrayList<Todo> getItems() {
         return items;
     }

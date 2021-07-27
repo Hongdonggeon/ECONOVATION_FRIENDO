@@ -18,7 +18,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         int month = intent.getIntExtra("month",0);
         int dayOfMonth = intent.getIntExtra("dayOfMonth",0);
 
-
         if(intent.getAction().equals(ACTION_RESTART_SERVICE)){
             Intent in = new Intent(context, AlarmService.class);
             in.putExtra("todo",todo);
