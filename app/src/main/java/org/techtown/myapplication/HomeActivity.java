@@ -47,7 +47,8 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference myReference4;
     Long uuid;
 
-    private UserModel destinationUserModel;
+   
+
 
     ArrayList<PendingIntent> pendingIntentArrayList;
 
@@ -57,6 +58,7 @@ public class HomeActivity extends AppCompatActivity {
     String emailGoogle;
 
     HashMap<String, String> userTokens = new HashMap<>();
+
 
     @Override
     protected void onStart() {
@@ -121,6 +123,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Group_add_dialog.class);
+                intent.putExtra("hashIntent",userTokens);
+                intent.putExtra("nameGoogle",nameGoogle);
                 startActivityForResult(intent,MAIN_ACTIVITY_REQUEST_CODE);
             }
         });
@@ -235,14 +239,20 @@ public class HomeActivity extends AppCompatActivity {
 //                        Toast.makeText(HomeActivity.this, msg, Toast.LENGTH_SHORT).show();
                         myReference4 = database.getReference();
                         myReference4.child("FcmID").child(uidGoogle).child(token).setValue(emailGoogle);
-                        myReference4.child("FcmID").child(uidGoogle).child(token).addValueEventListener(new ValueEventListener() {
+                        myReference4.child("FcmID").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                String token = snapshot.getKey();
-                                String email = snapshot.getValue().toString();
-                                userTokens.put(email,token);
-                                Log.d("homeactivity","here ! "+email);
-                                Log.d("homeactivity","here ! "+userTokens.get(email));
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    String information = dataSnapshot.getValue().toString();
+                                    Log.d("homeactivity",information);
+                                    information = information.substring(1,information.length()-1);
+                                    String[] array = information.split("=");
+                                    String token = array[0];
+                                    String email = array[1];
+                                    userTokens.put(email, token);
+                                    Log.d("homeactivity", "here ! " + array[0]);
+                                    Log.d("homeactivity", "here ! " + array[1]);
+                                }
 
                             }
 
@@ -272,32 +282,6 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    void sendGcm(){
-//        Gson gson = new Gson();
-//        NotificationModel notificationModel = new NotificationModel();
-//        notificationModel.to =  ;
-//        notificationModel.notification.title =emailGoogle;
-//        notificationModel.notification.text="초대 수락하시겠습니까";
-//
-//        RequestBody requestBody = RequestBody.create(gson.toJson(notificationModel),MediaType.parse("application/json; charset=utf8"));
-//        Request request = new Request.Builder().header("Content-Type", "application/json")
-//                .addHeader("Authorization","key=AAAAlzEMvvg:APA91bGHGn5W1uGfO3PKxvn_IGMK41j5b2ArIglH6PG_Py2kRNupE0v0St6YX28St_7ZkOKVs31cjz8psFiHvdMqGgSMnbiUyIvhf0XtbJIhaJ2XsD0X-DHjZAd4LX6BYGjumXUE3Lqh")
-//                .url("https://gcm-http.googleapis.com/gcm/send")
-//                .post(requestBody)
-//                .build();
-//        OkHttpClient okHttpClient =new OkHttpClient();
-//        okHttpClient.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//
-//            }
-//
-//            @Override
-//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-//
-//            }
-//        });
-    }
 
     @Override
     public void onBackPressed() {
