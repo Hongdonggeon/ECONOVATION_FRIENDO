@@ -23,24 +23,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -58,15 +46,13 @@ public class HomeActivity extends AppCompatActivity {
     Long uuid;
 
     private UserModel destinationUserModel;
-
-   
-
     int position;
     String token;
     String uidGoogle;
     String emailGoogle;
 
     HashMap<String, String> userTokens = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +91,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Group_add_dialog.class);
+                intent.putExtra("hashIntent",userTokens);
+                intent.putExtra("nameGoogle",nameGoogle);
                 startActivityForResult(intent,MAIN_ACTIVITY_REQUEST_CODE);
             }
         });
@@ -204,7 +192,6 @@ public class HomeActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
-                        sendGcm();
                         if (!task.isSuccessful()) {
                             Log.w("HomeActivity", "Fetching FCM registration token failed", task.getException());
                             return;
@@ -220,15 +207,20 @@ public class HomeActivity extends AppCompatActivity {
 //                        Toast.makeText(HomeActivity.this, msg, Toast.LENGTH_SHORT).show();
                         myReference4 = database.getReference();
                         myReference4.child("FcmID").child(uidGoogle).child(token).setValue(emailGoogle);
-
-                        myReference4.child("FcmID").child(uidGoogle).child(token).addValueEventListener(new ValueEventListener() {
+                        myReference4.child("FcmID").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                String token = snapshot.getKey();
-                                String email = snapshot.getValue().toString();
-                                userTokens.put(email,token);
-                                Log.d("homeactivity","here ! "+email);
-                                Log.d("homeactivity","here ! "+userTokens.get(email));
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    String information = dataSnapshot.getValue().toString();
+                                    Log.d("homeactivity",information);
+                                    information = information.substring(1,information.length()-1);
+                                    String[] array = information.split("=");
+                                    String token = array[0];
+                                    String email = array[1];
+                                    userTokens.put(email, token);
+                                    Log.d("homeactivity", "here ! " + array[0]);
+                                    Log.d("homeactivity", "here ! " + array[1]);
+                                }
 
                             }
 
@@ -251,38 +243,37 @@ public class HomeActivity extends AppCompatActivity {
 //                groupsFragment.items.add(new User(tdl_name));
 //                groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
                 myReference.push().setValue(tdl_name);
-
             }
         }
 
     }
 
-    void sendGcm(){
-        Gson gson = new Gson();
-        NotificationModel notificationModel = new NotificationModel();
-        notificationModel.to = token;
-        notificationModel.notification.title ="asdf";
-        notificationModel.notification.text="초대 수락하시겠습니까";
-
-        RequestBody requestBody = RequestBody.create(gson.toJson(notificationModel),MediaType.parse("application/json; charset=utf8"));
-        Request request = new Request.Builder().header("Content-Type", "application/json")
-                .addHeader("Authorization","key=AAAAlzEMvvg:APA91bGHGn5W1uGfO3PKxvn_IGMK41j5b2ArIglH6PG_Py2kRNupE0v0St6YX28St_7ZkOKVs31cjz8psFiHvdMqGgSMnbiUyIvhf0XtbJIhaJ2XsD0X-DHjZAd4LX6BYGjumXUE3Lqh")
-                .url("https://gcm-http.googleapis.com/gcm/send")
-                .post(requestBody)
-                .build();
-        OkHttpClient okHttpClient =new OkHttpClient();
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
-            }
-        });
-    }
+//    void sendGcm(){
+//        Gson gson = new Gson();
+//        NotificationModel notificationModel = new NotificationModel();
+//        notificationModel.to =  ;
+//        notificationModel.notification.title =emailGoogle;
+//        notificationModel.notification.text="초대 수락하시겠습니까";
+//
+//        RequestBody requestBody = RequestBody.create(gson.toJson(notificationModel),MediaType.parse("application/json; charset=utf8"));
+//        Request request = new Request.Builder().header("Content-Type", "application/json")
+//                .addHeader("Authorization","key=AAAAlzEMvvg:APA91bGHGn5W1uGfO3PKxvn_IGMK41j5b2ArIglH6PG_Py2kRNupE0v0St6YX28St_7ZkOKVs31cjz8psFiHvdMqGgSMnbiUyIvhf0XtbJIhaJ2XsD0X-DHjZAd4LX6BYGjumXUE3Lqh")
+//                .url("https://gcm-http.googleapis.com/gcm/send")
+//                .post(requestBody)
+//                .build();
+//        OkHttpClient okHttpClient =new OkHttpClient();
+//        okHttpClient.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//
+//            }
+//        });
+//    }
 
     @Override
     public void onBackPressed() {
