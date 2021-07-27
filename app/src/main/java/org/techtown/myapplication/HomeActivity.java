@@ -192,7 +192,7 @@ public class HomeActivity extends AppCompatActivity {
 
 //                myReference5.child(groupsFragment.items.get(groupsFragment.items.size()-1).getKey())
 //                        .setValue(groupsFragment.items.get(groupsFragment.items.size()-1).getName());
-
+                myReference5.child(groupsFragment.items.get(groupsFragment.items.size() - 1).getKey()).setValue(userUids);
                 groupsFragment.groupAdapter.notifyDataSetChanged();
             }
 
@@ -222,7 +222,22 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+
+        //myReference UserGroups - uidGoogle
         myReference5 = database.getReference("GroupUsers");
+        myReference5.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void saveTokenToDB() {
@@ -287,7 +302,7 @@ public class HomeActivity extends AppCompatActivity {
 //                    if(userUids.values().contains(email))
 //                    myReference4.child("UserGroups").child(email).push();
 //                }
-                myReference5.child(groupsFragment.items.get(groupsFragment.items.size() - 1).getKey()).setValue(userUids);
+
 
 //                groupsFragment.items.add(new User(tdl_name));
 //                groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
