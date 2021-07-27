@@ -1,6 +1,7 @@
 package org.techtown.myapplication;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -45,7 +47,11 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference myReference4;
     Long uuid;
 
-    private UserModel destinationUserModel;
+   
+
+
+    ArrayList<PendingIntent> pendingIntentArrayList;
+
     int position;
     String token;
     String uidGoogle;
@@ -55,28 +61,54 @@ public class HomeActivity extends AppCompatActivity {
 
 
     @Override
+    protected void onStart() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        uidGoogle = user.getUid();
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        uidGoogle = user.getUid();
+        super.onResume();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
-        groupsFragment =(GroupsFragment)getSupportFragmentManager().findFragmentById(R.id.mainFragment);
-        accountAddButton = findViewById(R.id.groupAddButton);
-
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
+        pendingIntentArrayList = new ArrayList<>();
+
+        groupsFragment =(GroupsFragment)getSupportFragmentManager().findFragmentById(R.id.mainFragment);
+        accountAddButton = findViewById(R.id.groupAddButton);
 
         Intent intent = getIntent();
         String emailKakao = intent.getStringExtra("emailKakao");
 
         //구글 사용자 정보
-         emailGoogle = intent.getStringExtra("emailGoogle");
+        emailGoogle = intent.getStringExtra("emailGoogle");
         String nameGoogle = intent.getStringExtra("nameGoogle");
-         uidGoogle = user.getUid();
+
+        uidGoogle = user.getUid();
+
+
+
+//        Log.d("HomeActivity","emailGoogle : " + user.getEmail());
+//        Log.d("HomeActivity","nameGoogle : " + user.getDisplayName());
+//        Log.d("HomeActivity","uidGoogle : " + user.getUid());
 
         // fcm 토큰 얻기
         saveTokenToDB();
+
+        Intent hashIntent = new Intent(getApplicationContext(),Group_add_dialog.class);
+        hashIntent.putExtra("userTokens",userTokens);
 
         // Users 데이터베이스 생성
         database =FirebaseDatabase.getInstance();
@@ -240,6 +272,8 @@ public class HomeActivity extends AppCompatActivity {
         if(requestCode == MAIN_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 tdl_name = data.getStringExtra("name");
+
+
 //                groupsFragment.items.add(new User(tdl_name));
 //                groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
                 myReference.push().setValue(tdl_name);
@@ -248,32 +282,6 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-//    void sendGcm(){
-//        Gson gson = new Gson();
-//        NotificationModel notificationModel = new NotificationModel();
-//        notificationModel.to =  ;
-//        notificationModel.notification.title =emailGoogle;
-//        notificationModel.notification.text="초대 수락하시겠습니까";
-//
-//        RequestBody requestBody = RequestBody.create(gson.toJson(notificationModel),MediaType.parse("application/json; charset=utf8"));
-//        Request request = new Request.Builder().header("Content-Type", "application/json")
-//                .addHeader("Authorization","key=AAAAlzEMvvg:APA91bGHGn5W1uGfO3PKxvn_IGMK41j5b2ArIglH6PG_Py2kRNupE0v0St6YX28St_7ZkOKVs31cjz8psFiHvdMqGgSMnbiUyIvhf0XtbJIhaJ2XsD0X-DHjZAd4LX6BYGjumXUE3Lqh")
-//                .url("https://gcm-http.googleapis.com/gcm/send")
-//                .post(requestBody)
-//                .build();
-//        OkHttpClient okHttpClient =new OkHttpClient();
-//        okHttpClient.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//
-//            }
-//
-//            @Override
-//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-//
-//            }
-//        });
-//    }
 
     @Override
     public void onBackPressed() {

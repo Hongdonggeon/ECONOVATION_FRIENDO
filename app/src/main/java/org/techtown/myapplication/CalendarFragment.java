@@ -54,6 +54,7 @@ public class CalendarFragment extends Fragment {
 
                 Intent intent = new Intent(getContext(), TodoWriteActivity.class);
                 // 캘린더 월/일 값 내보내기
+                intent.putExtra("year",year);
                 intent.putExtra("month", month);
                 intent.putExtra("dayOfMonth", dayOfMonth);
                 // 카카오 사용자 정보 내보내기

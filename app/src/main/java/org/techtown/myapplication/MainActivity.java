@@ -22,14 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
-
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-
 import com.google.firebase.database.annotations.NotNull;
-import com.kakao.sdk.common.util.Utility;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -54,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(this);
-
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -107,11 +100,11 @@ public class MainActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
-                Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
-                homeMove_intent.putExtra("emailGoogle",account.getEmail());
-                homeMove_intent.putExtra("nameGoogle",account.getDisplayName());
-                Log.d(TAG,"account.getId():"+account.getIdToken());
-                startActivity(homeMove_intent);
+//                Intent homeMove_intent = new Intent(getApplicationContext(), HomeActivity.class);
+//                homeMove_intent.putExtra("emailGoogle",account.getEmail());
+//                homeMove_intent.putExtra("nameGoogle",account.getDisplayName());
+//                Log.d(TAG,"account.getId():"+account.getIdToken());
+//                startActivity(homeMove_intent);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);

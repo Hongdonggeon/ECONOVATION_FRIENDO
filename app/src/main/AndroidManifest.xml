@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
-      
+        <activity android:name=".DevInfoActivitiy"></activity>
         <activity android:name=".AlarmActivity"></activity>
 
         <service
@@ -24,8 +24,6 @@
             android:exported="true" />
 
         <receiver android:name=".AlarmReceiver" />
-
-
 
         <activity
             android:name=".PopupAlarmActivity"
@@ -56,7 +54,7 @@
         <activity
             android:name=".Group_add_dialog"
             android:theme="@style/Theme.MyDialog" />
-        <activity android:name=".HomeActivity"></activity>
+        <activity android:name=".HomeActivity" />
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -71,12 +69,13 @@
             </intent-filter>
         </activity>
 
+
+      
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>

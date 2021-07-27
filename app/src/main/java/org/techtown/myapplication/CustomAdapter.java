@@ -29,26 +29,21 @@ import static androidx.core.app.ActivityCompat.startActivityForResult;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> implements ItemTouchHelperListener{
     ArrayList<Todo> items = new ArrayList<Todo>();
     String groupKey;
+    int year;
     int month;
     int dayOfMonth;
-
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference();
 
     public CustomAdapter(){}
 
-    public CustomAdapter(String groupKey, int month, int dayOfMonth) {
+    public CustomAdapter(String groupKey,int year, int month, int dayOfMonth) {
+        this.year= year;
         this.groupKey = groupKey;
         this.month = month;
         this.dayOfMonth = dayOfMonth;
     }
-
-    public CustomAdapter(int month, int dayOfMonth) {
-        this.month = month;
-        this.dayOfMonth=dayOfMonth;
-    }
-
 
     public void setItems(ArrayList<Todo> items) {
         this.items = items;
@@ -61,13 +56,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
 
-
     @Override
     public void onItemSwipe(int position) {
         Log.d("아이템포지션 체크", String.valueOf(position));
 
         myRef.child("Todos")
                 .child(groupKey)
+                .child(year+"년")
                 .child((month+1)+"월")
                 .child(dayOfMonth+"일")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -78,6 +73,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     if(dataSnapshot.getKey().equals(items.get(position).getPushKey())) {
                         myRef.child("Todos")
                                 .child(groupKey)
+                                .child(year+"년")
                                 .child((month+1)+"월")
                                 .child(dayOfMonth+"일")
                                 .child(items.get(position).getPushKey()).removeValue();
@@ -91,7 +87,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             }
         });
     }
-
 
     // 뷰홀더 클래스
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -125,11 +120,16 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                myRef.child("Todos").child(groupKey).child((month+1)+"월").child(dayOfMonth+"일").child(item.getPushKey()).child("checkBoxChecked").setValue(isChecked);
+                myRef.child("Todos")
+                        .child(groupKey)
+                        .child(year+"년")
+                        .child((month+1)+"월")
+                        .child(dayOfMonth+"일")
+                        .child(item.getPushKey())
+                        .child("checkBoxChecked")
+                        .setValue(isChecked);
             }
         });
-
-
 
 
         holder.alarmSwitch.setOnCheckedChangeListener(null);
@@ -138,28 +138,52 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-//                    item.setAlarmChecked(isChecked);
                     //알람 스위치 상태 DB저장 완료, 알람 시간 텍스트뷰에 적용시켜야함
-                    myRef.child("Todos").child(groupKey).child((month+1)+"월").child(dayOfMonth+"일").child(item.getPushKey()).child("alarmChecked").setValue(isChecked);
+                    myRef.child("Todos")
+                            .child(groupKey)
+                            .child(year+"년")
+                            .child((month+1)+"월")
+                            .child(dayOfMonth+"일")
+                            .child(item.getPushKey())
+                            .child("alarmChecked").setValue(isChecked);
+
                     Intent intent = new Intent(buttonView.getContext(), PopupAlarmActivity.class);
+                    intent.putExtra("todo",item.getTodo());
                     intent.putExtra("groupKey",groupKey);
+                    intent.putExtra("year",year);
                     intent.putExtra("month",month);
                     intent.putExtra("dayOfMonth",dayOfMonth);
                     intent.putExtra("position",position);
+                    intent.putExtra("pushKey",item.getPushKey());
+
                     startActivityForResult((Activity) buttonView.getContext(), intent, 101,null);
                 } else {
 //                    item.setAlarmChecked(isChecked);
-                    myRef.child("Todos").child(groupKey).child((month+1)+"월").child((dayOfMonth+"일")).child(item.getPushKey()).child("alarmChecked").setValue(isChecked);
-                    myRef.child("Todos").child(groupKey).child((month+1)+"월").child((dayOfMonth+"일")).child(item.getPushKey()).child("alarm").setValue("알람해제");
+                    myRef.child("Todos")
+                            .child(groupKey)
+                            .child(year+"년")
+                            .child((month+1)+"월")
+                            .child((dayOfMonth+"일"))
+                            .child(item.getPushKey())
+                            .child("alarmChecked")
+                            .setValue(isChecked);
+                    myRef.child("Todos")
+                            .child(groupKey)
+                            .child(year+"년")
+                            .child((month+1)+"월")
+                            .child((dayOfMonth+"일"))
+                            .child(item.getPushKey())
+                            .child("alarm")
+                            .setValue("알람해제");
                     notifyDataSetChanged();
                 }
             }
         });
         // setItem()메소드( 알람 시간 텍스트 설정 )를 사용하여 데이터 바인딩 시킴
         ((ViewHolder)holder).setItem(item);
-
         holder.checkBox.setText(items.get(position).todo);
     }
+
     public ArrayList<Todo> getItems() {
         return items;
     }

@@ -46,6 +46,7 @@ public class TodoWriteActivity extends AppCompatActivity {
     int minute;
     int position;
 
+    int year;
     int month;
     int dayOfMonth;
     String groupName;
@@ -57,6 +58,7 @@ public class TodoWriteActivity extends AppCompatActivity {
     HashMap<String,Object> map = new HashMap<>();
 
     ItemTouchHelper itemTouchHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +75,12 @@ public class TodoWriteActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
 
         Intent intent = getIntent();
-//        month = intent.getIntExtra("month", 0);
-//        dayOfMonth = intent.getIntExtra("dayOfMonth", 0);
-//        textView.setText((month + 1) + "월" + " " + dayOfMonth + "일");
+
         // 캘린더 월/일 값 받아오기
+        year = intent.getIntExtra("year",0);
         month = intent.getIntExtra("month", 0);
         dayOfMonth = intent.getIntExtra("dayOfMonth", 0);
+
         // 그룹 이름/키값 받아오기
         groupName = intent.getStringExtra("groupName");
         groupKey = intent.getStringExtra("groupKey");
@@ -88,29 +90,34 @@ public class TodoWriteActivity extends AppCompatActivity {
 //        uidGoogle = intent.getStringExtra("uidGoogle");
 
         textView.setText(month+1 + "월" + " " + dayOfMonth + "일");
-        customAdapter = new CustomAdapter(groupKey,month,dayOfMonth);
-
-
-        // 카카오API로부터 이메일 값, 그룹이름 값 받아 왔음, 데이터베이스 만들때 UID로 사용하면 됨
-        String emailKakao = intent.getStringExtra("email");
-        String groupName = intent.getStringExtra("groupName");
+        customAdapter = new CustomAdapter(groupKey,year,month,dayOfMonth);
 
         button = findViewById(R.id.button);
         editText = findViewById(R.id.editText);
         checkBox = findViewById(R.id.checkBox);
 
 
-        // 파이어베이스 데이터베이스 데이터 추가 되는지 테스트 하였음
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference().child("Todos").child(groupKey).child((month+1)+"월").child(dayOfMonth+"일");
-
+        DatabaseReference myRef = database.getReference()
+                .child("Todos")
+                .child(groupKey)
+                .child(year+"년")
+                .child((month+1)+"월")
+                .child(dayOfMonth+"일");
 
         // Todo아이템 추가 버튼
         button.setOnClickListener(new View.OnClickListener() {
             String pushKey;
             @Override
             public void onClick(View v) {
-                DatabaseReference myRef2 = database.getReference().child("Todos").child(groupKey).child((month+1)+"월").child(dayOfMonth+"일").push();
+                DatabaseReference myRef2 = database.getReference()
+                        .child("Todos")
+                        .child(groupKey)
+                        .child(year+"년")
+                        .child((month+1)+"월")
+                        .child(dayOfMonth+"일")
+                        .push();
+
                 todoContent = editText.getText().toString();
                 pushKey = myRef2.getKey();
 
@@ -151,10 +158,6 @@ public class TodoWriteActivity extends AppCompatActivity {
 
         itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(customAdapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
-
-
-
-
     }
     @Override
     protected void onResume() {
@@ -166,7 +169,11 @@ public class TodoWriteActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Todos").child(groupKey).child((month+1)+"월").child(dayOfMonth+"일");
+        DatabaseReference myRef = database.getReference("Todos")
+                .child(groupKey)
+                .child(year+"년")
+                .child((month+1)+"월")
+                .child(dayOfMonth+"일");
 
         if(requestCode==101 && resultCode==102) {
             hour = data.getIntExtra("hour",0);
