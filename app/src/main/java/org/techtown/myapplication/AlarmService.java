@@ -55,18 +55,17 @@ public class AlarmService extends Service {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                if(snapshot.getValue().toString() != "알람해제") {
+                    Intent alarmIntent = new Intent(getApplicationContext(), AlarmActivity.class);
+                    alarmIntent.putExtra("todo", todo);
+                    alarmIntent.putExtra("groupKey", groupKey);
+                    alarmIntent.putExtra("pushKey", pushKey);
+                    alarmIntent.putExtra("year", year);
+                    alarmIntent.putExtra("month", month);
+                    alarmIntent.putExtra("dayOfMonth", dayOfMonth);
 
+                    startActivity(alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
-                Intent alarmIntent = new Intent(getApplicationContext(), AlarmActivity.class);
-                alarmIntent.putExtra("todo",todo);
-                alarmIntent.putExtra("groupKey",groupKey);
-                alarmIntent.putExtra("pushKey",pushKey);
-                alarmIntent.putExtra("year",year);
-                alarmIntent.putExtra("month",month);
-                alarmIntent.putExtra("dayOfMonth",dayOfMonth);
-
-                startActivity(alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
 
             @Override
