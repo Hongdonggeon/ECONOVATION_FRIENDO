@@ -26,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -35,7 +34,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import retrofit2.http.HEAD;
 
 public class Group_add_dialog extends AppCompatActivity {
      Button submitBtn;
@@ -45,6 +43,8 @@ public class Group_add_dialog extends AppCompatActivity {
      GroupMemberAdapter adapter;
      EditText email_input;
      HashMap userTokens = new HashMap<>();
+     ArrayList<String> uids = new ArrayList<>();
+     HashMap<String,String> userUids = new HashMap<>();
 
      String googleName;
 
@@ -66,6 +66,7 @@ public class Group_add_dialog extends AppCompatActivity {
         googleName = intent.getStringExtra("nameGoogle");
         googleEmail = intent.getStringExtra("emailGoogle");
         googleUid = intent.getStringExtra("uidGoogle");
+         userUids.put(googleUid,googleEmail);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Users");
@@ -73,8 +74,7 @@ public class Group_add_dialog extends AppCompatActivity {
         userTokens = (HashMap)intent.getSerializableExtra("hashIntent");
 
 
-        HashMap<String, String> userUids = new HashMap<>();
-        userUids.put(googleUid, googleEmail);
+        HashMap<String, String> tempUids = new HashMap<>();
         Log.d("Group_add_dialog", googleEmail + googleUid);
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -83,16 +83,19 @@ public class Group_add_dialog extends AppCompatActivity {
                 String tdl_name = tdl_input.getText().toString();
 
                 if(!tdl_name.isEmpty()) {
-
-                Intent intent = new Intent();
+                    Intent intent = new Intent();
                 intent.putExtra("name", tdl_name);
-                intent.putExtra("map", userUids);
+                intent.putExtra("uids", uids);
+
+                intent.putExtra("userUids", userUids);
                 setResult(RESULT_OK, intent);
+
 
 
 //                //GroupUsers -> 그룹의 사용자들 관리하는 데이터베이스 테스트구현
 //                myRef.child("GroupUsers").child(tdl_name).push().setValue(uuid);
                     finish();
+
                 }
                 else{
                     AlertDialog.Builder dialog = new AlertDialog.Builder(Group_add_dialog.this).setMessage("그룹명을 입력해주세요");
@@ -124,7 +127,7 @@ public class Group_add_dialog extends AppCompatActivity {
                     information = information.substring(1,information.length()-1);
                     String[] array = information.split(",");
                     String[] emails = array[0].split("=");
-                    userUids.put(uid,emails[1]);
+                    tempUids.put(emails[1],uid);
 
                     Log.d("groupadd","email:"+emails[1]);
                     Log.d("groupadd","uid:"+uid);
@@ -144,6 +147,9 @@ public class Group_add_dialog extends AppCompatActivity {
                 String member_email = email_input.getText().toString();
                 if(!userTokens.isEmpty() && userTokens.containsKey(member_email)) {
                     adapter.addItem(new GroupMember(member_email));
+                    String uid = tempUids.get(member_email);
+                    uids.add(uid);
+                    userUids.put(uid,member_email);
                     Log.d("group_add_Dialog", member_email);
                     Log.d("group_add_Dialog",userTokens.get(member_email).toString());
 
