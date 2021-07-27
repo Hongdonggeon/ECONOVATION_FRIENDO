@@ -45,8 +45,13 @@ public class Group_add_dialog extends AppCompatActivity {
      GroupMemberAdapter adapter;
      EditText email_input;
      HashMap userTokens = new HashMap<>();
+
      String googleName;
-     List<String> userUids = new ArrayList<>();
+
+
+     String googleEmail;
+     String googleUid;
+
 
      @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +63,9 @@ public class Group_add_dialog extends AppCompatActivity {
         tdl_input = findViewById(R.id.tdl_input);
 
         Intent intent = getIntent();
-        long uuid = intent.getLongExtra("uuid",0);
         googleName = intent.getStringExtra("nameGoogle");
+        googleEmail = intent.getStringExtra("emailGoogle");
+        googleUid = intent.getStringExtra("uidGoogle");
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Users");
@@ -67,18 +73,22 @@ public class Group_add_dialog extends AppCompatActivity {
         userTokens = (HashMap)intent.getSerializableExtra("hashIntent");
 
 
-        HashMap<String, String> map = new HashMap<>();
-
+        HashMap<String, String> userUids = new HashMap<>();
+        userUids.put(googleUid, googleEmail);
+        Log.d("Group_add_dialog", googleEmail + googleUid);
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String tdl_name = tdl_input.getText().toString();
+
                 if(!tdl_name.isEmpty()) {
-                    Intent intent = new Intent();
-                    intent.putExtra("name", tdl_name);
-                    intent.putExtra("map", map);
-                    setResult(RESULT_OK, intent);
+
+                Intent intent = new Intent();
+                intent.putExtra("name", tdl_name);
+                intent.putExtra("map", userUids);
+                setResult(RESULT_OK, intent);
+
 
 //                //GroupUsers -> 그룹의 사용자들 관리하는 데이터베이스 테스트구현
 //                myRef.child("GroupUsers").child(tdl_name).push().setValue(uuid);
@@ -109,11 +119,15 @@ public class Group_add_dialog extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    String key = dataSnapshot.getKey();
-                    GroupMember groupMember = dataSnapshot.getValue(GroupMember.class);
+                    String uid = dataSnapshot.getKey();
+                    String information = dataSnapshot.getValue().toString();
+                    information = information.substring(1,information.length()-1);
+                    String[] array = information.split(",");
+                    String[] emails = array[0].split("=");
+                    userUids.put(uid,emails[1]);
 
-                    Log.d("groupadd",groupMember.getEmail());
-                    Log.d("groupadd",key);
+                    Log.d("groupadd","email:"+emails[1]);
+                    Log.d("groupadd","uid:"+uid);
                 }
             }
 
@@ -132,7 +146,6 @@ public class Group_add_dialog extends AppCompatActivity {
                     adapter.addItem(new GroupMember(member_email));
                     Log.d("group_add_Dialog", member_email);
                     Log.d("group_add_Dialog",userTokens.get(member_email).toString());
-
 
                     sendGcm(member_email);
 

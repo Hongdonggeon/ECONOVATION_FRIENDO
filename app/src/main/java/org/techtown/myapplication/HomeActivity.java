@@ -32,8 +32,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import retrofit2.http.HEAD;
-
 
 public class HomeActivity extends AppCompatActivity {
     private final long FINISH_INTERVAL_TIME = 2000;
@@ -50,7 +48,7 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference myReference5;
     Long uuid;
 
-    HashMap<String,String> map = new HashMap<>();
+    HashMap<String,String> userUids = new HashMap<>();
 
     ArrayList<PendingIntent> pendingIntentArrayList;
 
@@ -125,6 +123,9 @@ public class HomeActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Group_add_dialog.class);
                 intent.putExtra("hashIntent",userTokens);
                 intent.putExtra("nameGoogle",nameGoogle);
+                intent.putExtra("emailGoogle",emailGoogle);
+                intent.putExtra("uidGoogle",uidGoogle);
+
                 startActivityForResult(intent,MAIN_ACTIVITY_REQUEST_CODE);
             }
         });
@@ -278,10 +279,16 @@ public class HomeActivity extends AppCompatActivity {
         if(requestCode == MAIN_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 tdl_name = data.getStringExtra("name");
-                map = (HashMap<String, String>) data.getSerializableExtra("map");
+                userUids = (HashMap<String, String>) data.getSerializableExtra("map");
 
-//                myReference5.child(groupsFragment.items.get(groupsFragment.items.size()-1).getKey())
-//                        .setValue(map);
+                Log.d("HomeActivity","here!!!!!!!!!!!!!!"+userUids.keySet().toString());
+                Log.d("HomeActivity","here!!!!!!!!!!!!!!"+userUids.values().toString());
+//                for (int i =0; i< userUids.size(); i++){
+//                    String email = userUids.get(i);
+//                    if(userUids.values().contains(email))
+//                    myReference4.child("UserGroups").child(email).push();
+//                }
+                myReference5.child(groupsFragment.items.get(groupsFragment.items.size() - 1).getKey()).setValue(userUids);
 
 //                groupsFragment.items.add(new User(tdl_name));
 //                groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
