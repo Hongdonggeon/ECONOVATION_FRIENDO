@@ -8,13 +8,17 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,6 +35,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import retrofit2.http.HEAD;
 
 public class Group_add_dialog extends AppCompatActivity {
      Button submitBtn;
@@ -57,8 +62,13 @@ public class Group_add_dialog extends AppCompatActivity {
         googleName = intent.getStringExtra("nameGoogle");
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
+        DatabaseReference myRef = database.getReference("Users");
+
         userTokens = (HashMap)intent.getSerializableExtra("hashIntent");
+
+
+        HashMap<String, String> map = new HashMap<>();
+
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +77,7 @@ public class Group_add_dialog extends AppCompatActivity {
                 if(!tdl_name.isEmpty()) {
                     Intent intent = new Intent();
                     intent.putExtra("name", tdl_name);
+                    intent.putExtra("map", map);
                     setResult(RESULT_OK, intent);
 
 //                //GroupUsers -> 그룹의 사용자들 관리하는 데이터베이스 테스트구현
@@ -94,6 +105,25 @@ public class Group_add_dialog extends AppCompatActivity {
         Button plusBtn = findViewById(R.id.member_plus_btn);
         email_input = findViewById(R.id.email_input);
 
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    String key = dataSnapshot.getKey();
+                    GroupMember groupMember = dataSnapshot.getValue(GroupMember.class);
+
+                    Log.d("groupadd",groupMember.getEmail());
+                    Log.d("groupadd",key);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
+
         plusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,7 +131,9 @@ public class Group_add_dialog extends AppCompatActivity {
                 if(!userTokens.isEmpty() && userTokens.containsKey(member_email)) {
                     adapter.addItem(new GroupMember(member_email));
                     Log.d("group_add_Dialog", member_email);
-                   Log.d("group_add_Dialog",userTokens.get(member_email).toString());
+                    Log.d("group_add_Dialog",userTokens.get(member_email).toString());
+
+
                     sendGcm(member_email);
 
                 }

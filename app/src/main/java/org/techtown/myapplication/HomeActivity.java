@@ -32,6 +32,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import retrofit2.http.HEAD;
+
 
 public class HomeActivity extends AppCompatActivity {
     private final long FINISH_INTERVAL_TIME = 2000;
@@ -45,10 +47,10 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference myReference2;
     private DatabaseReference myReference3;
     private DatabaseReference myReference4;
+    private DatabaseReference myReference5;
     Long uuid;
 
-   
-
+    HashMap<String,String> map = new HashMap<>();
 
     ArrayList<PendingIntent> pendingIntentArrayList;
 
@@ -58,7 +60,6 @@ public class HomeActivity extends AppCompatActivity {
     String emailGoogle;
 
     HashMap<String, String> userTokens = new HashMap<>();
-
 
     @Override
     protected void onStart() {
@@ -97,7 +98,6 @@ public class HomeActivity extends AppCompatActivity {
         String nameGoogle = intent.getStringExtra("nameGoogle");
 
         uidGoogle = user.getUid();
-
 
 
 //        Log.d("HomeActivity","emailGoogle : " + user.getEmail());
@@ -188,6 +188,10 @@ public class HomeActivity extends AppCompatActivity {
                 Log.d("HomeActivity","onchildadded"+snapshot.getKey());
                 groupsFragment.items.add(new Group(snapshot.getValue().toString(),snapshot.getKey()));
                 groupsFragment.groupAdapter.setItems(groupsFragment.items);
+
+//                myReference5.child(groupsFragment.items.get(groupsFragment.items.size()-1).getKey())
+//                        .setValue(groupsFragment.items.get(groupsFragment.items.size()-1).getName());
+
                 groupsFragment.groupAdapter.notifyDataSetChanged();
             }
 
@@ -216,6 +220,8 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+
+        myReference5 = database.getReference("GroupUsers");
     }
 
     private void saveTokenToDB() {
@@ -272,11 +278,15 @@ public class HomeActivity extends AppCompatActivity {
         if(requestCode == MAIN_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 tdl_name = data.getStringExtra("name");
-                  myReference4.child("GroupUsers").push(); //groupusers
+                map = (HashMap<String, String>) data.getSerializableExtra("map");
+
+//                myReference5.child(groupsFragment.items.get(groupsFragment.items.size()-1).getKey())
+//                        .setValue(map);
 
 //                groupsFragment.items.add(new User(tdl_name));
 //                groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
-                myReference.push().setValue(tdl_name); //usersgroup
+                myReference.push().setValue(tdl_name);
+
             }
         }
 
