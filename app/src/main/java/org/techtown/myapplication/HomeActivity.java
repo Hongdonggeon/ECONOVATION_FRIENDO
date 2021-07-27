@@ -49,7 +49,8 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference myReference6;
     Long uuid;
 
-    HashMap<String,String> userUids = new HashMap<>();
+    ArrayList<String> Uids = new ArrayList<>();
+    HashMap<String, String> userUids = new HashMap<>();
 
     ArrayList<PendingIntent> pendingIntentArrayList;
 
@@ -151,6 +152,7 @@ public class HomeActivity extends AppCompatActivity {
         myReference = database.getReference("UserGroups").child(uidGoogle);
         myReference2 = database.getReference("UserGroups");
         myReference3 = database.getReference("Todos");
+        myReference5 = database.getReference("GroupUsers");
 
 
         groupsFragment.groupAdapter.setOnItemLongClickListener(new GroupAdapter.OnItemLongClickListener() {
@@ -167,9 +169,14 @@ public class HomeActivity extends AppCompatActivity {
                                 String groupKey = groupsFragment.items.get(pos).getKey();
 
                                 position = pos;
-                                groupsFragment.items.remove(pos);
+                                int numberofmember = groupsFragment.items.get(pos).getNumberofMember();
+                                groupsFragment.items.get(pos).setNumberofMember(--numberofmember);
                                 myReference.child(groupKey).removeValue();
-                                myReference3.child(groupKey).removeValue();
+                                myReference5.child(groupKey).child(uidGoogle).removeValue();
+                                if(groupsFragment.items.get(pos).getNumberofMember()==0) {
+                                    myReference3.child(groupKey).removeValue();
+                                }
+                                groupsFragment.items.remove(pos);
 
                                 Log.d("그룹 키값 확인",groupKey);
                             }
@@ -184,16 +191,33 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+
+
         myReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
                 Log.d("HomeActivity","onchildadded"+snapshot.getKey());
-                groupsFragment.items.add(new Group(snapshot.getValue().toString(),snapshot.getKey()));
+                Log.d("HomeActivity","onchildadded"+snapshot.getValue());
+                Group group = new Group(snapshot.getValue().toString(), snapshot.getKey(),0);
+                groupsFragment.items.add(group);
+                String groupKey = groupsFragment.items.get(groupsFragment.items.size() - 1).getKey();
+                String groupname = groupsFragment.items.get(groupsFragment.items.size() - 1).getName();
+                Log.d("HomeActivity","groupkey:"+ groupKey);
+                for(String uid : Uids){
+                    myReference2.child(uid).child(groupKey).setValue(groupname);
+                }
+                if(!userUids.isEmpty()) {
+                    myReference5.child(groupKey).setValue(userUids);
+                    groupsFragment.items.get(groupsFragment.items.size()-1).setNumberofMember(userUids.size());
+
+                }
                 groupsFragment.groupAdapter.setItems(groupsFragment.items);
+
 
 //                myReference5.child(groupsFragment.items.get(groupsFragment.items.size()-1).getKey())
 //                        .setValue(groupsFragment.items.get(groupsFragment.items.size()-1).getName());
-                myReference5.child(groupsFragment.items.get(groupsFragment.items.size() - 1).getKey()).setValue(userUids);
+      //          myReference5.child(groupsFragment.items.get(groupsFragment.items.size() - 1).getKey()).setValue(userUids);
+
                 groupsFragment.groupAdapter.notifyDataSetChanged();
             }
 
@@ -223,7 +247,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        myReference5 = database.getReference("GroupUsers");
+
     }
 
     private void saveTokenToDB() {
@@ -282,25 +306,31 @@ public class HomeActivity extends AppCompatActivity {
         if(requestCode == MAIN_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 tdl_name = data.getStringExtra("name");
-                userUids = (HashMap<String, String>) data.getSerializableExtra("map");
+                Uids = (ArrayList<String>) data.getSerializableExtra("uids");
+                userUids = (HashMap<String, String>)data.getSerializableExtra("userUids");
 
-                Log.d("HomeActivity","here!!!!!!!!!!!!!!"+userUids.keySet().toString());
+                Log.d("HomeActivity","array here!!!!!!!!!!!!!!"+ Uids);
+                Log.d("HomeActivity","hash here!!!!!!!!!!"+userUids.keySet());
+//                Set<String> keys = userUids.keySet();
+
 //                for (int i =0; i< userUids.size(); i++){
 //                    String email = userUids.get(i);
 //                    if(userUids.values().contains(email))
-//                    myReference4.child("UserGroups").child(email).push();
+//                    myReference4.child("UserGroups").child(userUids.).push();
 //                }
 
-                myReference6 = database.getReference("UserGroups").child(uidGoogle).push();
-                String groupKey = myReference6.getKey();
 
-                for(String uid : userUids.keySet()){
-                    Log.d("HomeActivity", "uid" + uid);
-                    userItems.add(new UserGroups(uid,groupKey,tdl_name));
-                }
-                for(int i=0; i<userItems.size(); i++){
-                    myReference4.child("UserGroups").child(userItems.get(i).getUid()).child(userItems.get(i).getGroupKey()).setValue(userItems.get(i).getGroupName());
-                }
+              //  myReference6 = database.getReference("UserGroups").child(uidGoogle).push();
+               // String groupKey = myReference6.getKey();
+
+              //  for(String uid : userUids.keySet()){
+                //    Log.d("HomeActivity", "uid" + uid);
+                 //   userItems.add(new UserGroups(uid,groupKey,tdl_name));
+               // }
+               // for(int i=0; i<userItems.size(); i++){
+                 //   myReference4.child("UserGroups").child(userItems.get(i).getUid()).child(userItems.get(i).getGroupKey()).setValue(userItems.get(i).getGroupName());
+               // }
+
 
 //                groupsFragment.items.add(new User(tdl_name));
 //                groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
