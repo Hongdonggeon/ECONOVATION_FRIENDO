@@ -23,23 +23,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -57,15 +46,13 @@ public class HomeActivity extends AppCompatActivity {
     Long uuid;
 
     private UserModel destinationUserModel;
-
-   
-
     int position;
     String token;
     String uidGoogle;
     String emailGoogle;
 
     HashMap<String, String> userTokens = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +78,6 @@ public class HomeActivity extends AppCompatActivity {
         // fcm 토큰 얻기
         saveTokenToDB();
 
-        Intent hashIntent = new Intent(getApplicationContext(),Group_add_dialog.class);
-        hashIntent.putExtra("userTokens",userTokens);
-        startActivity(intent);
-
         // Users 데이터베이스 생성
         database =FirebaseDatabase.getInstance();
         myReference4 = database.getReference();
@@ -108,6 +91,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Group_add_dialog.class);
+                intent.putExtra("hashIntent",userTokens);
+                intent.putExtra("nameGoogle",nameGoogle);
                 startActivityForResult(intent,MAIN_ACTIVITY_REQUEST_CODE);
             }
         });
@@ -222,14 +207,20 @@ public class HomeActivity extends AppCompatActivity {
 //                        Toast.makeText(HomeActivity.this, msg, Toast.LENGTH_SHORT).show();
                         myReference4 = database.getReference();
                         myReference4.child("FcmID").child(uidGoogle).child(token).setValue(emailGoogle);
-                        myReference4.child("FcmID").child(uidGoogle).child(token).addValueEventListener(new ValueEventListener() {
+                        myReference4.child("FcmID").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                String token = snapshot.getKey();
-                                String email = snapshot.getValue().toString();
-                                userTokens.put(email,token);
-                                Log.d("homeactivity","here ! "+email);
-                                Log.d("homeactivity","here ! "+userTokens.get(email));
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    String information = dataSnapshot.getValue().toString();
+                                    Log.d("homeactivity",information);
+                                    information = information.substring(1,information.length()-1);
+                                    String[] array = information.split("=");
+                                    String token = array[0];
+                                    String email = array[1];
+                                    userTokens.put(email, token);
+                                    Log.d("homeactivity", "here ! " + array[0]);
+                                    Log.d("homeactivity", "here ! " + array[1]);
+                                }
 
                             }
 
@@ -249,8 +240,6 @@ public class HomeActivity extends AppCompatActivity {
         if(requestCode == MAIN_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 tdl_name = data.getStringExtra("name");
-
-
 //                groupsFragment.items.add(new User(tdl_name));
 //                groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
                 myReference.push().setValue(tdl_name);
@@ -259,7 +248,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    void sendGcm(){
+//    void sendGcm(){
 //        Gson gson = new Gson();
 //        NotificationModel notificationModel = new NotificationModel();
 //        notificationModel.to =  ;
@@ -284,7 +273,7 @@ public class HomeActivity extends AppCompatActivity {
 //
 //            }
 //        });
-    }
+//    }
 
     @Override
     public void onBackPressed() {
