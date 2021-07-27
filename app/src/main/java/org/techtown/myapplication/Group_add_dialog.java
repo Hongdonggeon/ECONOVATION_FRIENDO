@@ -20,7 +20,9 @@ import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -39,6 +41,7 @@ public class Group_add_dialog extends AppCompatActivity {
      EditText email_input;
      HashMap userTokens = new HashMap<>();
      String googleName;
+     List<String> userUids = new ArrayList<>();
 
      @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +64,19 @@ public class Group_add_dialog extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String tdl_name = tdl_input.getText().toString();
-                Intent intent = new Intent();
-                intent.putExtra("name", tdl_name);
-                setResult(RESULT_OK, intent);
+                if(!tdl_name.isEmpty()) {
+                    Intent intent = new Intent();
+                    intent.putExtra("name", tdl_name);
+                    setResult(RESULT_OK, intent);
 
 //                //GroupUsers -> 그룹의 사용자들 관리하는 데이터베이스 테스트구현
 //                myRef.child("GroupUsers").child(tdl_name).push().setValue(uuid);
-                finish();
+                    finish();
+                }
+                else{
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(Group_add_dialog.this).setMessage("그룹명을 입력해주세요");
+                    dialog.create().show();
+                }
             }
         });
 

@@ -272,11 +272,11 @@ public class HomeActivity extends AppCompatActivity {
         if(requestCode == MAIN_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 tdl_name = data.getStringExtra("name");
-
+                  myReference4.child("GroupUsers").push(); //groupusers
 
 //                groupsFragment.items.add(new User(tdl_name));
 //                groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
-                myReference.push().setValue(tdl_name);
+                myReference.push().setValue(tdl_name); //usersgroup
             }
         }
 
