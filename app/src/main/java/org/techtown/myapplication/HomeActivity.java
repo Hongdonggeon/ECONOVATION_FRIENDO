@@ -46,6 +46,7 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference myReference3;
     private DatabaseReference myReference4;
     private DatabaseReference myReference5;
+    private DatabaseReference myReference6;
     Long uuid;
 
     ArrayList<String> Uids = new ArrayList<>();
@@ -213,6 +214,9 @@ public class HomeActivity extends AppCompatActivity {
                 groupsFragment.groupAdapter.setItems(groupsFragment.items);
 
 
+//                myReference5.child(groupsFragment.items.get(groupsFragment.items.size()-1).getKey())
+//                        .setValue(groupsFragment.items.get(groupsFragment.items.size()-1).getName());
+      //          myReference5.child(groupsFragment.items.get(groupsFragment.items.size() - 1).getKey()).setValue(userUids);
 
                 groupsFragment.groupAdapter.notifyDataSetChanged();
             }
@@ -297,6 +301,8 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        ArrayList<UserGroups> userItems = new ArrayList<>();
+
         if(requestCode == MAIN_ACTIVITY_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 tdl_name = data.getStringExtra("name");
@@ -313,9 +319,23 @@ public class HomeActivity extends AppCompatActivity {
 //                    myReference4.child("UserGroups").child(userUids.).push();
 //                }
 
+
+              //  myReference6 = database.getReference("UserGroups").child(uidGoogle).push();
+               // String groupKey = myReference6.getKey();
+
+              //  for(String uid : userUids.keySet()){
+                //    Log.d("HomeActivity", "uid" + uid);
+                 //   userItems.add(new UserGroups(uid,groupKey,tdl_name));
+               // }
+               // for(int i=0; i<userItems.size(); i++){
+                 //   myReference4.child("UserGroups").child(userItems.get(i).getUid()).child(userItems.get(i).getGroupKey()).setValue(userItems.get(i).getGroupName());
+               // }
+
+
 //                groupsFragment.items.add(new User(tdl_name));
 //                groupsFragment.recyclerView.setAdapter(groupsFragment.userAdapter);
                 myReference.push().setValue(tdl_name);
+
 
             }
         }
