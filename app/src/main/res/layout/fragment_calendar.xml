@@ -12,7 +12,9 @@
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
-            android:layout_height="399dp" />
+            android:layout_height="399dp"
+            android:weekDayTextAppearance="@style/Text.TitleStyle"
+            android:dateTextAppearance="@style/Text.NormalStyle"/>
 
         <TextView
             android:id="@+id/textView"

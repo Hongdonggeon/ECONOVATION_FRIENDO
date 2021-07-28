@@ -65,7 +65,6 @@ public class TodoWriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_write);
 
-
         recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -144,6 +143,11 @@ public class TodoWriteActivity extends AppCompatActivity {
                     Todo todo = dataSnapshot.getValue(Todo.class);
                     items.add(todo);
                     customAdapter.setItems(items);
+
+                    //알람 시간 String으로 빼왔고,
+                    // 시간 / 분 따로 인덱싱해서 여기 TodoWriteAcivity에서 캘린더 시간 설정해서 서비스 호출해주면 될 듯?
+                    String alarmTime = todo.getAlarm();
+                    Log.d("TodoWriteActivity", alarmTime);
                 }
                 customAdapter.notifyDataSetChanged();
             }
@@ -153,6 +157,8 @@ public class TodoWriteActivity extends AppCompatActivity {
                 Log.e("TodoWriteActivity: ", String.valueOf(error.toException()));
             }
         });
+
+
 
         recyclerView.setAdapter(customAdapter);
 
