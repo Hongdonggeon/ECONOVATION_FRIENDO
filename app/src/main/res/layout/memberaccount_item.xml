@@ -13,7 +13,12 @@
         android:layout_width="match_parent"
         style="@style/Text.NormalStyle"
         android:layout_height="wrap_content"
-        android:background="@color/background"
-        android:textColor="@color/button" />
+        android:background="@android:color/transparent"
+        android:textColor="@color/text" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:background="@drawable/background_double_line"/>
+
 
 </LinearLayout>
