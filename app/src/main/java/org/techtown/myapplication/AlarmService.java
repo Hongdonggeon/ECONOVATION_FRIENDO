@@ -56,6 +56,7 @@ public class AlarmService extends Service {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if(snapshot.getValue().toString() != "알람해제") {
+
                     Intent alarmIntent = new Intent(getApplicationContext(), AlarmActivity.class);
                     alarmIntent.putExtra("todo", todo);
                     alarmIntent.putExtra("groupKey", groupKey);
