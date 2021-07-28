@@ -8,10 +8,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -109,29 +109,34 @@ public class TodoWriteActivity extends AppCompatActivity {
             String pushKey;
             @Override
             public void onClick(View v) {
-                DatabaseReference myRef2 = database.getReference()
-                        .child("Todos")
-                        .child(groupKey)
-                        .child(year+"년")
-                        .child((month+1)+"월")
-                        .child(dayOfMonth+"일")
-                        .push();
-
                 todoContent = editText.getText().toString();
-                pushKey = myRef2.getKey();
+                if(!todoContent.isEmpty()) {
+                    DatabaseReference myRef2 = database.getReference()
+                            .child("Todos")
+                            .child(groupKey)
+                            .child(year + "년")
+                            .child((month + 1) + "월")
+                            .child(dayOfMonth + "일")
+                            .push();
 
-                map.put("pushKey",pushKey);
-                map.put("todo", todoContent);
-                map.put("alarm", "알람 없음");
-                map.put("checkBoxChecked", false);
-                map.put("alarmChecked", false);
+                    pushKey = myRef2.getKey();
 
-                Log.d("pushKey Test", pushKey);
+                    map.put("pushKey", pushKey);
+                    map.put("todo", todoContent);
+                    map.put("alarm", "알람 없음");
+                    map.put("checkBoxChecked", false);
+                    map.put("alarmChecked", false);
 
-                myRef2.setValue(map);
+                    Log.d("pushKey Test", pushKey);
+
+                    myRef2.setValue(map);
+                }
+                else {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(TodoWriteActivity.this).setMessage("할 일을 입력해주세요.");
+                    dialog.create().show();
+                }
 
                 editText.setText(null);
-                Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
