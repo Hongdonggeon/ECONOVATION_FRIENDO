@@ -98,7 +98,7 @@ public class Group_add_dialog extends AppCompatActivity {
 
                 }
                 else{
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(Group_add_dialog.this).setMessage("그룹명을 입력해주세요");
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(Group_add_dialog.this).setMessage("TO DO LIST 명을 입력해주세요");
                     dialog.create().show();
                 }
             }
