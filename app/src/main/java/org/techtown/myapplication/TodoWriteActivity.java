@@ -1,6 +1,10 @@
 package org.techtown.myapplication;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 
@@ -152,7 +157,46 @@ public class TodoWriteActivity extends AppCompatActivity {
                     //알람 시간 String으로 빼왔고,
                     // 시간 / 분 따로 인덱싱해서 여기 TodoWriteAcivity에서 캘린더 시간 설정해서 서비스 호출해주면 될 듯?
                     String alarmTime = todo.getAlarm();
-                    Log.d("TodoWriteActivity", alarmTime);
+                    if(!alarmTime.equals("알람 없음") & !alarmTime.equals("알람해제")) {
+                        Log.d("TodoWriteActivity", alarmTime);
+                        int hour = Integer.parseInt(alarmTime.substring(0, 2));
+                        int minute = Integer.parseInt(alarmTime.substring(3, 5));
+
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(System.currentTimeMillis());
+                        calendar.set(Calendar.HOUR_OF_DAY, hour);
+                        calendar.set(Calendar.MINUTE, minute);
+                        Log.d("TodoWriteActivity", hour + "시" + minute + "분 설정");
+                        calendar.set(Calendar.SECOND, 0);
+
+                        if (calendar.before(Calendar.getInstance())) {
+                            calendar.add(Calendar.DATE, 1);
+                        }
+
+                        Intent alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
+                        alarmIntent.putExtra("todo", todo.getTodo());
+                        alarmIntent.putExtra("groupKey", groupKey);
+                        alarmIntent.putExtra("year", year);
+                        alarmIntent.putExtra("month", month);
+                        alarmIntent.putExtra("dayOfMonth", dayOfMonth);
+                        alarmIntent.putExtra("pushKey", todo.getPushKey());
+
+                        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        alarmIntent.setAction(AlarmReceiver.ACTION_RESTART_SERVICE);
+
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), position, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
+                        Log.d("PopupAlarmActivity", "i값 : " + position);
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                            Log.d("PopupAlarmActivity", "Build.VERSION_CODES.M 호출");
+                        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                            Log.d("PopupAlarmActivity", "Build.VERSION_CODES.KITKAT 호출");
+                        }
+                    }
+                    // 일단 여기까지 테스트임
+
                 }
                 customAdapter.notifyDataSetChanged();
             }
