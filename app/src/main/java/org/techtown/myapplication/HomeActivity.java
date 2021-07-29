@@ -171,11 +171,33 @@ public class HomeActivity extends AppCompatActivity {
                                 position = pos;
                                 int numberofmember = groupsFragment.items.get(pos).getNumberofMember();
                                 groupsFragment.items.get(pos).setNumberofMember(--numberofmember);
+                                Log.d("HomeActivity here",groupsFragment.items.get(pos).getNumberofMember()+"");
                                 myReference.child(groupKey).removeValue();
                                 myReference5.child(groupKey).child(uidGoogle).removeValue();
-                                if(groupsFragment.items.get(pos).getNumberofMember()==0) {
-                                    myReference3.child(groupKey).removeValue();
-                                }
+
+                                myReference5.addValueEventListener(new ValueEventListener() {
+                                    boolean tempFlag;
+                                    @Override
+                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                        for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                            Log.d("homeactivity",dataSnapshot.toString());
+                                            if (groupKey.equals(dataSnapshot.getKey())){
+                                                tempFlag = true;
+                                                break;
+                                            }
+                                            else{
+                                                tempFlag = false;
+                                            }
+                                        }
+                                        if (!tempFlag)
+                                            myReference3.child(groupKey).removeValue();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                    }
+                                });
                                 groupsFragment.items.remove(pos);
 
                                 Log.d("그룹 키값 확인",groupKey);
@@ -184,6 +206,7 @@ public class HomeActivity extends AppCompatActivity {
                         .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+
                             }
                         });
                 dialog.create().show();
@@ -248,7 +271,6 @@ public class HomeActivity extends AppCompatActivity {
 
 
     }
-
     private void saveTokenToDB() {
         // 현재 토큰
         FirebaseMessaging.getInstance().getToken()

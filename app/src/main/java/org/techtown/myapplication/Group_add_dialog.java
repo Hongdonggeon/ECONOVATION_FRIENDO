@@ -170,9 +170,9 @@ public class Group_add_dialog extends AppCompatActivity {
     void sendGcm(String email) {
         NotificationModel notificationModel = new NotificationModel();
         notificationModel.to = userTokens.get(email).toString();
-        notificationModel.notification.title = "FRIENDO";
+        notificationModel.notification.title = googleName + "님의 초대 수락하시겠습니까?";
         notificationModel.notification.text = googleName + "님의 초대 수락하시겠습니까?";
-        notificationModel.data.title="FRIENDO";
+        notificationModel.data.title=googleName + "님의 초대 수락하시겠습니까?";
         notificationModel.notification.text = googleName +"님의 초대 수락하시겠습니까";
         Gson gson = new Gson();
         String json = gson.toJson(notificationModel);
