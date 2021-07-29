@@ -159,6 +159,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     startActivityForResult((Activity) buttonView.getContext(), intent, 101,null);
                 } else {
 //                    item.setAlarmChecked(isChecked);
+
                     myRef.child("Todos")
                             .child(groupKey)
                             .child(year+"년")
