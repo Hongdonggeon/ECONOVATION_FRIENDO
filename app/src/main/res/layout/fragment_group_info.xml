@@ -5,10 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".GroupInfoFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textStyle="bold"
-        android:textSize="50dp"
-        android:text="그룹정보 테스트"/>
+        android:layout_height="wrap_content" />
+
 </FrameLayout>
