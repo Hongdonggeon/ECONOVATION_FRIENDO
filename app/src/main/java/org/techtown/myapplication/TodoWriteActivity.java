@@ -26,12 +26,22 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class TodoWriteActivity extends AppCompatActivity {
@@ -59,10 +69,12 @@ public class TodoWriteActivity extends AppCompatActivity {
     String emailGoogle;
     String nameGoogle;
     String uidGoogle;
+    HashMap<String, String> userTokens = new HashMap<>();
 
     HashMap<String,Object> map = new HashMap<>();
 
     ItemTouchHelper itemTouchHelper;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
 
 
     @Override
@@ -89,7 +101,7 @@ public class TodoWriteActivity extends AppCompatActivity {
         groupName = intent.getStringExtra("groupName");
         groupKey = intent.getStringExtra("groupKey");
         // 구글 사용자 정보 받아오기
-//        emailGoogle = intent.getStringExtra("emailGoogle");
+        emailGoogle = intent.getStringExtra("emailGoogle");
 //        nameGoogle = intent.getStringExtra("nameGoogle");
 //        uidGoogle = intent.getStringExtra("uidGoogle");
 
@@ -101,7 +113,7 @@ public class TodoWriteActivity extends AppCompatActivity {
         checkBox = findViewById(R.id.checkBox);
 
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
         DatabaseReference myRef = database.getReference()
                 .child("Todos")
                 .child(groupKey)
@@ -135,6 +147,22 @@ public class TodoWriteActivity extends AppCompatActivity {
                     Log.d("pushKey Test", pushKey);
 
                     myRef2.setValue(map);
+                    DatabaseReference myReference = database.getReference("GroupUsers");
+                    myReference.child(groupKey).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                Log.d("todo write activity", dataSnapshot.getValue().toString()) ;
+                                String email = dataSnapshot.getValue().toString();
+                                sendGcm(email);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                        }
+                    });
                 }
                 else {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(TodoWriteActivity.this).setMessage("할 일을 입력해주세요.");
@@ -278,5 +306,34 @@ public class TodoWriteActivity extends AppCompatActivity {
                 customAdapter.notifyDataSetChanged();
             }
         }
+    }
+    void sendGcm(String email) {
+        NotificationModel notificationModel = new NotificationModel();
+        notificationModel.to = userTokens.get(email);
+        notificationModel.notification.title = groupName + "To do가 추가되었습니다 ";
+        notificationModel.notification.text = "Friendo";
+        notificationModel.data.title="To do가 추가되었습니다.";
+        notificationModel.notification.text = "Friendo";
+        Gson gson = new Gson();
+        String json = gson.toJson(notificationModel);
+
+        RequestBody requestBody = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
+        Request request = new Request.Builder().header("Content-Type", "application/json")
+                .addHeader("Authorization", "key=AAAAlzEMvvg:APA91bEG25GVkmgSNafCqUkTA2Xv6lubz27ghch4a97yIfg0n7jAzAUcifNF4nhu5XWSCH96P4odfOis-BoliFKSU2nNgpUcrYV2qxWL5aDi4h0bNYG1axwJXIrtf_YiIc_fmwWcapah")
+                .url("https://fcm.googleapis.com/fcm/send")
+                .post(requestBody)
+                .build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+            }
+        });
     }
 }

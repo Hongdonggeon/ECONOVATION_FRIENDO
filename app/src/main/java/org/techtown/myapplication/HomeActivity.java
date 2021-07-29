@@ -139,6 +139,7 @@ public class HomeActivity extends AppCompatActivity {
                 intent.putExtra("emailKakao",emailKakao);
                 // 그룹 이름/난수 내보내기
                 intent.putExtra("groupName",tdl_name);
+                intent.putExtra("userTokens",userTokens);
                 intent.putExtra("groupKey",groupsFragment.items.get(pos).getKey());
                 //구글 사용자 정보 내보내기
 //                intent.putExtra("emailGoolge",emailGoogle);

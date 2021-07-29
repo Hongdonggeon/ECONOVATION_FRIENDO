@@ -12,7 +12,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+
 public class GroupCalendar extends AppCompatActivity {
+    HashMap<String,String> userTokens = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class GroupCalendar extends AppCompatActivity {
         Intent intent = getIntent();
         // 카카오 사용자 정보 받아오기
         String emailKakao = intent.getStringExtra("emailKakao");
+        userTokens = (HashMap<String, String>)intent.getSerializableExtra("userTokens");
         // 그룹 이름/난수 받아오기
         String groupName = intent.getStringExtra("groupName");
         String groupKey = intent.getStringExtra("groupKey");
@@ -50,6 +54,7 @@ public class GroupCalendar extends AppCompatActivity {
         Bundle bundle = new Bundle();
         // 카카오 사용자 정보 내보내기
         bundle.putString("emailKakao", emailKakao);
+        bundle.putSerializable("userTokens", userTokens);
         // 그룹 이름/난수 내보내기
         bundle.putString("groupName", groupName);
         bundle.putString("groupKey",groupKey);

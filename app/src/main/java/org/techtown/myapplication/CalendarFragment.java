@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import java.util.HashMap;
+
 public class CalendarFragment extends Fragment {
     String emailKakao;
     String groupName;
@@ -20,6 +22,7 @@ public class CalendarFragment extends Fragment {
     String nameGoogle;
     String uidGoogle;
     String TAG = "CalendarFragment";
+    HashMap<String, String> userTokens = new HashMap<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class CalendarFragment extends Fragment {
             // 그룹 이름/난수 받아오기
             groupName = bundle.getString("groupName", "그룹이름 값 안넘어옴");
             groupKey = bundle.getString("groupKey","카카오 그룹 키 값 안넘어옴");
+            userTokens = (HashMap<String, String>) bundle.getSerializable("userTokens");
             // 구글 사용자 정보 받아오기
 //            emailGoogle = bundle.getString("emailGoogle", "구글 이메일 값 안넘어옴");
 //            nameGoogle = bundle.getString("nameGoogle", "구글 사용자명 값 안넘어옴");
@@ -62,6 +66,7 @@ public class CalendarFragment extends Fragment {
                 // 그룹 이름/키값 내보내기
                 intent.putExtra("groupName",groupName);
                 intent.putExtra("groupKey",groupKey);
+                intent.putExtra("userTokens",userTokens);
                 // 구글 사용자 정보 내보내기
 //                intent.putExtra("emailGoogle",emailGoogle);
 //                intent.putExtra("nameGoogle",nameGoogle);
