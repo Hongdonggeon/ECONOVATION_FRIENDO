@@ -6,7 +6,7 @@
         android:icon="@drawable/icon_calendar"/>
     <item
         android:id="@+id/group"
-        android:title="그룹정보"
+        android:title="그룹원 정보"
         android:icon="@drawable/icon_group"/>
     <item
         android:id="@+id/setting"

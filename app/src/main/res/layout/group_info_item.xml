@@ -10,7 +10,9 @@
         style="@style/Text.NormalStyle"
         android:text="TEST"
         android:textSize="25dp"
-        android:paddingLeft="20dp" />
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"/>
     <View
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
