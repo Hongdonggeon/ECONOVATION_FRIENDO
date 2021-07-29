@@ -48,7 +48,6 @@ public class AlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mediaPlayer.stop();
-
                 finish();
             }
         });

@@ -184,7 +184,6 @@ public class HomeActivity extends AppCompatActivity {
                         .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                finish();
                             }
                         });
                 dialog.create().show();

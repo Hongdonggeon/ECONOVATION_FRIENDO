@@ -35,6 +35,12 @@ public class PopupAlarmActivity extends AppCompatActivity {
 
     ArrayList<PendingIntent> pendingIntentArrayList;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent serviceIntent = new Intent(getApplicationContext(),AlarmService.class);
+        getApplicationContext().stopService(serviceIntent);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -43,6 +49,8 @@ public class PopupAlarmActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_popup_alarm);
         timePicker = findViewById(R.id.timePicker);
+
+
 
         CustomAdapter customAdapter = new CustomAdapter();
         pendingIntentArrayList = new ArrayList<>();
@@ -67,7 +75,7 @@ public class PopupAlarmActivity extends AppCompatActivity {
                 intent.putExtra("hour",timePicker.getHour());
                 intent.putExtra("minute",timePicker.getMinute());
                 intent.putExtra("todo",todo);
-                setAlarm();
+//                setAlarm();
 
                 setResult(102,intent);
                 finish();

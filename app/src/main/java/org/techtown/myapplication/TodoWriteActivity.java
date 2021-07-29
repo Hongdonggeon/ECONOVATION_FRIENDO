@@ -172,7 +172,6 @@ public class TodoWriteActivity extends AppCompatActivity {
                         if (calendar.before(Calendar.getInstance())) {
                             calendar.add(Calendar.DATE, 1);
                         }
-
                         Intent alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
                         alarmIntent.putExtra("todo", todo.getTodo());
                         alarmIntent.putExtra("groupKey", groupKey);
@@ -187,6 +186,31 @@ public class TodoWriteActivity extends AppCompatActivity {
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), position, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
                         Log.d("PopupAlarmActivity", "i값 : " + position);
 
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                            Log.d("PopupAlarmActivity", "Build.VERSION_CODES.M 호출");
+                        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                            Log.d("PopupAlarmActivity", "Build.VERSION_CODES.KITKAT 호출");
+                        }
+                    } else {
+                        Log.d("TodoWriteActivity","서비스해제 실행");
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(System.currentTimeMillis());
+                        calendar.set(Calendar.HOUR_OF_DAY, 0);
+                        calendar.set(Calendar.MINUTE, 0);
+
+                        Log.d("TodoWriteActivity", hour + "시" + minute + "분 설정");
+
+                        if (calendar.before(Calendar.getInstance())) {
+                            calendar.add(Calendar.DATE, 1);
+                        }
+
+                        Intent alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
+                        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        alarmIntent.setAction(AlarmReceiver.ACTION_STOP_SERVICE);
+
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), position, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                             Log.d("PopupAlarmActivity", "Build.VERSION_CODES.M 호출");

@@ -55,7 +55,7 @@ public class AlarmService extends Service {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if(snapshot.getValue().toString() != "알람해제") {
+                if(!snapshot.getValue().toString().equals("알람해제")) {
 
                     Intent alarmIntent = new Intent(getApplicationContext(), AlarmActivity.class);
                     alarmIntent.putExtra("todo", todo);
@@ -66,6 +66,7 @@ public class AlarmService extends Service {
                     alarmIntent.putExtra("dayOfMonth", dayOfMonth);
 
                     startActivity(alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    stopSelf();
                 }
             }
 
