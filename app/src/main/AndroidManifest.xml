@@ -28,7 +28,8 @@
         <activity
             android:name=".PopupAlarmActivity"
             android:theme="@style/Theme.MyDialog" />
-        <activity android:name=".TodoWriteActivity" />
+        <activity android:name=".TodoWriteActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".GroupCalendar" />
         <activity android:name=".MenuActivity" />
 
@@ -53,7 +54,8 @@
         </activity>
         <activity
             android:name=".Group_add_dialog"
-            android:theme="@style/Theme.MyDialog" />
+            android:theme="@style/Theme.MyDialog"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".HomeActivity" />
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
             <intent-filter>

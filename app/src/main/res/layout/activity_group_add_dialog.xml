@@ -167,7 +167,8 @@
         style="@style/Text.NormalStyle"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline10"
