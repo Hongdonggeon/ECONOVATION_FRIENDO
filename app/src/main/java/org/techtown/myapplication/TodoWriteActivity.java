@@ -172,6 +172,7 @@ public class TodoWriteActivity extends AppCompatActivity {
                         if (calendar.before(Calendar.getInstance())) {
                             calendar.add(Calendar.DATE, 1);
                         }
+
                         Intent alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
                         alarmIntent.putExtra("todo", todo.getTodo());
                         alarmIntent.putExtra("groupKey", groupKey);
