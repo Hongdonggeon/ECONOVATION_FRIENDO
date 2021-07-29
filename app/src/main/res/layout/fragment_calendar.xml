@@ -8,8 +8,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="캘린더"
+            android:textSize="40dp"
+            android:gravity="center_horizontal"
+            style="@style/Text.NormalStyle"/>
+
         <CalendarView
+            android:layout_marginTop="10dp"
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="399dp"
