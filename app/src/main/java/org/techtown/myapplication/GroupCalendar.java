@@ -58,6 +58,8 @@ public class GroupCalendar extends AppCompatActivity {
 //        bundle.putString("nameGoolge", nameGoogle);
 //        bundle.putString("uidGoogle",uidGoolge);
         calendarFragment.setArguments(bundle);
+        groupInfoFragment.setArguments(bundle);
+
 
         // BottomNavigationView를 직접 터치했을때 화면 전환 이벤트
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -93,6 +95,10 @@ public class GroupCalendar extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+
+
+
+
 
     }
 
