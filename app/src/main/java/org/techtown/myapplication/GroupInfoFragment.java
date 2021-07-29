@@ -23,7 +23,6 @@ import java.util.ArrayList;
 
 public class GroupInfoFragment extends Fragment {
     RecyclerView recyclerView;
-    GroupInfoAdapter groupInfoAdapter;
 
     String groupKey;
     @Override
@@ -33,8 +32,6 @@ public class GroupInfoFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
-
-
 
         Bundle bundle = getArguments();
         if(bundle != null){
@@ -65,7 +62,6 @@ public class GroupInfoFragment extends Fragment {
 
             }
         });
-
 
 
         recyclerView.setAdapter(groupInfoAdapter);
